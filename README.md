@@ -1,4 +1,4 @@
-E-commerce Gaming Accessories Website (README.md)
+<b> GamersLoot E-commerce Gaming Accessories Website</b> (README.md)
 This is the README file for a Git repository containing the source code for an e-commerce website selling gaming accessories.
 
 Project Description
