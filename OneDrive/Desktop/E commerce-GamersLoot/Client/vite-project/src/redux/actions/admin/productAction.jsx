@@ -28,11 +28,11 @@ export const getProducts = createAsyncThunk(
 );
 export const updateProduct = createAsyncThunk(
   "products/updateProduct",
-  async ({ id, formdata }, { rejectWithValue }) => {
+  async ({ id, data }, { rejectWithValue }) => {
     return commonReduxRequests(
       "patch",
       `/admin/product/${id}`,
-      formdata,
+      data,
       multiForm,
       rejectWithValue
     );

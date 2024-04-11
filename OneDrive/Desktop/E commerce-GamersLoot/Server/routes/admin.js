@@ -24,6 +24,6 @@ module.exports = router;
 
 router.get("/products",getProduct);
 router.get("/product/:id",getSingleProduct)
-router.patch('/product/:id',upload.any(),updateProduct)
+router.patch("/product/:id",upload.any(),updateProduct)
 router.delete('product/:id');
 router.post("/product", upload.any(), addProduct);

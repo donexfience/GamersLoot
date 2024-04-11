@@ -12,14 +12,13 @@ const getSingleProduct = async (req, res) => {
     }
     res.status(200).json({ product });
   } catch (error) {
-    console.error(error.message)
-    res.status(400).json({error:error.message})
+    console.error(error.message);
+    res.status(400).json({ error: error.message });
   }
 };
 
 //Getting all products to list on admin Dashboard
 const getProduct = async (req, res) => {
-  console.log("helo=================");
   try {
     const {
       status,
@@ -62,7 +61,7 @@ const addProduct = async (req, res) => {
     const files = req?.files;
 
     const attributes = JSON.parse(formData.attributes);
-    console.log(req.body,"bodyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
+    console.log(req.body, "bodyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
 
     formData.attributes = attributes;
 
@@ -87,16 +86,66 @@ const addProduct = async (req, res) => {
   }
 };
 
-const updateProduct =async (req,res)=>{
-  const {id} =req.params;
-  const formData=req.body;
-  console.log(formData,"=================")
+//update products
+const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const formData = req.body;
+    console.log("Updation: ", formData);
 
-}
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw Error("Invalid ID!!!");
+    }
 
+    const files = req?.files;
+
+    if (files && files.length > 0) {
+      formData.moreImageURL = [];
+      formData.imageURL = "";
+      files.map((file) => {
+        if (file.fieldname === "imageURL") {
+          formData.imageURL = file.filename;
+        } else {
+          formData.moreImageURL.push(file.filename);
+        }
+      });
+
+      if (formData.imageURL === "") {
+        delete formData.imageURL;
+      }
+
+      if (formData.moreImageURL.length === 0 || formData.moreImageURL === "") {
+        delete formData.moreImageURL;
+      }
+    }
+
+    if (formData.moreImageURL === "") {
+      formData.moreImageURL = [];
+    }
+
+    if (formData.attributes) {
+      const attributes = JSON.parse(formData.attributes);
+      formData.attributes = attributes;
+    }
+
+    const product = await Product.findOneAndUpdate(
+      { _id: id },
+      { $set: { ...formData } },
+      { new: true }
+    );
+
+    if (!product) {
+      throw Error("No Such Product");
+    }
+
+    res.status(200).json({ product });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 module.exports = {
   getProduct,
   addProduct,
   getSingleProduct,
-  updateProduct
+  updateProduct,
 };

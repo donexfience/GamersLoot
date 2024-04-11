@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCategories } from "../../../../redux/actions/admin/categoriesAction";
 import BreadCrumbs from "../../components/BreadCrumbs";
-import { AiOutlineClose, AiOutlineDelete, AiOutlineSave } from "react-icons/ai";
+import { AiOutlineSave, AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
 import toast from "react-hot-toast";
 import CustomSingleFileInput from "../../../../components/CustomSingleFileInput";
 import CustomFileInput from "../../components/CustomFileInput";
@@ -73,14 +73,13 @@ const EditProduct = () => {
           withCredentials: true,
         });
         setFetchData({ ...data.product });
-        setDuplicateFetchData({...data.product})
+        setDuplicateFetchData({ ...data.product });
       } catch (error) {
         console.log(error, "error in setting data");
       }
     };
     getProductDetails();
   }, []);
-  console.log("duplicate",duplicateFetchData)
 
   const [attributName, setAttributName] = useState("");
   const [attributeValue, setAttributeValue] = useState("");
@@ -107,7 +106,6 @@ const EditProduct = () => {
     setAttributName("");
     setAttributeValue("");
   };
-  console.log("attributes", fetchData.attributes);
   const handleAttributeChange = (index, attributeName, value) => {
     setFetchData((prevData) => {
       const updatedAttributes = [...prevData.attributes];
@@ -145,50 +143,48 @@ const EditProduct = () => {
       ["moreImageURL"]: updatedImages, // Update the state with the new array of images
     });
   };
-  
+
   const [newMoreImage, setNewMoreImage] = useState([]);
+
   const handleMultipleImageInput = (files) => {
     setNewMoreImage(files);
   };
-  console.log("handlemoreinmage",newMoreImage)
   // for (const pair of FormData.entries()) {
   //   console.log(pair[0] + ", " + pair[1]);
   // }
   const handleSave = () => {
-    const formData = new FormData();
+    const data = {};
+  
     for (const key in fetchData) {
-      
       if (duplicateFetchData[key] !== fetchData[key]) {
-        console.log("inside the handlesave")
         if (key === "attributes") {
-          formData.append("attributes", JSON.stringify(fetchData.attributes));
+          data["attributes"] = JSON.stringify(fetchData.attributes);
         } else if (key === "moreImageURL" && Array.isArray(fetchData[key])) {
-          fetchData[key].forEach((item, index) => {
-            formData.append(`${key}[${index}]`, item);
-          });
+          data["moreImageURL"] = fetchData[key];
         } else {
-          formData.append(key, fetchData[key]);
-          console.log(key,"----------","+++++++++",fetchData[key])
+          data[key] = fetchData[key];
         }
       }
     }
+  
+    // Add newMoreImage if it exists
     if (newMoreImage.length > 0) {
-      for (const file of moreImageURL) {
-        formData.append("moreImageURL", file);
-      }
+      data["moreImageURL"] = newMoreImage;
     }
+  
+    // Add newThumbnail if it exists
     if (newThumbnail) {
-      for (const file of moreImageURL) {
-        formData.append("imageURL", newThumbnail);
-      }
+      data["imageURL"] = newThumbnail;
+      
     }
-        for (const pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
-    }
-   
-    dispatch(updateProduct({ id: id, formData: formData }));
+    console.log("🚀 ~ file: EditProduct.jsx:178 ~ handleSave ~ data:", data)
+  
+    dispatch(updateProduct({ id: id, data: data }));
     navigate(-1);
   };
+  
+  
+
   return (
     <div className="w-full bg-gray-100 pb-5">
       {showConfirm && (
@@ -299,12 +295,16 @@ const EditProduct = () => {
               placeholder="Type product name here"
               className="admin-input p-2 rounded  hover:border-black w-full"
               value={fetchData.price || ""}
+              min={1}
+              max={99}
               onChange={handleInputChange}
             />
             <p className="admin-label font-semibold">Markup</p>
             <input
               type="number"
               name="markup"
+              min={1}
+              max={99}
               placeholder="Type product markup here"
               className="admin-input p-2 rounded  hover:border-black w-full"
               value={fetchData.markup || ""}
@@ -356,50 +356,49 @@ const EditProduct = () => {
           {/* Right ending */}
         </div>
         <div className="admin-div">
-              <h1 className="font-bold">Product Images</h1>
-              {fetchData.moreImageURL &&
-              fetchData.moreImageURL.length > 0 ? (
-                <div className="bg-gray-100 py-5 rounded-lg text-center border-dashed border-2">
-                  <div className="flex flex-wrap   gap-3 justify-center">
-                    {fetchData.moreImageURL.map((img, index) => (
-                      <div
-                        className="bg-white p-2 rounded-lg shadow-lg mb-2 w-28 h-28 relative"
-                        key={index}
-                      >
-                        <img
-                          src={`${URL}/img/${img}`}
-                          alt="img"
-                          className="h-full w-full object-contain"
-                        />
-                        <button
-                          onClick={() => deleteOneProductImage(index)}
-                          className="absolute -top-2 -right-2 text-xl p-2 bg-blue-100 hover:bg-blue-200 rounded-full"
-                        >
-                          <AiOutlineDelete />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    className="mt-4 bg-red-500 text-white font-bold py-2 px-4 rounded"
-                    onClick={() =>
-                      setFetchData({
-                        ...fetchData,
-                        ["moreImageURL"]: [],
-                      })
-                    }
+          <h1 className="font-bold">Product Images</h1>
+          {fetchData.moreImageURL && fetchData.moreImageURL.length > 0 ? (
+            <div className="bg-gray-100 py-5 rounded-lg text-center border-dashed border-2">
+              <div className="flex flex-wrap   gap-3 justify-center">
+                {fetchData.moreImageURL.map((img, index) => (
+                  <div
+                    className="bg-white p-2 rounded-lg shadow-lg mb-2 w-28 h-28 relative"
+                    key={index}
                   >
-                    Delete All
-                  </button>
-                </div>
-              ) : (
-                <>
-                  <p className="admin-label my-2">Drop Here</p>
-
-                  <CustomFileInput onChange={handleMultipleImageInput} />
-                </>
-              )}
+                    <img
+                      src={`${URL}/img/${img}`}
+                      alt="img"
+                      className="h-full w-full object-contain"
+                    />
+                    <button
+                      onClick={() => deleteOneProductImage(index)}
+                      className="absolute -top-2 -right-2 text-xl p-2 bg-blue-100 hover:bg-blue-200 rounded-full"
+                    >
+                      <AiOutlineDelete />
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <button
+                className="mt-4 bg-red-500 text-white font-bold py-2 px-4 rounded"
+                onClick={() =>
+                  setFetchData({
+                    ...fetchData,
+                    ["moreImageURL"]: [],
+                  })
+                }
+              >
+                Delete All
+              </button>
             </div>
+          ) : (
+            <>
+              <p className="admin-label my-2">Drop Here</p>
+
+              <CustomFileInput onChange={handleMultipleImageInput} />
+            </>
+          )}
+        </div>
         {/* multi image div ending */}
 
         {/* attributes sections */}
