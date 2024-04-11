@@ -1,0 +1,102 @@
+const mongoose = require("mongoose");
+const Product = require("../../model/ProductModel");
+
+//getting single product on when clicking edit button
+
+const getSingleProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findOne({ _id: id });
+    if (!product) {
+      throw Error("No such product");
+    }
+    res.status(200).json({ product });
+  } catch (error) {
+    console.error(error.message)
+    res.status(400).json({error:error.message})
+  }
+};
+
+//Getting all products to list on admin Dashboard
+const getProduct = async (req, res) => {
+  console.log("helo=================");
+  try {
+    const {
+      status,
+      search,
+      page = 1,
+      limit = 10,
+      startingDate,
+      endingDate,
+    } = req.query;
+    const skip = (page - 1) * limit;
+    let filter = {};
+    if (status) {
+      filter.status = status;
+    }
+    if (search) {
+      filter.name = { $regex: new RegExp(search, "i") };
+    }
+    if (startingDate) {
+      const date = new Date(startingDate);
+      filter.createdAt = { $gte: date };
+    }
+    if (endingDate) {
+      const date = new Date(endingDate);
+      filter.createdAt = { ...filter.createdAt, $lte: date };
+    }
+    const products = await Product.find(filter, { skip })
+      .skip()
+      .limit(limit)
+      .populate("category", { name: 1 });
+    const totalAvailableProducts = await Product.countDocuments(products);
+    res.status(200).json({ products, totalAvailableProducts });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+//creating new product
+const addProduct = async (req, res) => {
+  try {
+    let formData = { ...req.body, isActive: true };
+    const files = req?.files;
+
+    const attributes = JSON.parse(formData.attributes);
+    console.log(req.body,"bodyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
+
+    formData.attributes = attributes;
+
+    if (files && files.length > 0) {
+      formData.moreImageURL = [];
+      formData.imageURL = "";
+      files.map((file) => {
+        if (file.fieldname === "imageURL") {
+          formData.imageURL = file.filename;
+        } else {
+          formData.moreImageURL.push(file.filename);
+        }
+      });
+    }
+    console.log(formData, "**********************************");
+    const product = await Product.create(formData);
+
+    res.status(200).json({ product });
+  } catch (error) {
+    console.error(error.message, "=-=-=---=-----==-=");
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const updateProduct =async (req,res)=>{
+  const {id} =req.params;
+  const formData=req.body;
+  console.log(formData,"=================")
+
+}
+
+module.exports = {
+  getProduct,
+  addProduct,
+  getSingleProduct,
+  updateProduct
+};

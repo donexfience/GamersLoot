@@ -1,0 +1,29 @@
+const express = require("express");
+const {
+  deleteCategory,
+  getCategory,
+  getCategories,
+  updateCategory,
+  createCategory,
+} = require("../controllers/admin/categoryController");
+const router = express.Router();
+const upload = require("../middleware/upload");
+const { requireAdminAuth } = require("../middleware/requireAuth");
+const { getProduct, createProducts, addProduct, getSingleProduct, updateProduct,} = require("../controllers/admin/productController");
+//category controller functions mounting them to corresponding suiitable routes
+
+
+router.get("/categories", getCategories);
+router.get("/category/:id", getCategory);
+router.delete("/category/:id", deleteCategory);
+router.patch("/category/:id", upload.single("imgURL"), updateCategory);
+router.post("/category",requireAdminAuth, upload.single("imgURL"), createCategory);
+module.exports = router;
+
+//product controller functions mounting them to corresponding suitabele routes
+
+router.get("/products",getProduct);
+router.get("/product/:id",getSingleProduct)
+router.patch('/product/:id',upload.any(),updateProduct)
+router.delete('product/:id');
+router.post("/product", upload.any(), addProduct);
