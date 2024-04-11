@@ -1,7 +1,7 @@
 import { handleError } from "./configurations";
 import axios from "axios";
 
-export const URL = "http://localhost:9072/api";
+export const URL = "your backend url";
 
 const apiInstance = axios.create({ baseURL: URL });
 //response initerceptor creating
