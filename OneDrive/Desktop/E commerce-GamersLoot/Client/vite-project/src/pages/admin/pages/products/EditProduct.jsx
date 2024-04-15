@@ -46,7 +46,7 @@ const EditProduct = () => {
   });
   //confirrmation
   const toggleConfirm = () => {
-    if (fetchData?.offer && fetchData?.offer < 1) {
+    if (fetchData?.offer && fetchData?.offer > 2) {
       toast.error("Offer can't be less than 1");
       return;
     }

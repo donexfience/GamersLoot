@@ -23,6 +23,7 @@ export const commonReduxRequests = async (
         withCredentials:true
     }
     try{
+        console.log("customer request----->>>>.")
         const response=await apiInstance(requestConfig);
         return response;
     }

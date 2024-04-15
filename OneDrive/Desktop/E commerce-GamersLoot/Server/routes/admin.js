@@ -9,7 +9,8 @@ const {
 const router = express.Router();
 const upload = require("../middleware/upload");
 const { requireAdminAuth } = require("../middleware/requireAuth");
-const { getProduct, createProducts, addProduct, getSingleProduct, updateProduct,} = require("../controllers/admin/productController");
+const { getProduct, createProducts, addProduct, getSingleProduct, updateProduct, deleteProduct,} = require("../controllers/admin/productController");
+const { getCustomer, getCustomers, blockOrUnblockCustomer } = require("../controllers/admin/customerController");
 //category controller functions mounting them to corresponding suiitable routes
 
 
@@ -27,3 +28,13 @@ router.get("/product/:id",getSingleProduct)
 router.patch("/product/:id",upload.any(),updateProduct)
 router.delete('product/:id');
 router.post("/product", upload.any(), addProduct);
+router.delete("/product/:id",deleteProduct)
+
+//customer controller functions mounting them to corresponding suitable routes
+
+router.get("/customers", getCustomers);
+router.get("/customer/:id", getCustomer);
+router.delete("/customer/:id");
+router.patch("/customer/:id");
+router.post("/customer", upload.any());
+router.patch("/customer-block-unblock/:id",blockOrUnblockCustomer);

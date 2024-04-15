@@ -31,7 +31,11 @@ const Navbar = () => {
     // Change navbar color based on the current route
     if (location.pathname === "/") {
       setNavbarColor("text-white"); // Change to the desired color
-    } else {
+    }
+   else if (location.pathname.includes("/product/")) {
+    setNavbarColor("text-black"); // Change to the desired color for paths containing "/product/"
+  } 
+   else {
       setNavbarColor("text-black"); // Change to the default color
     }
   }, [location.pathname]);
@@ -130,31 +134,31 @@ const Navbar = () => {
                 >
                   <NavLink
                     to="/dashboard/"
-                    className="navbar-drop-ul flex items-center"
+                    className="navbar-drop-ul mb-5 flex items-center text-violet-500 font-bold"
                     onClick={toggleDropDown}
                   >
-                    <RiDashboardLine className="text-xl mr-2" /> Dashboard
+                    <RiDashboardLine className="text-xl mr-2 text-violet-500 font-bold" /> Dashboard
                   </NavLink>
                   <NavLink
                     to="/dashboard/profile"
-                    className="navbar-drop-ul flex items-center"
+                    className="navbar-drop-ul flex items-center mb-5 text-violet-500"
                     onClick={toggleDropDown}
                   >
-                    <AiOutlineUser className="text-xl mr-2" /> Profile
+                    <AiOutlineUser className="text-xl mr-2 text-violet-500 font-bold" /> Profile
                   </NavLink>
                   <NavLink
                     to="/dashboard/order-history"
-                    className="navbar-drop-ul flex items-center"
+                    className="navbar-drop-ul flex items-center mb-5 text-violet-500"
                     onClick={toggleDropDown}
                   >
-                    <AiOutlineHistory className="text-xl mr-2" /> Order
+                    <AiOutlineHistory className="text-xl mr-2 text-violet-500 font-bold" /> Order
                     History
                   </NavLink>
                   <button
                     onClick={handleLogout}
-                    className="navbar-drop-ul flex items-center w-full"
+                    className="navbar-drop-ul flex items-center w-full text-violet-500 font-bold"
                   >
-                    <AiOutlineLogout className="text-xl mr-2" />
+                    <AiOutlineLogout className="text-xl text-violet-500 mr-2 " />
                     Logout
                   </button>
                 </OutsideTouchCloseComponent>

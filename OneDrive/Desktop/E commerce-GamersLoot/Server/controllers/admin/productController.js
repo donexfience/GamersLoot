@@ -28,6 +28,7 @@ const getProduct = async (req, res) => {
       startingDate,
       endingDate,
     } = req.query;
+
     const skip = (page - 1) * limit;
     let filter = {};
     if (status) {
@@ -45,10 +46,11 @@ const getProduct = async (req, res) => {
       filter.createdAt = { ...filter.createdAt, $lte: date };
     }
     const products = await Product.find(filter, { skip })
-      .skip()
+      .skip(skip)
       .limit(limit)
       .populate("category", { name: 1 });
     const totalAvailableProducts = await Product.countDocuments(products);
+    console.log(products,"===================")
     res.status(200).json({ products, totalAvailableProducts });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -143,9 +145,32 @@ const updateProduct = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+//deleting thte product if needed
+const deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw Error("Invalid ID!!!");
+    }
+
+    const product = await Product.findOneAndDelete({ _id: id });
+
+    if (!product) {
+      throw Error("No Such Product");
+    }
+
+    res.status(200).json({ product });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getProduct,
   addProduct,
   getSingleProduct,
   updateProduct,
+  deleteProduct
 };

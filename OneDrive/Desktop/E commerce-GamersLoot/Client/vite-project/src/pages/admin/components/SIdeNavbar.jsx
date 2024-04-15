@@ -56,11 +56,11 @@ const SIdeNavbar = () => {
         Payments
         </NavLink>
         <p className='text-grey-600 mt-4 mb-4 font-bold text-black'>User Management</p>
-        {user&& user.role==='superAdmin' &&(<NavLink className='side-nav-link-sp text-white flex items-center mr-7 mb-4 gap-3 justify-center hover:text-black' to='/admin'>
+        {user&& user.role==='superAdmin' &&(<NavLink className='side-nav-link-sp text-white flex items-center mr-7 mb-4 gap-3 justify-center hover:text-black' to='/adming'>
         <FaUser/>
           Manage Admins
         </NavLink>)}
-        <NavLink className='side-nav-link-sp text-white flex items-center mb-4 gap-2 justify-center hover:text-black hover:bg-white rounded py-3 px-2 mr-3' to='/admin'>
+        <NavLink className='side-nav-link-sp text-white flex items-center mb-4 gap-2 justify-center hover:text-black hover:bg-white rounded py-3 px-2 mr-3' to='customers'>
           <FaUser/>
           Customers
           </NavLink> 
