@@ -22,7 +22,7 @@ const Pagination = ({ handleClick, page, number, totalNumber }) => {
 
       if (leftBoundary > 1) {
         paginationButtons.push(
-          <p key="ellipsis-left" className="pagination-dots font-semibold">
+          <p key="ellipsis-left" className="pagination-dots">
             ...
           </p>
         );
@@ -58,7 +58,7 @@ const Pagination = ({ handleClick, page, number, totalNumber }) => {
       for (let i = 1; i <= paginationNum; i++) {
         paginationButtons.push(
           <p
-            className={`pagination${page === i ? "-active" : "text-red-500"} font-bold border bg-violet-500 text-white border-violet-600  py-2 px-4 rounded-3xl`}
+            className={`pagination${page === i ? "-active" : ""}`}
             onClick={() => handleClick("page", i)}
             key={i}
           >
@@ -72,10 +72,10 @@ const Pagination = ({ handleClick, page, number, totalNumber }) => {
   };
 
   return (
-    <div className="flex gap-2 justify-center items-center mr-3">
+    <div className="flex gap-2 justify-center">
       {paginationNum > maxVisibleButtons && (
         <p
-          className="pagination-arrows mt-4"
+          className="pagination-arrows"
           onClick={() => {
             if (page > 1) {
               handleClick("page", 1);

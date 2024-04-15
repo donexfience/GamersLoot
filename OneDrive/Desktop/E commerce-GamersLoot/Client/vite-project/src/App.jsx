@@ -23,8 +23,6 @@ import EditCategory from "./pages/admin/pages/categories/EditCategory";
 import AddProducts from "./pages/admin/pages/products/AddProducts";
 import Products from "./pages/admin/pages/products/Products";
 import EditProduct from "./pages/admin/pages/products/EditProduct";
-import Customers from "./pages/admin/pages/customers/Customers";
-import ProductDetails from "./pages/user/pages/ProductDetails";
 
 function App() {
   const { user } = useSelector((state) => state.user);
@@ -37,7 +35,6 @@ function App() {
   }, [dispatch, user]);
 
   return (
-    //user routes
     <>
       <Toaster position="top-center" />
       <BrowserRouter>
@@ -58,8 +55,6 @@ function App() {
               )
             }
           />
-          <Route path="/product/:id" element={<ProductDetails/>}/>
-
           {/* Admin Routes */}
           {(user && user.role === "admin") ||
           (user && user.role === "superAdmin") ? (
@@ -93,7 +88,6 @@ function AdminRoutes() {
         <Route path="product/create" element={<AddProducts/>}/>
         <Route path="product/edit/:id" element={<EditProduct/>}/>
         {/* users management */}
-        <Route path="customers" element={<Customers/>}/>
       </Route>
     </Routes>
   );

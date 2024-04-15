@@ -11,7 +11,6 @@ import RangeDatePicker from "../../../../components/RangeDatePicker";
 import ClearFilterButton from "../../components/ClearFilterButton";
 import JustLoading from "../../../../components/JustLoading";
 import TableRow from "./TableRow";
-import Pagination from "../../../../components/Pagination";
 
 const Products = () => {
   const dispatch = useDispatch();
@@ -143,14 +142,6 @@ const Products = () => {
             </table>
           )
         )}
-        <div className="py-5">
-          <Pagination
-            handleClick={handleFilter}
-            page={page}
-            number={10}
-            totalNumber={totalAvailableProducts}
-          />
-        </div>
       </div>
     </div>
   );
