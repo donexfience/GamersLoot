@@ -91,7 +91,10 @@ const getProduct = async (req, res) => {
         name: 1,
       });
   
-      res.status(200).json({ product });
+      const similarProducts=await Product.find({status: { $in: ["published", "low quantity"] },category:product.category}).limit(5)
+      console.log("🚀 ~ file: productController.js:95 ~ getProduct ~ similarProducts:", similarProducts)
+      
+      res.status(200).json({ product,similarProducts });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }

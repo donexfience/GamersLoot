@@ -4,14 +4,13 @@ import { URL } from "../../Common/api";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
-
   const handleClick = () => {
     navigate(`/product/${product._id}`);
   };
 
+
   return (
-    <div
-      className="relative p-5 bg-white rounded-lg border border-gray-200 hover:shadow-lg cursor-pointer"
+    <div className="relative p-5 bg-white rounded-lg border border-gray-200 hover:shadow-lg cursor-pointer"
       onClick={() => navigate(`/product/${product._id}`)}
     >
       {product.offer &&  (

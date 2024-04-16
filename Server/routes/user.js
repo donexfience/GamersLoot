@@ -15,7 +15,7 @@ router.get('/',getUserDataFirst)
 
 router.get('/product',getProducts);
 router.get("/product/:id",getProduct)
-router.get("/product-quantity/:id",getAvailableQuantity)
+router.get("/product/quantity/:id",getAvailableQuantity)
 
 //getting category for user dashboard
 
