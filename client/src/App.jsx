@@ -25,6 +25,7 @@ import Products from "./pages/admin/pages/products/Products";
 import EditProduct from "./pages/admin/pages/products/EditProduct";
 import Customers from "./pages/admin/pages/customers/Customers";
 import ProductDetails from "./pages/user/pages/ProductDetails";
+import Cart from "./pages/user/cart/Cart";
 
 function App() {
   const { user } = useSelector((state) => state.user);
@@ -35,13 +36,16 @@ function App() {
       dispatch(getUserDataFirst());
     }
   }, [dispatch, user]);
-
+  const ProtectedRoute = ({ element }) => {
+    const { user } = useSelector((state) => state.user);
+    return user ? element : <Navigate to="/login" />;
+  };
   return (
     //user routes
     <>
       <Toaster position="top-center" />
       <BrowserRouter>
-      {user ? user.role === "user" && <Navbar /> : <Navbar />}
+        {user ? user.role === "user" && <Navbar /> : <Navbar />}
 
         <Routes>
           <Route
@@ -58,7 +62,9 @@ function App() {
               )
             }
           />
-          <Route path="/product/:id" element={<ProductDetails/>}/>
+          {/* user routes */}
+          <Route path="/cart" element={<ProtectedRoute element={<Cart />} />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
 
           {/* Admin Routes */}
           {(user && user.role === "admin") ||
@@ -85,15 +91,15 @@ function AdminRoutes() {
       <Route path="/" element={<AdminDash />}>
         <Route index element={<AdminHome />} />
         {/* cateogories */}
-        <Route path="categories" element={<Categories/>}/>
-        <Route path="categories/create" element={<CreateCategory/>}/>
-        <Route path="categories/edit/:id" element={<EditCategory/>}/>
+        <Route path="categories" element={<Categories />} />
+        <Route path="categories/create" element={<CreateCategory />} />
+        <Route path="categories/edit/:id" element={<EditCategory />} />
         {/* product */}
-        <Route path="product" element={<Products/>}/>
-        <Route path="product/create" element={<AddProducts/>}/>
-        <Route path="product/edit/:id" element={<EditProduct/>}/>
+        <Route path="product" element={<Products />} />
+        <Route path="product/create" element={<AddProducts />} />
+        <Route path="product/edit/:id" element={<EditProduct />} />
         {/* users management */}
-        <Route path="customers" element={<Customers/>}/>
+        <Route path="customers" element={<Customers />} />
       </Route>
     </Routes>
   );

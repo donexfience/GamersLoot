@@ -2,6 +2,7 @@ const express = require("express");
 const { logoutUser, getUserDataFirst } = require("../controllers/userController");
 const { getProducts, getProduct, getAvailableQuantity } = require("../controllers/user/productController");
 const { getCategories } = require("../controllers/user/CategoryController");
+const { getCart, addToCart, deleteCart, deleteOneProduct, incrementQuantity, decrementQuantity } = require("../controllers/user/cartController");
 const router = express.Router();
 //Logout
 
@@ -20,6 +21,16 @@ router.get("/product/quantity/:id",getAvailableQuantity)
 //getting category for user dashboard
 
 // Category
+
 router.get("/categories", getCategories);
+
+//cart
+
+router.get('/cart',getCart);
+router.post('/cart',addToCart);
+router.delete('/cart/:id',deleteCart)
+router.delete('/cart/:cartId/item/:productId',deleteOneProduct)
+router.patch('/cart-increment-quantity/:cartId/item/:ProductId',incrementQuantity)
+router.patch('/cart-decrement-quantity/:cartId/item/:productId',decrementQuantity)
 
 module.exports = router;

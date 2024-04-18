@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { URL } from "../../../Common/api";
+import { URL, commonRequests } from "../../../Common/api";
 import { config } from "../../../Common/configurations";
 import toast from "react-hot-toast";
 import JustLoading from "../../../components/JustLoading";
@@ -14,6 +14,8 @@ import Quantity from "../components/Quantity";
 import { AiFillHeart } from "react-icons/ai";
 import RelatedProducts from "../components/RelatedProducts";
 import UserReview from "../components/UserReview";
+import { addToBuyNowStore } from "../../../redux/reducers/user/buyNowSlice";
+import AnimatedCartButton from "../components/cartAnimatedbutton/AnimatedCartButton";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -74,16 +76,40 @@ const ProductDetails = () => {
     }
   };
 
+  //decrement counts
+
   const decrement = () => {
-    if (count > 0) {
+    if (count > 1) {
       setCount((count) => count - 1);
     }
   };
 
-  console.log(
-    "🚀 ~ file: ProductDetails.jsx:89 ~ ProductDetails ~ ProductImage:",
-    ProductImage
-  );
+  //adding to cart
+  const [cartLoading, setCartLoading] = useState(false);
+
+  const addToCart = async () => {
+    console.log("🚀 ~ file: ProductDetails.jsx:98 ~ addToCart ~ o:", count)
+    setCartLoading(true);
+    await axios
+      .post(
+        `${URL}/user/cart`,
+        {
+          product: id,
+          quantity: count,
+        },
+        
+        { ...config, withCredentials: true }
+      )
+      .then((data) => {
+        toast.success("Added to cart");
+        setCartLoading(false);
+      })
+      .catch((error) => {
+        const err = error.response.data.error;
+        toast.error(err);
+        setCartLoading(false);
+      });
+  };
 
   return (
     <div className="px-5 lg:px-30 py-20 bg-white">
@@ -115,11 +141,11 @@ const ProductDetails = () => {
                     </div>
                   ))}
               </div>
-              <div className="ml-6">
+              <div className="ml-31 mx-auto">
                 {ProductImage && (
                   <ImageZooming
                     imageUrl={`${URL}/img/${ProductImage}`}
-                    width={500}
+                    width={380}
                     zoomedValue={820}
                     zoomedWidth={500}
                   />
@@ -156,7 +182,7 @@ const ProductDetails = () => {
               <p className="description mt-3 font-semibold text-gray-500">
                 {product.description}
               </p>
-              <div class="mt-3 ml-2 mr-3 border border-gray-300"></div>
+              <div className="mt-3 ml-2 mr-3 border border-gray-300"></div>
               <p className="font-bold mt-3">
                 Category:{" "}
                 <span className="font-semibold">
@@ -203,15 +229,14 @@ const ProductDetails = () => {
                   decrement={decrement}
                   increment={increment}
                 />
-                <button
-                  className="w-full  text-black font-bold border border-black rounded-lg p-2 hover:bg-violet-700 hover:text-white"
-                  disabled=""
-                >
-                  Add to Card
-                </button>
+               <AnimatedCartButton onClick={addToCart} isLoading={cartLoading}/>
               </div>
               <div className="flex">
                 <button
+                  onClick={() => {
+                    dispatch(addToBuyNowStore({ product, count }));
+                    navigate('/buy-now')
+                  }}
                   className="w-full  text-white font-bold border bg-violet-700 border-black rounded-lg p-2 hover:bg-violet-700 hover:text-white"
                   disabled=""
                 >
@@ -223,14 +248,15 @@ const ProductDetails = () => {
               </div>
             </div>
           </div>
+          {/* related products based on category */}
           <div className="mt-5">
             <RelatedProducts id={id} />
           </div>
           <div className="border border-red-500">
-              <UserReview/>
+            <UserReview />
           </div>
         </>
-      ) : null}
+      ) : (<p>No data found</p>)}
     </div>
   );
 };
