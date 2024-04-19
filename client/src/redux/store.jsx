@@ -4,6 +4,7 @@ import categoriesReducer from './reducers/admin/categoriesSlice'
 import productReducer from './reducers/admin/ProductSlice'
 import customerReducer from './reducers/admin/customerSlice'
 import userProductReducer from "./reducers/user/userProductSlice";
+import cartReducer from './reducers/user/cartSlice'
 export const store=configureStore({
     reducer:{
         user:userReducer,
@@ -11,6 +12,8 @@ export const store=configureStore({
 
         //user side reducers in store
         userProducts:userProductReducer,
+        cart:cartReducer,
+
 
         //Admin side reducers in store
 

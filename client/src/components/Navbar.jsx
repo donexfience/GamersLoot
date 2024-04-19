@@ -107,7 +107,7 @@ const Navbar = () => {
               <NavLink to="/" className="hover:text-blue-400 p-2">
                 <AiOutlineHome className="text-xl" />
               </NavLink>
-              <NavLink to="/" className="hover:text-blue-400 p-2">
+              <NavLink to="/cart" className="hover:text-blue-400 p-2">
                 <AiOutlineShoppingCart className="text-xl" />
               </NavLink>
               <NavLink to="/" className="hover:text-blue-400 p-2">

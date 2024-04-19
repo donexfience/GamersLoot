@@ -116,33 +116,40 @@ const deleteCart = async (req, res) => {
 const deleteOneProduct = async (req, res) => {
   try {
     const { cartId, productId } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(cartId)) {
-      throw Error("Invalid ID");
-    }
+
     if (!mongoose.Types.ObjectId.isValid(productId)) {
-      throw Error("Invalid ID");
+      throw Error("Invalid Product !!!");
     }
+    if (!mongoose.Types.ObjectId.isValid(cartId)) {
+      throw Error("Invalid Cart !!!");
+    }
+
     const updatedCart = await Cart.findByIdAndUpdate(cartId, {
-      $pull: { items: { product: productId } },
+      $pull: {
+        items: { product: productId },
+      },
     });
+
     if (!updatedCart) {
-      throw Error("Invalid product");
+      throw Error("Invalid Product");
     }
-    console.log(
-      "🚀 ~ file: cartController.js:116 ~ deleteOneProduct ~ updatedCart:",
-      updatedCart
-    );
+
+    console.log(updatedCart);
+
+    res.status(200).json({ productId });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 const incrementQuantity = async (req, res) => {
   try {
-    const { cartId, productId } = req.params;
+    console.log(req.params)
+    const { cartId, ProductId } = req.params;
     let cart = await Cart.findOne({ _id: cartId });
     let [product] = cart.items.filter((item) => {
-      return item.product.toString() === productId;
+      return item.product.toString() === ProductId;
     });
+    console.log(product)
     let productOriginalData = await Product.findById(product.product, {
       stockQuantity: 1,
     });
@@ -151,7 +158,7 @@ const incrementQuantity = async (req, res) => {
     }
     cart = await Cart.findOneAndUpdate(
       {
-        "items.product": productId,
+        "items.product": ProductId,
         _id: cartId,
       },
       {
@@ -164,10 +171,12 @@ const incrementQuantity = async (req, res) => {
       }
     );
     let [dataAfterIncrement] = cart.items.filter((item) => {
-      return item.product.toString() === productId;
+      return item.product.toString() === ProductId;
     });
     return res.status(200).json({ updatedItem: dataAfterIncrement });
+
   } catch (error) {
+    console.error(error)
     res.status(400).json({ error: error.message });
   }
 };
@@ -175,26 +184,35 @@ const incrementQuantity = async (req, res) => {
 const decrementQuantity = async (req, res) => {
   try {
     const { cartId, productId } = req.params;
+    
+    // Find the cart
     let cart = await Cart.findOne({ _id: cartId });
-    let [product] = cart.items.filter((item) => {
-      return item.product.toString() === productId;
-    });
-    if (product.quantity < 2) {
-      throw Error("At least 1 quantity is required");
+
+    // Find the product in the cart
+    const productIndex = cart.items.findIndex(item => item.product.toString() === productId);
+    if (productIndex === -1) {
+      throw new Error("Product not found in cart");
     }
-    cart = await Cart.findByIdAndUpdate(
-      { "item.product": productId, _id: cartId },
-      { $inc: { "items.$.quantity": -1 } },
-      { new: true }
-    );
-    let [dataAfterDecrement] = cart.item.filter((item) => {
-      return item.product.toString() === productId;
-    });
-    return res.status(200).json({ updatedItem: dataAfterDecrement });
+
+    // Ensure the quantity is greater than 1
+    if (cart.items[productIndex].quantity < 2) {
+      throw new Error("At least 1 quantity is required");
+    }
+
+    // Decrement the quantity of the product in the cart
+    cart.items[productIndex].quantity--;
+    cart = await cart.save();
+
+    // Return the updated product data
+    const updatedItem = cart.items[productIndex];
+
+    return res.status(200).json({ updatedItem });
   } catch (error) {
+    console.error(error);
     res.status(400).json({ error: error.message });
   }
 };
+
 module.exports = {
   getCart,
   deleteCart,

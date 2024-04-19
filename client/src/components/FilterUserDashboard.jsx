@@ -6,7 +6,6 @@ import { BiTrash } from "react-icons/bi";
 
 const FilterUserDashboard = ({ handleClick, filters, price, clearFilters }) => {
   const [categories, setCategories] = useState([]);
-  console.log("🚀 ~ file: FilterUserDashboard.jsx:9 ~ FilterUserDashboard ~ categories:", categories)
   const loadCategories = async () => {
     const { data } = await axios.get(`${URL}/user/categories`, config);
     setCategories(data.categories);

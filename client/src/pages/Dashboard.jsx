@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SearchBar from "../components/SearchBar";
 import { useSearchParams } from "react-router-dom";
-import { getUserProducts } from "../redux/actions/userProductAction";
 import FilterUserDashboard from "../components/FilterUserDashboard";
 import JustLoading from "../components/JustLoading";
 import SortButton from "../components/SortButton";
 import ProductCard from './user/ProductCard'
 import Pagination from '../components/Pagination'
+import { getUserProducts } from "../redux/actions/user/userProductAction";
 
 const Dashboard = () => {
   const { userProducts, loading, error, totalAvailableProducts } = useSelector(
@@ -22,7 +22,7 @@ const Dashboard = () => {
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
   const [sort, setSort] = useState("");
-  console.log("🚀 ~ file: Dashboard.jsx:26 ~ Dashboard ~ userProducts:", userProducts)
+
 
   useEffect(() => {
     const categoryParam = searchParams.get("category");

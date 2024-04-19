@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { commonReduxRequests } from "../..//Common/api";
-import { appJson } from "../../Common/configurations";
+import { commonReduxRequests } from "../../../Common/api";
+import { appJson } from "../../../Common/configurations";
 export const getUserProducts = createAsyncThunk(
   "products/getUserProducts",
   async (searchParams, { rejectWithValue }) => {

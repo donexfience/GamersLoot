@@ -28,14 +28,12 @@ const BestSellingProducts = () => {
         null,
         appJson
       );
-      console.log(res);
       if (res.keyboards) {
         setList(res.keyboards);
       }
     };
     loadData();
   }, []);
-  console.log(list, "===============");
   return (
     <div className="pt-20 lg:py-20 relative bg-black">
       <div>

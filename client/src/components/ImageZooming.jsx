@@ -10,7 +10,6 @@ const ImageZooming = ({ width, zoomedWidth, zoomedValue, imageUrl }) => {
       setImageSize({ width: img.naturalWidth, height: img.naturalHeight });
     }
   }, []);
-  console.log(imageUrl,"image from zooming")
 
   const handleHover = (e) => {
     const box1Rect = document.querySelector(".box1").getBoundingClientRect();

@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { URL } from "../Common/api";
 
 const ProductCard = ({data}) => {
-  console.log(data,"product card")
   return (
     <div className="flex-shrink-0 text-center">
       <div className="w-56 h-56 mx-auto">

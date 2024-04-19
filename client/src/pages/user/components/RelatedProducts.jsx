@@ -26,7 +26,6 @@ const RelatedProducts = ({id}) => {
       const { data } = await axios.get(`${URL}/user/product/${id}`, {
         withCredentials: true,
       });
-      console.log(data,"loadDataa at product card")
       if (data) {
         setProduct(data.similarProducts);
       }
