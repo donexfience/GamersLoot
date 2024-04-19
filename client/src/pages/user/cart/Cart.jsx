@@ -12,6 +12,7 @@ import BreadCrumbs from "../../admin/components/BreadCrumbs";
 import CartProductRow from "../../../components/CartProductRow";
 import CartEmpty from '../../../assets/CartEmpty.jpg'
 import TotalPrice from "./TotalPrice";
+import { AiOutlineDelete } from "react-icons/ai";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -59,10 +60,15 @@ const Cart = () => {
   return (
     <div className="bg-gray-100 flex lg:flex-row flex-col gap-5 lg:px-28 px-5 py-20 min-h-screen">
       <div className="lg:w-2/3 bg-white border border-gray-200 shadow-lg ">
+
+
         <BreadCrumbs list={["Home", "Cart"]} />
 
-        <div className="mb-4 bg-white  p-4 flex items-center justify-center">
+        <div className="mb-4 bg-white  p-4 flex items-center justify-evenly">
           <h2 className="text-violet-500 font-bold text-lg ">Product Cart</h2>
+          <div className="">
+          <button className="bg-violet-600 p-3 text-white rounded-md flex items-center gap-3 font-semibold" onClick={toggleConfirm}>Delete Cart <AiOutlineDelete /></button>
+        </div>
         </div>
         {showConfirm && (
           <ConfirmModal
@@ -136,7 +142,7 @@ const Cart = () => {
       <div className="lg:w-1/3 shadow-lg bg-white ">
         <div className="bg-white border p-5    ">
           <h3 className="font-bold text-violet-500">Cart Total</h3>
-        <TotalPrice/>
+        <TotalPrice/> 
         </div>
       </div>
     </div>
