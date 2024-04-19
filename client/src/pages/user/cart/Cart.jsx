@@ -139,6 +139,16 @@ const Cart = () => {
         <div className="bg-white border p-5    ">
           <h3 className="font-bold text-violet-500">Cart Total</h3>
         <TotalPrice/>
+        <button className="bg-violet-600 w-full p-3  text-white font-bold rounded-md"
+            onClick={() => {
+              if (cart.length > 0) {
+                navigate("/checkout");
+              }
+              else{
+                toast.error("Nothing inside the cart")
+              }
+            }}
+          >Procced to Checkout</button>
         </div>
       </div>
     </div>
