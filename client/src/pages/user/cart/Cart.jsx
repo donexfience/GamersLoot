@@ -12,6 +12,7 @@ import BreadCrumbs from "../../admin/components/BreadCrumbs";
 import CartProductRow from "../../../components/CartProductRow";
 import CartEmpty from '../../../assets/CartEmpty.jpg'
 import TotalPrice from "./TotalPrice";
+import { AiOutlineDelete } from "react-icons/ai";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -61,8 +62,9 @@ const Cart = () => {
       <div className="lg:w-2/3 bg-white border border-gray-200 shadow-lg ">
         <BreadCrumbs list={["Home", "Cart"]} />
 
-        <div className="mb-4 bg-white  p-4 flex items-center justify-center">
+        <div className="mb-4 bg-white  p-4 flex items-center justify-between">
           <h2 className="text-violet-500 font-bold text-lg ">Product Cart</h2>
+          <button className="flex gap-4 items-center p-3  font-bold  rounded-md bg-violet-500 text-white" onClick={toggleConfirm}>Delete Cart <AiOutlineDelete></AiOutlineDelete></button>
         </div>
         {showConfirm && (
           <ConfirmModal

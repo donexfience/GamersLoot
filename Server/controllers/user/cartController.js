@@ -100,8 +100,8 @@ const addToCart = async (req, res) => {
 
 const deleteCart = async (req, res) => {
   try {
-    const { _id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(_id)) {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       throw Error("Invalid ID");
     }
     const cartItem = await Cart.findOneAndDelete({ _id: id });
