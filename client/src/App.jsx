@@ -27,6 +27,7 @@ import Customers from "./pages/admin/pages/customers/Customers";
 import ProductDetails from "./pages/user/pages/ProductDetails";
 import Cart from "./pages/user/cart/Cart";
 import Checkout from "./pages/user/checkout/Checkout";
+import OrderConfirmation from "./pages/user/order/OrderConfirmation";
 
 function App() {
   const { user } = useSelector((state) => state.user);
@@ -72,6 +73,9 @@ function App() {
           {/* checkout */}
 
           <Route path="/checkout" element={<ProtectedRoute element={<Checkout/>}/>}/>
+
+          {/* order confirmation */}
+          <Route path='/order-confirmation' element={<ProtectedRoute element={<OrderConfirmation/>}/>}/>
 
           {/* Admin Routes */}
           {(user && user.role === "admin") ||

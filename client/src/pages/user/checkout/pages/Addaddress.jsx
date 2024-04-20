@@ -8,7 +8,7 @@ import SearchInput from "./SearchInput";
 import { createAddress } from "../../../../redux/actions/user/addressAction";
 import InputType from "../../../../components/InputType";
 
-const Address = ({ closeToggle }) => {
+const Addaddress = ({ closeToggle }) => {
   const dispatch = useDispatch();
   const countries = Country.getAllCountries();
   let [states, setStates] = useState([]);
@@ -61,9 +61,9 @@ const Address = ({ closeToggle }) => {
   };
 
   return (
-    <div className="bg-white w-5/6 shadow-2xl overflow-y-hidden h-screen lg:h-auto rounded-lg ">
+    <div className="bg-white  shadow-2xl overflow-y-hidden h-screen lg:h-auto rounded-lg w-full ">
       <div className="bg-white pt-5 pb-3 px-7 flex items-center justify-between">
-        <h1 className="font-bold text-lg ">Create your Delivery Address</h1>
+        <h1 className="font-bold text-lg text-violet-500">Create your Delivery Address</h1>
         <AiOutlineClose
           className="text-xl cursor-pointer"
           onClick={closeToggle}
@@ -135,4 +135,4 @@ const Address = ({ closeToggle }) => {
   );
 };
 
-export default Address;
+export default Addaddress;

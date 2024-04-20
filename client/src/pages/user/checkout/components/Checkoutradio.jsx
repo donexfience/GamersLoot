@@ -9,13 +9,15 @@ const Checkoutradio = ({
   toggleEditAddressModal,
   toggleDeleteAdressModal,
 }) => {
-  //   const selected = selectedAddress === item._id;
-  const selected = false;
+    console.log(item,"------------")
+    const selected = selectedAddress === item._id;
+    console.log(selected)
+  
 
   return (
     <div
-      className={ `border border-violet-500 shadow-slate-950 bg-white rounded my-1 py-2 px-4 cursor-pointer hover:bg-white flex justify-between${
-        selected ? " text-black font-bold" : ""
+      className={ ` shadow-slate-950 bg-white rounded my-1 py-2 px-4 cursor-pointer hover:bg-white flex justify-between${
+        selected ? "  font-bold text-lg text-blue-500" : ""
       }`}
     >
       <div className="flex items-center">
@@ -31,10 +33,10 @@ const Checkoutradio = ({
               }}
             />
           </span>
-          <span className="font font-semibold border-yellow-400 text-violet-500">
-            {/* {item.firstName} {item.lastName}
+          <span className=" ml-4 rounded-lg p-4 h-16">
+            {item.firstName} {item.lastName}
               {" "}
-              {item.address} */}
+              {item.address}
           </span>
         </p>
       </div>

@@ -18,23 +18,23 @@ const TotalPrice = () => {
   return (
     <div className="border-b border-gray-200 pb-2 mb-2">
       <div className="cart-total-list">
-        <p className="cart-total-list-first">Sub Total</p>
+        <p className="cart-total-list-first font-bold text-violet-500">Sub Total</p>
         <p className="cart-total-list-second">{totalPrice}₹</p>
       </div>
 
       <div className="cart-total-list">
-        <p className="cart-total-list-first">Tax</p>
+        <p className="cart-total-list-first font-bold text-violet-500">Tax</p>
         <p className="cart-total-list-second">{parseInt(tax)}₹</p>
       </div>
 
       <div className="cart-total-list">
-        <p className="cart-total-list-first">Shipping</p>
+        <p className="cart-total-list-first font-bold text-violet-500">Shipping</p>
         <p className="cart-total-li-second">
           {shipping === 0 ? "Free" : shipping}
         </p>
       </div>
       <div className="cart-total-list">
-        <p className="font-semibold text-gray-500">Total</p>
+        <p className=" font-bold text-red-400">Total</p>
         <p className="font-semibold">{finalprice}₹</p>
       </div>
     </div>

@@ -8,7 +8,7 @@ const InputType = ({ title, name, placeholder, optional }) => {
   return (
     <div className="text-sm my-2 w-full ">
       <p className="my-1 px-3 font-semibold">
-        <label htmlFor="username">
+        <label htmlFor="username" className="text-violet-500">
           {title}{" "}
           <span className="text-gray-400">{optional && "(Optional)"}</span>
         </label>

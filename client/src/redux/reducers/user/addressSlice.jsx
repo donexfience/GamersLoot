@@ -1,11 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  getAddress,
-  createAddress,
-  deleteAddress,
-  updateAddress,
-} from "../../actions/user/addressAction";
 import toast from "react-hot-toast";
+import { createAddress, deleteAddress, getAddresses, updateAddress } from "../../actions/user/addressAction";
 
 const addressSlice = createSlice({
   name: "addresses",
@@ -16,19 +11,20 @@ const addressSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getAddress.pending, (state) => {
+      .addCase(getAddresses.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getAddress.fulfilled, (state, { payload }) => {
+      .addCase(getAddresses.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.error = null;
         state.addresses = payload.addresses;
       })
-      .addCase(getAddress.rejected, (state, { payload }) => {
+      .addCase(getAddresses.rejected, (state, { payload }) => {
         state.loading = false;
         state.addresses = null;
         state.error = payload;
       })
+      // Address creation
       .addCase(createAddress.pending, (state) => {
         state.loading = true;
       })

@@ -7,7 +7,7 @@ export const createAddress = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     return commonReduxRequests(
       "post",
-      "/user/address",
+      `/user/address`,
       formData,
       appJson,
       rejectWithValue
@@ -15,12 +15,12 @@ export const createAddress = createAsyncThunk(
   }
 );
 
-export const getAddress = createAsyncThunk(
-  "address/getAddress",
+export const getAddresses = createAsyncThunk(
+  "address/getAddresses",
   async (_, { rejectWithValue }) => {
     return commonReduxRequests(
       "get",
-      "/user/address",
+      `/user/address`,
       null,
       appJson,
       rejectWithValue
@@ -33,8 +33,8 @@ export const deleteAddress = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     return commonReduxRequests(
       "delete",
-      `/user/address${id}`,
-      null,
+      `/user/address/${id}`,
+      {},
       appJson,
       rejectWithValue
     );
@@ -46,9 +46,9 @@ export const updateAddress = createAsyncThunk(
   async ({ id, formData }, { rejectWithValue }) => {
     return commonReduxRequests(
       "patch",
-      `/user/address${id}`,
+      `/user/address/${id}`,
       formData,
-      appJson,
+      appJson,      
       rejectWithValue
     );
   }

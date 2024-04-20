@@ -137,4 +137,4 @@ const cartSlice = createSlice({
   },
 });
 export default cartSlice.reducer;
-export const {calculateTotalPrice}= cartSlice.actions
+export const {calculateTotalPrice,clearCartOnOrderPlaced}= cartSlice.actions
