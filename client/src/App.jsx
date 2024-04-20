@@ -26,6 +26,7 @@ import EditProduct from "./pages/admin/pages/products/EditProduct";
 import Customers from "./pages/admin/pages/customers/Customers";
 import ProductDetails from "./pages/user/pages/ProductDetails";
 import Cart from "./pages/user/cart/Cart";
+import Checkout from "./pages/user/checkout/Checkout";
 
 function App() {
   const { user } = useSelector((state) => state.user);
@@ -63,8 +64,14 @@ function App() {
             }
           />
           {/* user routes */}
+
+          {/* cart */}
           <Route path="/cart" element={<ProtectedRoute element={<Cart />} />} />
+          {/* product details */}
           <Route path="/product/:id" element={<ProductDetails />} />
+          {/* checkout */}
+
+          <Route path="/checkout" element={<ProtectedRoute element={<Checkout/>}/>}/>
 
           {/* Admin Routes */}
           {(user && user.role === "admin") ||

@@ -148,7 +148,7 @@ const Cart = () => {
       <div className="lg:w-1/3 shadow-lg bg-white ">
         <div className="bg-white border p-5    ">
           <h3 className="font-bold text-violet-500">Cart Total</h3>
-          <TotalPrice />
+          <TotalPrice/>
           <button className="bg-violet-600 w-full p-3  text-white font-bold rounded-md"
             onClick={() => {
               if (cart.length > 0) {
