@@ -157,6 +157,9 @@ const incrementQuantity = async (req, res) => {
     if (product.quantity >= productOriginalData.stockQuantity) {
       throw Error("Insufficient Products");
     }
+    if(product.quantity>=5){
+      throw Error("Maximum limit exceed")
+    }
     cart = await Cart.findOneAndUpdate(
       {
         "items.product": ProductId,

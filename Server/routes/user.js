@@ -67,4 +67,12 @@ router.post("/address", createAddress);
 router.delete("/address/:id", deleteAddress);
 router.patch("/address/:id", updateAddress);
 
+//order
+router.post('/order')
+router.get('/orders')
+router.get('/order/:id');
+router.post('/cancel-order/:id')
+
+
+
 module.exports = router;

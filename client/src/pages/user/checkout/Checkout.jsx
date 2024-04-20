@@ -48,7 +48,7 @@ const Checkout = () => {
   //naviagation to confirmation page
 
   const navigateOrderConfirmation = (order) => {
-    if (orderID) {
+    if (order) {
       navigate("/order-confirmation", { state: order });
     }
   };
