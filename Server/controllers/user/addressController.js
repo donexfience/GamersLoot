@@ -83,12 +83,13 @@ const updateAddress = async (req, res) => {
 const deleteAddress = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(_id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       throw Error("Invalid User Id");
     }
     const address = await Address.findByIdAndDelete(id);
     res.status(200).json({ address });
   } catch (error) {
+    console.error(error)
     res.status(400).json({ error: error.message });
   }
 };
