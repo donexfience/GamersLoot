@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const User = require("./userModel");
 const Counter =require('./counterModel')
 const { Schema } = mongoose;
+const Product =require('../model/ProductModel')
 
 const StatusHistorySchema = new Schema({
   status: {
@@ -11,7 +12,7 @@ const StatusHistorySchema = new Schema({
       "processing",
       "shipped",
       "delivered",
-      "canceled",
+      "cancelled",
       "return request",
       "return approved",
       "return rejected",

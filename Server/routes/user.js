@@ -24,6 +24,7 @@ const {
   deleteAddress,
   updateAddress,
 } = require("../controllers/user/addressController");
+const { createOrder, getOrder, getOrders, cancelOrder } = require("../controllers/user/orderController");
 const router = express.Router();
 //Logout
 
@@ -68,10 +69,10 @@ router.delete("/address/:id", deleteAddress);
 router.patch("/address/:id", updateAddress);
 
 //order
-router.post('/order')
-router.get('/orders')
-router.get('/order/:id');
-router.post('/cancel-order/:id')
+router.post('/order',createOrder)
+router.get('/orders',getOrders)
+router.get('/order/:id',getOrder);
+router.post('/cancel-order/:id',cancelOrder)
 
 
 

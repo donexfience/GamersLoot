@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { FaSpinner } from "react-icons/fa";
-import "./styles.css"; // Import your CSS file containing the vibrate animation
+import Delivery from '../../../../assets/Delivery.mp4'
 
 const AnimatedCartButton = ({ onClick, isLoading }) => {
   const [isClicked, setIsClicked] = useState(false);
@@ -17,7 +17,7 @@ const AnimatedCartButton = ({ onClick, isLoading }) => {
 
   return (
     <button
-      className={`w-full relative flex items-center justify-center px-4 py-2 text-black border-2 border-purple-600 rounded-lg transition-all duration-300 ${
+      className={`relative flex items-center justify-center px-4 py-2 text-black border-2 border-purple-600 rounded-lg transition-all duration-300 w-full ${
         isClicked ? "animate-vibrate" : ""
       }`}
       onClick={handleClick}
@@ -27,19 +27,20 @@ const AnimatedCartButton = ({ onClick, isLoading }) => {
         <FaSpinner className="animate-spin mr-2 font-bold" />
       ) : (
         <>
-          <span className={`w-full font-bold ${isClicked ? "invisible" : ""}`}>
-            Add to Cart
-          </span>
-          <span
-            className={`font-bold absolute ${
-              isClicked ? "visible" : "invisible"
-            }`}
-          >
-            Added to Cart
-          </span>
-          <AiOutlineShoppingCart
-            className={`ml-2 font-bold ${isClicked ? "invisible" : ""}`}
-          />
+          {!isClicked && (
+            <>
+              <span className="font-bold">Add to Cart</span>
+              <AiOutlineShoppingCart className="ml-2 font-bold" />
+            </>
+          )}
+          {isClicked && (
+            <div className="w-10 h-10">
+              <video autoPlay loop muted className="object-cover">
+                <source src={Delivery} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          )}
         </>
       )}
     </button>
