@@ -46,9 +46,9 @@ const OrderDetailsProductRow = ({
       {status !== "pending" &&
         status !== "processing" &&
         status !== "shipped" && (
-          <td>
+          <td className="flex items-center justify-center">
             <p
-              className="font-semibold flex items-center gap-1 text-blue-400 cursor-pointer hover:bg-blue-100 p-2 rounded-lg shrink-0"
+              className="font-semibold flex items-center gap-1 text-white cursor-pointer bg-violet-500 p-3 mr-22 hover:bg-blue-100  rounded-lg shrink-0"
               onClick={() => toggleReviewModal(item.productId)}
             >
               Leave a Review <BiMessageSquareDetail />

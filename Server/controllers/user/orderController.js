@@ -164,7 +164,7 @@ const cancelOrder = async (req, res) => {
     });
     await Promise.all(updateProductCount);
     const order = await Order.findOneAndUpdate(
-      find,
+      finder,
       {
         $set: { status: "cancelled" },
         $push: {
@@ -190,6 +190,7 @@ const cancelOrder = async (req, res) => {
     );
     res.status(200).json({ order });
   } catch (error) {
+    console.error(error,"error from cancel order")
     res.status(400).json({ error: error.message });
   }
 };
