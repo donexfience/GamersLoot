@@ -9,7 +9,7 @@ const SortButton = ({ sort, handleClick }) => {
     <div className="{shrink-0 flex gap-2 items-center}">
       <p className="shrink-0 pt-3 text-white ">Sort By :</p>
       <select
-        className=" bg-violet-500  shadow-xd py-3 px-2 rounded-lg text-white font-bold "
+        className="border text-black bg-violet-400 border-violet-500 shadow-xd py-3 px-2 rounded-lg font-bold "
         onChange={(e) => {
           handleChange("sort", e.target.value);
         }}

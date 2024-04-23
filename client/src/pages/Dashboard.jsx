@@ -135,6 +135,8 @@ const Dashboard = () => {
         price={price}
       />
       <div className="w-full lg:w-4/5 pb-5">
+        {/* Sort Button moved below the product cards */}
+
         <div className="flex flex-col lg:flex-row gap-5 items-center justify-between">
           <SearchBar
             handleClick={handleClick}
@@ -142,6 +144,9 @@ const Dashboard = () => {
             placeholder={"search Products here"}
             setSearch={setSearch}
           />
+          <div className="flex justify-end">
+            <SortButton handleClick={handleClick} sort={sort} />
+          </div>
           <div className="shrink-0 hidden ml-5 lg:block">
             {userProducts.length}/{totalAvailableProducts} Results Loaded
           </div>
@@ -162,10 +167,6 @@ const Dashboard = () => {
                   <p>Nothing to show</p>
                 </div>
               )}
-            </div>
-            {/* Sort Button moved below the product cards */}
-            <div className="flex justify-end">
-              <SortButton handleClick={handleClick} sort={sort} />
             </div>
           </div>
         )}

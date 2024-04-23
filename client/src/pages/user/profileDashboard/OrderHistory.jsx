@@ -49,7 +49,7 @@ const OrderHistory = () => {
             <JustLoading size={10} />
           ) : userOrders && userOrders.length > 0 ? (
             <div className="overflow-x-auto">
-              <table className="w-full min-w-max table-auto text-sm border">
+              <table className="w-full min-w-max table-auto text-sm shadow-lg">
                 <thead>
                   <tr className="">
                     <td className="px-5 py-2 font-bold text-violet-400">Product Name</td>
