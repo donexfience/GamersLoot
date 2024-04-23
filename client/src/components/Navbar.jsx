@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { debounce } from "time-loom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/actions/userActions";
+import download from '../assets/download.json'
 import {
   AiOutlineShoppingCart,
   AiOutlineHeart,
@@ -21,6 +22,7 @@ import { TiTicket } from "react-icons/ti";
 import GamersLootLogo from "./GamersLootLogo";
 import OutsideTouchCloseComponent from "./OutSideTouchCloseComponent";
 import { useLocation } from "react-router-dom";
+import { BsArrowDown } from "react-icons/bs";
 
 const Navbar = () => {
   //navbar colour changing 
@@ -29,14 +31,20 @@ const Navbar = () => {
 
   useEffect(() => {
     // Change navbar color based on the current route
+    if (location.pathname === "/" && user) {
+      setNavbarColor("text-black"); // Change to the desired color
+    }
     if (location.pathname === "/") {
-      setNavbarColor("text-white"); // Change to the desired color
+      setNavbarColor("text-black"); // Change to the desired color
+    }
+    if (location.pathname === "/login") {
+      setNavbarColor("text-black"); // Change to the desired color
     }
    else if (location.pathname.includes("/product/")) {
     setNavbarColor("text-black"); // Change to the desired color for paths containing "/product/"
   } 
    else {
-      setNavbarColor("text-black"); // Change to the default color
+      setNavbarColor("text-white"); // Change to the default color
     }
   }, [location.pathname]);
 
@@ -104,13 +112,13 @@ const Navbar = () => {
         <div className="flex sm:gap-6 items-center justify-center relative">
           {user && (
             <>
-              <NavLink to="/" className="hover:text-blue-400 p-2">
+              <NavLink to="/" className="text-black hover:text-blue-400 p-2">
                 <AiOutlineHome className="text-xl" />
               </NavLink>
-              <NavLink to="/cart" className="hover:text-blue-400 p-2">
+              <NavLink to="/cart" className="text-black hover:text-blue-400 p-2">
                 <AiOutlineShoppingCart className="text-xl" />
               </NavLink>
-              <NavLink to="/" className="hover:text-blue-400 p-2">
+              <NavLink to="/" className="text-black hover:text-blue-400 p-2">
                 <AiOutlineHeart className="text-xl" />
               </NavLink>
               <button
@@ -120,48 +128,60 @@ const Navbar = () => {
                 <GiHamburgerMenu className="text-xl" />
               </button>
               <button
-                className="hover:text-blue-400 hidden sm:block"
+                className="text-black hover:text-blue-400 hidden sm:block"
                 onClick={toggleDropDown}
               >
                 <AiOutlineUser className="text-xl" />
               </button>
 
               {dropDown && (
-                <OutsideTouchCloseComponent
-                  toggleVisibility={toggleDropDown}
-                  style="absolute top-10 right-0 font-normal w-44 bg-white rounded-lg shadow-2xl"
-                  showSideNavbar={showSideNavbar}
-                >
-                  <NavLink
-                    to="/dashboard/"
-                    className="navbar-drop-ul mb-5 flex items-center text-violet-500 font-bold"
-                    onClick={toggleDropDown}
-                  >
-                    <RiDashboardLine className="text-xl mr-2 text-violet-500 font-bold" /> Dashboard
-                  </NavLink>
-                  <NavLink
-                    to="/dashboard/profile"
-                    className="navbar-drop-ul flex items-center mb-5 text-violet-500"
-                    onClick={toggleDropDown}
-                  >
-                    <AiOutlineUser className="text-xl mr-2 text-violet-500 font-bold" /> Profile
-                  </NavLink>
-                  <NavLink
-                    to="/dashboard/order-history"
-                    className="navbar-drop-ul flex items-center mb-5 text-violet-500"
-                    onClick={toggleDropDown}
-                  >
-                    <AiOutlineHistory className="text-xl mr-2 text-violet-500 font-bold" /> Order
-                    History
-                  </NavLink>
-                  <button
-                    onClick={handleLogout}
-                    className="navbar-drop-ul flex items-center w-full text-violet-500 font-bold"
-                  >
-                    <AiOutlineLogout className="text-xl text-violet-500 mr-2 " />
-                    Logout
-                  </button>
-                </OutsideTouchCloseComponent>
+                   <div className="relative inline-block text-left">
+                   <button
+                     type="button"
+                     className="inline-flex justify-center items-center w-full px-4 py-2 border border-indigo-500 rounded-md shadow-sm bg-indigo-500 text-sm font-medium text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                     onClick={toggleDropDown}
+                   >
+                     Open Dropdown
+                   </button>
+             
+                   {dropDown && (
+                     <OutsideTouchCloseComponent
+                       toggleVisibility={toggleDropDown}
+                       style="absolute top-10 right-2 p-5 font-normal w-44 bg-white rounded-lg shadow-2xl"
+                       showSideNavbar={showSideNavbar}
+                     >
+                       <NavLink
+                         to="/dashboard/"
+                         className="navbar-drop-ul mb-3 flex items-center text-indigo-500 font-bold"
+                         onClick={toggleDropDown}
+                       >
+                         <RiDashboardLine className="text-xl mr-2 text-indigo-500 font-bold" /> Dashboard
+                       </NavLink>
+                       <NavLink
+                         to="/dashboard/profile"
+                         className="navbar-drop-ul mb-3 flex items-center text-indigo-500 font-bold"
+                         onClick={toggleDropDown}
+                       >
+                         <AiOutlineUser className="text-xl mr-2 text-indigo-500 font-bold" /> Profile
+                       </NavLink>
+                       <NavLink
+                         to="/dashboard/order-history"
+                         className="navbar-drop-ul mb-3 flex items-center text-indigo-500 font-bold"
+                         onClick={toggleDropDown}
+                       >
+                         <AiOutlineHistory className="text-xl mr-2 text-indigo-500 font-bold" /> Order History
+                       </NavLink>
+                       <button
+                         onClick={handleLogout}
+                         className="navbar-drop-ul flex items-center w-full text-indigo-500 font-bold"
+                       >
+                         <AiOutlineLogout className="text-xl text-indigo-500 mr-2" />
+                         Logout
+                       </button>
+                     </OutsideTouchCloseComponent>
+                   )}
+                 </div>
+               
               )}
             </>
           )}

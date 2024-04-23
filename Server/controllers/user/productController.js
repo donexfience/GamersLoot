@@ -2,7 +2,7 @@ const Product = require("../../model/ProductModel");
 const mongoose = require("mongoose");
 const getProducts = async (req, res) => {
   try {
-    const { category, price, search, sort, page = 1, limit = 4 } = req.query;
+    const { category, price, search, sort, page = 1, limit = 7 } = req.query;
     let filter = {};
     if (category) {
       filter.category = { $in: category.split(",") };

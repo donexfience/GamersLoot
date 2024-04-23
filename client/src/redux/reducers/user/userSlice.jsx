@@ -1,5 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginUser, logout,getUserDataFirst,googleLoginOrSignUp,signUpUser } from "../../actions/userActions";
+import {
+  loginUser,
+  logout,
+  getUserDataFirst,
+  googleLoginOrSignUp,
+  signUpUser,
+  editUserProfile,
+} from "../../actions/userActions";
 import toast from "react-hot-toast";
 
 const userSlice = createSlice({
@@ -25,10 +32,10 @@ const userSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state, { payload }) => {
         (state.loading = false), (state.user = null), (state.error = payload);
-      }).addCase(logout.rejected,(state,{payload})=>{
-        state.loading=false
-        state.user=null,
-        state.error=payload
+      })
+      .addCase(logout.rejected, (state, { payload }) => {
+        state.loading = false;
+        (state.user = null), (state.error = payload);
       })
       // Get User data when user comes back later to website after closing the browser we can again get access.
       .addCase(getUserDataFirst.pending, (state) => {
@@ -86,8 +93,22 @@ const userSlice = createSlice({
         state.loading = false;
         state.user = null;
         state.error = payload;
+      })
+      .addCase(editUserProfile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(editUserProfile.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.user = payload;
+        toast.success("Profile Updated");
+      })
+      .addCase(editUserProfile.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.user = null;
+        state.error = payload;
       });
   },
 });
-export const {updateUserOnOTPValidation,updateError}=userSlice.actions
+export const { updateUserOnOTPValidation, updateError } = userSlice.actions;
 export default userSlice.reducer;

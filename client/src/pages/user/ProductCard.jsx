@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { URL } from "../../Common/api";
+import { FaHeart, FaStar } from "react-icons/fa"; // Example: Heart and Star icons from Font Awesome
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
@@ -10,41 +11,51 @@ const ProductCard = ({ product }) => {
 
   return (
     <div
-      className="relative p-5 bg-white rounded-lg border border-gray-200 hover:shadow-lg cursor-pointer"
+      className="relative p-5 bg-white rounded-lg shadow-xl hover:shadow- cursor-pointer"
       onClick={() => navigate(`/product/${product._id}`)}
     >
-      {parseInt(product.offer) > 0 && (
-        <div className="absolute top-0 left-0 bg-orange-500 text-white py-1 px-2 rounded-tl-lg rounded-br-lg">
-          {product.offer}% OFF
-        </div>
-      )}
-      <div className="overflow-hidden rounded-lg h-56">
+      {/* Product Image */}
+      <div className="overflow-hidden rounded-lg h-56 mb-4">
         <img
           src={`${URL}/img/${product.imageURL}`}
           alt={product.name}
-          className="object-contain w-full h-full"
+          className="object-cover w-full h-full"
         />
       </div>
-      {product.numberOfReviews > 0 ? (
-        <RatingStars
-          numberOfReviews={product.numberOfReviews}
-          rating={product.rating}
-        />
-      ) : (
-        <div className="h-9"></div>
-      )}
-      <p className="font-bold text-lg text-gray-800 line-clamp-1">{product.name}</p>
-      <p className="font-semibold text-md text-blue-500">
-        {product.offer ? (
-          <>
-            <span className="text-gray-500 line-through">
-              {product.price}₹
-            </span>
-            {" "}
-          </>
-        ) : null}
-        {discountedPrice + product.markup}₹ {/* Displaying the discounted price + markup */}
-      </p>
+      
+      {/* Product Title */}
+      <p className="font-bold text-lg text-gray-800 line-clamp-2 mb-2">{product.name}</p>
+      
+      {/* Product Price and Rating */}
+      <div className="flex items-center justify-between mb-2">
+        <p className="font-semibold text-md text-blue-500">
+          {product.offer ? (
+            <>
+              <span className="text-gray-500 line-through">
+                {product.price}₹
+              </span>{" "}
+            </>
+          ) : null}
+          {discountedPrice + product.markup}₹ {/* Displaying the discounted price + markup */}
+        </p>
+        <div className="flex items-center text-yellow-500">
+          <FaStar className="mr-1" />
+          <span>{product.rating}</span>
+        </div>
+      </div>
+      
+      {/* Additional content */}
+      <div className="flex justify-between items-center mt-2">
+        <div className="flex items-center">
+          <button className="text-gray-500 hover:text-red-500 mr-2">
+            <FaHeart className="text-red-500" /> {/* Heart icon */}
+          </button>
+          <p className="text-sm text-green-600">Available: {product.availability}</p>
+        </div>
+        <button className="px-3 py-1 text-sm font-semibold text-white bg-violet-500 rounded-md hover:bg-blue-600 focus:outline-none">
+          Add to Cart
+        </button>
+      </div>
     </div>
   );
 };

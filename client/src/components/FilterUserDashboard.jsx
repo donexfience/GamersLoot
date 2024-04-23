@@ -16,10 +16,10 @@ const FilterUserDashboard = ({ handleClick, filters, price, clearFilters }) => {
   return (
     <div className="lg:w-1/5">
       <ul className="hidden lg:block">
-        <li className="uppercase text-white font-bold mb-4">Category's</li>
+        <li className="uppercase text-black font-bold mb-4">Category's</li>
         {categories.map((item) => {
           return (
-            <li className="category-lists mb-3 text-white " key={item._id}>
+            <li className="category-lists mb-3 text-violet-400 " key={item._id}>
               <input
                 type="checkbox"
                 name="category"
@@ -31,11 +31,11 @@ const FilterUserDashboard = ({ handleClick, filters, price, clearFilters }) => {
             </li>
           );
         })}
-        <li className=" text-violet-500  font-bold mb-4 uppercase">
+        <li className=" text-black  font-bold mb-4 uppercase">
           price range
         </li>
         <li
-          className="category-li font-semibold text-white mb-2
+          className="category-li font-semibold text-violet-400 mb-2
         "
         >
           <input
@@ -47,7 +47,7 @@ const FilterUserDashboard = ({ handleClick, filters, price, clearFilters }) => {
           />{" "}
           All Price
         </li>
-        <li className="category-li font-semibold text-white mb-2">
+        <li className="category-li font-semibold text-violet-400 mb-2">
           <input
             type="radio"
             name="priceRange"
@@ -57,7 +57,7 @@ const FilterUserDashboard = ({ handleClick, filters, price, clearFilters }) => {
           />{" "}
           Above 10000₹
         </li>
-        <li className="category-li font-semibold text-white mb-2">
+        <li className="category-li font-semibold text-violet-400 mb-2">
           <input
             type="radio"
             name="priceRange"
@@ -67,7 +67,7 @@ const FilterUserDashboard = ({ handleClick, filters, price, clearFilters }) => {
           />{" "}
           5000₹ - 10000₹
         </li>
-        <li className="category-li font-semibold text-white mb-2">
+        <li className="category-li font-semibold text-violet-400 mb-2">
           <input
             type="radio"
             name="priceRange"
@@ -77,7 +77,7 @@ const FilterUserDashboard = ({ handleClick, filters, price, clearFilters }) => {
           />{" "}
           2000₹ - 5000₹
         </li>
-        <li className="category-li font-semibold text-white mb-2">
+        <li className="category-li font-semibold text-violet-400 mb-2">
           <input
             type="radio"
             name="priceRange"
@@ -87,7 +87,7 @@ const FilterUserDashboard = ({ handleClick, filters, price, clearFilters }) => {
           />{" "}
           1000₹ - 1999₹
         </li>
-        <li className="category-li font-semibold text-white mb-2">
+        <li className="category-li font-semibold text-violet-400 mb-2">
           <input
             type="radio"
             name="priceRange"
@@ -97,7 +97,7 @@ const FilterUserDashboard = ({ handleClick, filters, price, clearFilters }) => {
           />{" "}
           500₹ - 1000₹
         </li>
-        <li className="category-li font-semibold text-white mb-2">
+        <li className="category-li font-semibold text-violet-400 mb-2">
           <input
             type="radio"
             name="priceRange"

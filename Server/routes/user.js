@@ -2,6 +2,7 @@ const express = require("express");
 const {
   logoutUser,
   getUserDataFirst,
+  editUser,
 } = require("../controllers/userController");
 const {
   getProducts,
@@ -24,7 +25,15 @@ const {
   deleteAddress,
   updateAddress,
 } = require("../controllers/user/addressController");
-const { createOrder, getOrder, getOrders, cancelOrder } = require("../controllers/user/orderController");
+const {
+  createOrder,
+  getOrder,
+  getOrders,
+  cancelOrder,
+  orderCount,
+} = require("../controllers/user/orderController");
+const upload = require("../middleware/upload");
+const { readProductReviews, readProductReview, createNewReview, EditReview, readOrderReview } = require("../controllers/user/reviewController");
 const router = express.Router();
 //Logout
 
@@ -33,6 +42,10 @@ router.get("/logout", logoutUser);
 //to get user data at initial load;
 
 router.get("/", getUserDataFirst);
+
+//edit user profile
+
+router.post("/edit-profile", upload.single("profileImgURL"), editUser);
 
 //products on Dashboard
 
@@ -69,11 +82,20 @@ router.delete("/address/:id", deleteAddress);
 router.patch("/address/:id", updateAddress);
 
 //order
-router.post('/order',createOrder)
-router.get('/orders',getOrders)
-router.get('/order/:id',getOrder);
-router.post('/cancel-order/:id',cancelOrder)
+router.post("/order", createOrder);
+router.get("/orders", getOrders);
+router.get("/order/:id", getOrder);
+router.post("/cancel-order/:id", cancelOrder);
+router.get("/order-count", orderCount);
 
+//review
+// Reviews
+router.get("/reviews/:id", readProductReviews);
+router.get("/review/:id", readProductReview);
+router.post("/review", createNewReview);
+router.patch("/review/:id", EditReview);
+// Review on order details page
+router.get("/order-review/:id", readOrderReview);
 
 
 module.exports = router;

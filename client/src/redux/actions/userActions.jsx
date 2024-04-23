@@ -25,12 +25,11 @@ export const getUserDataFirst = createAsyncThunk(
   async (userCredentials, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(`${URL}/user/`, config);
-      return data
+      return data;
+    } catch (err) {
+      return handleError(err, rejectWithValue);
+    }
   }
-  catch(err){
-    return handleError(err,rejectWithValue)
-  }
-}
 );
 //one method without using the commonreduxrequests
 
@@ -79,9 +78,26 @@ export const signUpUser = createAsyncThunk(
 
       return data;
     } catch (error) {
-      console.log("error from signup",error)
+      console.log("error from signup", error);
       return handleError(error, rejectWithValue);
     }
   }
 );
 //editt profile
+
+export const editUserProfile = createAsyncThunk(
+  "user/editUserProfile",
+  async (formData, { rejectWithValue }) => {
+    console.log("🚀 ~ file: userActions.jsx:91 ~ formData:", formData)
+    try {
+      const { data } = await axios.post(
+        `${URL}/user/edit-profile`,
+        formData,
+        configMultiPart
+      );
+      return data;
+    } catch (error) {
+      return handleError(error, rejectWithValue);
+    }
+  }
+);

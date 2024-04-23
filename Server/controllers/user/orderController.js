@@ -46,9 +46,7 @@ const updateProductList = async (id, count) => {
   const product = await Product.findOne({ _id: id });
   if (count < 0) {
     if (product.stockQuantity - count * -1 < 0) {
-      
-      throw Error(`${product.name} doesn\'t have ${count*-1} stock`);
-      
+      throw Error(`${product.name} doesn\'t have ${count * -1} stock`);
     }
   }
   const updateProduct = await Product.findByIdAndUpdate(
@@ -86,7 +84,9 @@ const createOrder = async (req, res) => {
       throw Error("Invalid ID");
     }
     const { address, paymentMode, notes } = req.body;
-    const addressData = await Address.findOne({ id: address });
+    console.log(address,"--------------------------")
+    const addressData = await Address.findOne({ _id: address });
+    console.log(addressData,"---------------")
     const cart = await Cart.findOne({ user: _id }).populate("items.product", {
       name: 1,
       price: 1,
@@ -123,17 +123,19 @@ const createOrder = async (req, res) => {
       ],
       ...(notes ? notes : {}),
     };
+    console.log(orderData,"000000000000000000000000")
     const updateProductCount = products.map((item) => {
       return updateProductList(item.productId, -item.quantity);
     });
     await Promise.all(updateProductCount);
     const order = await Order.create(orderData);
+    console.log(order,"suceessssssssssssssssssssssssssss")
     if (order) {
       await Cart.findByIdAndDelete(cart._id);
     }
     res.status(200).json({ order });
   } catch (error) {
-    console.error(error,"--------------------------")
+    console.error(error, "--------------------------");
     res.status(400).json({ error: error.message });
   }
 };
@@ -238,7 +240,28 @@ const orderCount = async (req, res) => {
       user: _id,
       status: "delivered",
     });
-    res.status(200).json({ totalOrders, pendingOrders, completedOrders });
+    const totalAddresses = await Address.countDocuments({ user: _id });
+
+    // Calculate total products purchased
+    const orders = await Order.find({ user: _id });
+    let totalProductsPurchased = 0;
+    orders.forEach((order) => {
+      totalProductsPurchased += order.totalQuantity;
+    });
+    // Calculate total products available
+    const totalProductsAvailable = await Product.countDocuments();
+
+    // Calculate average purchase percentage
+    const averagePurchasePercentage =
+      (totalProductsPurchased / totalProductsAvailable) * 100;
+    res.status(200).json({
+      totalAddresses,
+      totalProductsPurchased,
+      averagePurchasePercentage,
+      totalOrders,
+      pendingOrders,
+      completedOrders,
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

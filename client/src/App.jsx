@@ -28,6 +28,11 @@ import ProductDetails from "./pages/user/pages/ProductDetails";
 import Cart from "./pages/user/cart/Cart";
 import Checkout from "./pages/user/checkout/Checkout";
 import OrderConfirmation from "./pages/user/order/OrderConfirmation";
+import ProfileDashboard from "./pages/user/profileDashboard/ProfileDashboard";
+import Dash from "./pages/user/profileDashboard/Dash";
+import OrderHistory from "./pages/user/profileDashboard/OrderHistory";
+import OrderDetail from "./pages/user/profileDashboard/OrderDetail";
+import ProfilePage from "./pages/user/profileDashboard/ProfilePage";
 
 function App() {
   const { user } = useSelector((state) => state.user);
@@ -72,10 +77,16 @@ function App() {
           <Route path="/product/:id" element={<ProductDetails />} />
           {/* checkout */}
 
-          <Route path="/checkout" element={<ProtectedRoute element={<Checkout/>}/>}/>
+          <Route
+            path="/checkout"
+            element={<ProtectedRoute element={<Checkout />} />}
+          />
 
           {/* order confirmation */}
-          <Route path='/order-confirmation' element={<ProtectedRoute element={<OrderConfirmation/>}/>}/>
+          <Route
+            path="/order-confirmation"
+            element={<ProtectedRoute element={<OrderConfirmation />} />}
+          />
 
           {/* Admin Routes */}
           {(user && user.role === "admin") ||
@@ -84,12 +95,28 @@ function App() {
           ) : (
             <Route path="/admin" element={<Navigate to="/" />} />
           )}
+          {/* auth routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/otp" element={<ValidateOTP />} />
           <Route path="/forgot-password" element={<ForgetPassword />} />
+
+          {/* home components routes */}
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
+
+          {/* user profile mangement */}
+
+          <Route
+            path="/dashboard"
+            element={<ProtectedRoute element={<ProfileDashboard />} />}
+          >
+            {/* user Profile options */}
+            <Route index element={<Dash />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="order-history" element={<OrderHistory />} />
+            <Route path="order-history/detail/:id" element={<OrderDetail />} />
+          </Route>
         </Routes>
         {user ? user.role === "user" && <Footer /> : <Footer />}
       </BrowserRouter>

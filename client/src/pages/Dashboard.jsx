@@ -5,8 +5,8 @@ import { useSearchParams } from "react-router-dom";
 import FilterUserDashboard from "../components/FilterUserDashboard";
 import JustLoading from "../components/JustLoading";
 import SortButton from "../components/SortButton";
-import ProductCard from './user/ProductCard'
-import Pagination from '../components/Pagination'
+import ProductCard from "./user/ProductCard";
+import Pagination from "../components/Pagination";
 import { getUserProducts } from "../redux/actions/user/userProductAction";
 
 const Dashboard = () => {
@@ -22,7 +22,6 @@ const Dashboard = () => {
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
   const [sort, setSort] = useState("");
-
 
   useEffect(() => {
     const categoryParam = searchParams.get("category");
@@ -127,7 +126,7 @@ const Dashboard = () => {
     setPage(parseInt(pageNumber || 1));
   }, [searchParams]);
   return (
-    <div className="w-full flex pt-20 px-5 lg:p-20 bg-black text-gray-500 font-semibold">
+    <div className="w-full flex pt-20 px-5 lg:p-20 bg-white text-gray-500 font-semibold">
       {/* category filtering checkboxes */}
       <FilterUserDashboard
         clearFilters={clearFilters}
@@ -143,7 +142,6 @@ const Dashboard = () => {
             placeholder={"search Products here"}
             setSearch={setSearch}
           />
-          <SortButton handleClick={handleClick} sort={sort} />
           <div className="shrink-0 hidden ml-5 lg:block">
             {userProducts.length}/{totalAvailableProducts} Results Loaded
           </div>
@@ -153,26 +151,31 @@ const Dashboard = () => {
             <JustLoading size={20} />
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 py-5">
-            {userProducts && userProducts.length > 0 ? (
-              userProducts.map((product, index) => (
-                <ProductCard product={product} key={index} />
-              ))
-            ) : (
-              <div className="h-96">
-                <p>Nothing to show</p>
-              </div>
-            )}
+          <div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-5">
+              {userProducts && userProducts.length > 0 ? (
+                userProducts.map((product, index) => (
+                  <ProductCard product={product} key={index} />
+                ))
+              ) : (
+                <div className="h-96">
+                  <p>Nothing to show</p>
+                </div>
+              )}
+            </div>
+            {/* Sort Button moved below the product cards */}
+            <div className="flex justify-end">
+              <SortButton handleClick={handleClick} sort={sort} />
+            </div>
           </div>
         )}
-          <Pagination
+        <Pagination
           handleClick={handleClick}
           number={4}
           page={page}
           totalNumber={totalAvailableProducts}
         />
       </div>
-
     </div>
   );
 };

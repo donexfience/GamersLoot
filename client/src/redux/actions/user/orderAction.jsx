@@ -1,0 +1,29 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { commonReduxRequests } from "../../../Common/api";
+import { appJson } from "../../../Common/configurations";
+
+export const getOrders = createAsyncThunk(
+  "order/getOrders",
+  async (queries, { rejectWithValue }) => {
+    return commonReduxRequests(
+      "get",
+      `/user/orders${queries && `?${queries}`}`,
+      null,
+      appJson,
+      rejectWithValue
+    );
+  }
+);
+
+export const cancelOrder = createAsyncThunk(
+  "order/cancelOrder",
+  async ({ id, formData }, { rejectWithValue }) => {
+    return commonReduxRequests(
+      "post",
+      `user/cancel-order/${id}`,
+      formData,
+      appJson,
+      rejectWithValue
+    );
+  }
+);

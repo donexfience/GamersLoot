@@ -88,7 +88,7 @@ const ProductDetails = () => {
   const [cartLoading, setCartLoading] = useState(false);
 
   const addToCart = async () => {
-    console.log("🚀 ~ file: ProductDetails.jsx:98 ~ addToCart ~ o:", count)
+    console.log("🚀 ~ file: ProductDetails.jsx:98 ~ addToCart ~ o:", count);
     setCartLoading(true);
     await axios
       .post(
@@ -97,7 +97,7 @@ const ProductDetails = () => {
           product: id,
           quantity: count,
         },
-        
+
         { ...config, withCredentials: true }
       )
       .then((data) => {
@@ -170,6 +170,7 @@ const ProductDetails = () => {
                     rating={product.rating}
                   />
                 )}
+                <p className="text-red-500">{`Hurry up ${product.stockQuantity} left`}</p>
                 <span className="divider font-bold ml-2 mr-2">|</span>
                 <span
                   className={`font-semibold capitalize ${
@@ -229,13 +230,16 @@ const ProductDetails = () => {
                   decrement={decrement}
                   increment={increment}
                 />
-               <AnimatedCartButton onClick={addToCart} isLoading={cartLoading}/>
+                <AnimatedCartButton
+                  onClick={addToCart}
+                  isLoading={cartLoading}
+                />
               </div>
               <div className="flex">
                 <button
                   onClick={() => {
                     dispatch(addToBuyNowStore({ product, count }));
-                    navigate('/buy-now')
+                    navigate("/buy-now");
                   }}
                   className="w-full  text-white font-bold border bg-violet-700 border-black rounded-lg p-2 hover:bg-violet-700 hover:text-white"
                   disabled=""
@@ -256,7 +260,9 @@ const ProductDetails = () => {
             <UserReview />
           </div>
         </>
-      ) : (<p>No data found</p>)}
+      ) : (
+        <p>No data found</p>
+      )}
     </div>
   );
 };
