@@ -37,10 +37,12 @@ const editUser = async (req, res) => {
     }
     let formData = req.body;
     const profileImgURL = req?.file?.filename;
-
     if (profileImgURL) {
       formData = { ...formData, profileImgURL: profileImgURL };
+    } else {
+      formData = { ...formData, profileImgURL: "" };
     }
+    console.log(profileImgURL, "---------------------");
     const updateUser = await User.findByIdAndUpdate(
       { _id },
       { $set: { ...formData } },
@@ -50,7 +52,7 @@ const editUser = async (req, res) => {
     if (!updateUser) {
       throw Error("No such User");
     }
-    res.status(200).json({updateUser})
+    res.status(200).json({ updateUser });
   } catch (error) {
     console.error(error);
     res.status(400).json({ error: error.message });

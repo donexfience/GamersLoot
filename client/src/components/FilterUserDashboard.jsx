@@ -13,6 +13,7 @@ const FilterUserDashboard = ({ handleClick, filters, price, clearFilters }) => {
   useEffect(() => {
     loadCategories();
   }, []);
+  console.log(categories,"[[[[[[[[[[[[[[[[[[[[[")
   return (
     <div className="lg:w-1/5">
       <ul className="hidden lg:block">

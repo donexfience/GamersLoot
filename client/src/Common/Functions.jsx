@@ -22,3 +22,9 @@ export const modifyPaymentText = (mode) => {
     return "Cash on Delivery";
   }
 };
+export const getTodayOnwardDateForInput = () => {
+  const today = new Date();
+  today.setDate(today.getDate());
+  const formattedMinDate = date.format(today, "YYYY-MM-DD");
+  return formattedMinDate;
+};

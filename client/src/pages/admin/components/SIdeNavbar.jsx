@@ -39,7 +39,7 @@ const SIdeNavbar = () => {
         <ImStack/>
         Category
         </NavLink>
-        <NavLink className='side-nav-link-sp text-white flex items-center mb-4 gap-2 justify-center hover:text-black hover:bg-white rounded py-3 px-2 mr-8' to='categories'>
+        <NavLink className='side-nav-link-sp text-white flex items-center mb-4 gap-2 justify-center hover:text-black hover:bg-white rounded py-3 px-2 mr-8' to='orders'>
         <BsCardChecklist/>
         Orders
         </NavLink>

@@ -56,7 +56,7 @@ const OrderDetail = () => {
   useEffect(() => {
     loadData();
   }, [id]);
-
+  console.log(orderData);
   return (
     <div className="w-full">
       {reviewModal && (
@@ -208,13 +208,33 @@ const OrderDetail = () => {
                       />
                     </div>
                   )}
-                <div className="p-5 font-bold lg:flex justify-center">
-                  {orderData.address && (
-                    <OrderHistoryAddress
-                      address={orderData.address}
-                      title="Billing Address"
-                    />
-                  )}
+
+                <div
+                  className=" font-bold lg:flex items-center justify-center gap-10
+                "
+                >
+                  <div className="border-b lg:border-b-0 lg:border-r-2 pr-4">
+                    <p className="text-violet-500 font-bold text-xl pb-4">
+                      Billing Address
+                    </p>
+                    {orderData.address && (
+                      <OrderHistoryAddress
+                        address={orderData.address}
+                        title="Billing Address"
+                      />
+                    )}
+                  </div>
+                  <div className="border-b lg:border-b-0  pr-4">
+                    <p className="text-violet-500 font-bold text-xl pb-4">
+                      Shipping Address
+                    </p>
+                    {orderData.address && (
+                      <OrderHistoryAddress
+                        address={orderData.address}
+                        title="Billing Address"
+                      />
+                    )}
+                  </div>
                 </div>
                 <div className="lg:w-1/3 p-5">
                   <h1 className="font-bold">Order Notes</h1>

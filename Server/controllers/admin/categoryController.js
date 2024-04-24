@@ -44,6 +44,13 @@ const createCategory = async (req, res) => {
       formData = { ...formData, imgURL: imgURL };
     }
 
+    // Check if the category name already exists
+    const existingCategory = await Category.findOne({ name: formData.name });
+
+    if (existingCategory) {
+        throw Error("category with this name already exist")
+    }
+
     const category = await Category.create(formData);
 
     res.status(200).json({ category });
@@ -51,6 +58,7 @@ const createCategory = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 //deleting cateogory
 const deleteCategory = async (req, res) => {

@@ -3,7 +3,7 @@ const Category = require("../../model/categoryModel");
 const getCategories = async (req, res) => {
   try {
     let filter = {
-      isActive: true,
+      IsActive: true,
     };
 
     const categories = await Category.find(filter);

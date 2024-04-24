@@ -33,6 +33,8 @@ import Dash from "./pages/user/profileDashboard/Dash";
 import OrderHistory from "./pages/user/profileDashboard/OrderHistory";
 import OrderDetail from "./pages/user/profileDashboard/OrderDetail";
 import ProfilePage from "./pages/user/profileDashboard/ProfilePage";
+import Orders from "./pages/admin/pages/orders/Orders";
+import OrderDetailAdmin from "./pages/admin/pages/orders/OrderDetailAdmin";
 
 function App() {
   const { user } = useSelector((state) => state.user);
@@ -138,6 +140,9 @@ function AdminRoutes() {
         <Route path="product/edit/:id" element={<EditProduct />} />
         {/* users management */}
         <Route path="customers" element={<Customers />} />
+        {/* order management */}
+        <Route path="orders" element={<Orders />} />
+        <Route path="orders/detail/:id" element={<OrderDetailAdmin/>}/>
       </Route>
     </Routes>
   );

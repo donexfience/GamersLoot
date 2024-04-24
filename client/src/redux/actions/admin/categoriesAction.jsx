@@ -6,6 +6,7 @@ import {
   configMultiPart,
   handleError,
 } from "../../../Common/configurations";
+import toast from "react-hot-toast";
 
 export const createNewCategory = createAsyncThunk(
   "categories/createNewCategory",
@@ -18,6 +19,8 @@ export const createNewCategory = createAsyncThunk(
       );
       return data;
     } catch (error) {
+      console.log(error)
+      toast.error(error.response.data.error)
       return handleError(error, rejectWithValue);
     }
   }
