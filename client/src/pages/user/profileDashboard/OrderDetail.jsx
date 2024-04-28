@@ -149,6 +149,7 @@ const OrderDetail = () => {
                   <StatusComponent status={orderData.status} />
                 </div>
               </div>
+
               <div className="px-5 w-full border-b mt-3">
                 <h1 className="text-lg font-bold pb-3">
                   Products <span className="">({orderData.totalQuantity})</span>
@@ -198,17 +199,7 @@ const OrderDetail = () => {
                     </div>
                   </div>
                 </div>
-                {orderData.statusHistory &&
-                  (orderData.status === "pending" ||
-                    orderData.status === "processing" ||
-                    orderData.status === "shipped" ||
-                    orderData.status === "delivered") && (
-                    <div className="px-5 pt-5 ">
-                      <StatusHistoryLoadingBar
-                        statusHistory={orderData.statusHistory}
-                      />
-                    </div>
-                  )}
+
                 {orderData && (
                   <div className="pt-5">
                     <YourReview id={id} products={orderData.productId} />
@@ -243,6 +234,17 @@ const OrderDetail = () => {
                     )}
                   </div>
                 </div>
+                {orderData.statusHistory &&
+                  (orderData.status === "pending" ||
+                    orderData.status === "processing" ||
+                    orderData.status === "shipped" ||
+                    orderData.status === "delivered") && (
+                    <div className="px-5 pt-5 ">
+                      <StatusHistoryLoadingBar
+                        statusHistory={orderData.statusHistory}
+                      />
+                    </div>
+                  )}
                 <div className="lg:w-1/3 p-5">
                   <h1 className="font-bold">Order Notes</h1>
                   <p className="text-black">

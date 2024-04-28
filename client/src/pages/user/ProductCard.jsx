@@ -5,7 +5,7 @@ import { FaHeart, FaStar } from "react-icons/fa"; // Example: Heart and Star ico
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
-  console.log(product,"--------------product----------card")
+  console.log(product, "--------------product----------card");
 
   // Calculate the discounted price
   const discountedPrice = product.price - (product.price * product.offer) / 100;
@@ -23,10 +23,12 @@ const ProductCard = ({ product }) => {
           className="object-cover w-full h-full"
         />
       </div>
-      
+
       {/* Product Title */}
-      <p className="font-bold text-lg text-gray-800 line-clamp-2 mb-2">{product.name}</p>
-      
+      <p className="font-bold text-lg text-gray-800 line-clamp-2 mb-2">
+        {product.name}
+      </p>
+
       {/* Product Price and Rating */}
       <div className="flex items-center justify-between mb-2">
         <p className="font-semibold text-md text-blue-500">
@@ -37,21 +39,28 @@ const ProductCard = ({ product }) => {
               </span>{" "}
             </>
           ) : null}
-          {discountedPrice + product.markup}₹ {/* Displaying the discounted price + markup */}
+          {discountedPrice + product.markup}₹{" "}
+          {/* Displaying the discounted price + markup */}
         </p>
         <div className="flex items-center text-yellow-500">
           <FaStar className="mr-1" />
-          <span>{product.rating}</span>
+          <span>
+            {typeof product.rating === "number" && !isNaN(product.rating)
+              ? parseFloat(product.rating).toFixed(1)
+              : "0"}
+          </span>
         </div>
       </div>
-      
+
       {/* Additional content */}
       <div className="flex justify-between items-center mt-2">
         <div className="flex items-center">
           <button className="text-gray-500 hover:text-red-500 mr-2">
             <FaHeart className="text-red-500" /> {/* Heart icon */}
           </button>
-          <p className="text-sm text-green-600">Available: {product.availability}</p>
+          <p className="text-sm text-green-600">
+            Available: {product.availability}
+          </p>
         </div>
         <button className="px-3 py-1 text-sm font-semibold text-white bg-violet-500 rounded-md hover:bg-blue-600 focus:outline-none">
           Add to Cart

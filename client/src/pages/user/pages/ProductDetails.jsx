@@ -110,7 +110,6 @@ const ProductDetails = () => {
         setCartLoading(false);
       });
   };
-
   return (
     <div className="px-5 lg:px-30 py-20 bg-white">
       {loading ? (
@@ -164,13 +163,22 @@ const ProductDetails = () => {
             <div className=" lg:w-1/2">
               <h1 className="text-2xl font-bold my-2">{product.name}</h1>
               <div className="rating-status flex">
-                {product.numOfReview > 0 && (
+                {/* Display Rating and Review component if there are reviews */}
+                {product.numOfReviews > 0 && (
                   <RatingandReview
                     numberOfReviews={product.numberOfReviews}
                     rating={product.rating}
                   />
                 )}
-                <p className="text-red-500">{`Hurry up ${product.stockQuantity} left`}</p>
+
+                {/* Display "Hurry up" message if stock quantity is less than 10 */}
+                <p className="text-red-500">
+                  {product.stockQuantity <= 10
+                    ? `Hurry up ${product.stockQuantity} left`
+                    : `Huge collection available`}
+                </p>
+
+                {/* Display the product status */}
                 <span className="divider font-bold ml-2 mr-2">|</span>
                 <span
                   className={`font-semibold capitalize ${
@@ -180,6 +188,7 @@ const ProductDetails = () => {
                   {product.status === "published" ? "In Stock" : product.status}
                 </span>
               </div>
+
               <p className="description mt-3 font-semibold text-gray-500">
                 {product.description}
               </p>
@@ -257,7 +266,7 @@ const ProductDetails = () => {
             <RelatedProducts id={id} />
           </div>
           <div className="">
-            <UserReview product={product} id={id} />
+            <UserReview product={product} id={id} key={product} />
           </div>
         </>
       ) : (

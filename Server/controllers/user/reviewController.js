@@ -3,21 +3,22 @@ const mongoose = require("mongoose");
 const Review = require("../../model/ReviewModal");
 const Product = require("../../model/ProductModel");
 const Order = require("../../model/orderModel");
-//getting all the reviews for the product Details page
+//getting all the reviews for the product Details pages in user side
 const readProductReviews = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id,"idof product reviews")
-    if (mongoose.Types.ObjectId.isValid(_id)) {
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       throw Error("Invalid ID!!!");
     }
-    const reviews = await Review.find({ Product: _id }).populate("user", {
+
+    const reviews = await Review.find({ product: id }).populate("user", {
       firstName: 1,
       lastName: 1,
       profileImgURL: 1,
     });
     if (!reviews || reviews.length < 1) {
-      throw Error("No reviews found");
+      throw Error("No reviews so far");
     }
     res.status(200).json({ reviews });
   } catch (error) {
@@ -25,6 +26,7 @@ const readProductReviews = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 // single review reading contoller
 const readProductReview = async (req, res) => {
   try {
@@ -69,7 +71,6 @@ const EditReview = async (req, res) => {
       (product.rating * product.numberOfReviews + ratingChange) /
       product.numberOfReviews;
     //updating rating in product
-    
     await Product.findByIdAndUpdate(
       body.product,
       { $set: { rating: newRates } },
@@ -96,13 +97,15 @@ const EditReview = async (req, res) => {
 const createNewReview = async (req, res) => {
   try {
     const token = req.cookies.user_token;
+
     const { _id } = jwt.verify(token, process.env.SECRET);
-    const body = req.body;
-    console.log(body, "-----------------");
+
     if (!mongoose.Types.ObjectId.isValid(_id)) {
-      throw Error("not valid id of user");
+      throw Error("Invalid user Id!!!");
     }
-    //order id inside body
+
+    const body = req.body;
+
     if (!mongoose.Types.ObjectId.isValid(body.order)) {
       const order = await Order.findOne({ orderId: body.order });
       body.order = order._id;
@@ -113,7 +116,7 @@ const createNewReview = async (req, res) => {
       product: body.product,
       order: body.order,
     });
-    console.log(reviewExists, "==============================");
+
     if (reviewExists) {
       throw Error("You have already reviewed. Please go to end of page");
     }
@@ -133,9 +136,6 @@ const createNewReview = async (req, res) => {
       newNumberOfReviews = product.numberOfReviews + 1;
     }
 
-    // Round the newRating to one decimal place
-    newRating = parseFloat(newRating.toFixed(1));
-
     const updatedProduct = await Product.findByIdAndUpdate(
       body.product,
       {
@@ -151,7 +151,6 @@ const createNewReview = async (req, res) => {
 
     res.status(200).json({ review, updatedProduct });
   } catch (error) {
-    console.error(error);
     res.status(400).json({ error: error.message });
   }
 };

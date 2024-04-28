@@ -18,7 +18,7 @@ const UserReview = ({ product, id }) => {
   };
 
   const loadReviews = async () => {
-    console.log(id,"--------------")
+    console.log(id, "--------------");
     try {
       const { data } = await axios.get(`${URL}/user/reviews/${id}`, {
         withCredentials: true,
@@ -161,12 +161,12 @@ const UserReview = ({ product, id }) => {
                   );
                 })}
             </div>
+            {reviews &&
+              reviews.map((review, index) => {
+                return <ReviewRow review={review} />;
+              })}
           </div>
         )}
-        {reviews &&
-          reviews.map((review, index) => {
-            return <ReviewRow review={review}/>;
-          })}
       </div>
     </div>
   );
