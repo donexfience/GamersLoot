@@ -23,6 +23,39 @@ const findProductWithMostOrders = async () => {
     throw error;
   }
 };
+async function getProductsSortedByRating() {
+  try {
+    // Aggregate pipeline to calculate average rating
+    const pipeline = [
+      {
+        $match: { status: "published" },
+      },
+      {
+        $lookup: {
+          from: "reviews",
+          localField: "_id",
+          foreignField: "product",
+          as: "reviews",
+        },
+      },
+      {
+        $addFields: {
+          averageRating: { $avg: "$reviews.rating" }, // Calculate average rating
+        },
+      },
+      {
+        $sort: { averageRating: -1 }, // Sort products by average rating descending
+      },
+    ];
+
+    const products = await Product.aggregate(pipeline);
+
+    return products;
+  } catch (error) {
+    console.error("Error getting products sorted by rating:", error);
+    throw error;
+  }
+}
 const getProducts = async (req, res) => {
   try {
     const { category, price, search, sort, page = 1, limit = 7 } = req.query;
@@ -66,7 +99,7 @@ const getProducts = async (req, res) => {
     );
     let sortOptions = {};
     if (sort === "created-desc") {
-      sortOptions.createdAt = 1;
+      sortOptions.createdAt = -1;
     }
     if (sort === "featured") {
       products = await findProductWithMostOrders();
@@ -135,66 +168,15 @@ const getProducts = async (req, res) => {
         status: { $in: ["published", "low quantity"] },
         ...filter,
       });
-      return res.status(200).json({ products,totalAvailableProducts });
+      return res.status(200).json({ products, totalAvailableProducts });
     } else if (sort === "averagerating") {
       // Calculate average rating using aggregation
-       products = await Product.aggregate([
-        {
-          $match: {
-            status: { $in: ["published", "low quantity"] },
-            ...filter,
-          },
-        },
-        {
-          $lookup: {
-            from: "reviews",
-            localField: "_id",
-            foreignField: "product",
-            as: "reviews",
-          },
-        },
-        {
-          $addFields: {
-            averageRating: { $avg: "$reviews.rating" },
-          },
-        },
-        {
-          $sort: { averageRating: -1 },
-        },
-        {
-          $skip: (page - 1) * limit,
-        },
-        {
-          $limit: parseInt(limit),
-        },
-        {
-          $project: {
-            name: 1,
-            imageURL: 1,
-            price: 1,
-            markup: 1,
-            numberOfReviews: { $size: "$reviews" },
-            rating: "$averageRating",
-            offer: 1,
-          },
-        },
-        {
-          $lookup: {
-            from: "categories",
-            localField: "category",
-            foreignField: "_id",
-            as: "category",
-          },
-        },
-        {
-          $unwind: "$category",
-        },
-      ]);
+      products = await getProductsSortedByRating();
+      console.log(products, "---------------average rating--------------");
       const totalAvailableProducts = await Product.countDocuments({
         status: { $in: ["published", "low quantity"] },
         ...filter,
       });
-      console.log(products, "---------------average rating--------------");
       return res.status(200).json({ products, totalAvailableProducts });
     } else {
       if (sort === "price-asc") {
