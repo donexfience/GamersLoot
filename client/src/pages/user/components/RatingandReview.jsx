@@ -4,6 +4,7 @@ const RatingandReview = ({ rating, numberOfReviews }) => {
   const filledStars = Math.floor(rating);
   const hasHalfStar = rating % 1 !== 0;
   const renderStars = () => {
+    console.log("rating on product detaili below name")
     const stars = [];
 
     for (let i = 1; i <= filledStars; i++) {

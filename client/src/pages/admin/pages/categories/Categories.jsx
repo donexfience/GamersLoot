@@ -122,7 +122,7 @@ const Categories = () => {
 
                         {category.name}
                       </td>
-                      <td  className="admin-table-row p-3 mt-2 ml-10 font-semibold">
+                      <td  className="admin-table-row p-3 mt-2 ml-10 font-semibold overflow-x">
                         {category.description}
                       </td>
                       <td className="admin-table-row p-5 ml-6 font-semibold">

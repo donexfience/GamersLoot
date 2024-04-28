@@ -119,7 +119,7 @@ const UserReview = ({ product, id }) => {
           </div>
         )}
         {activeTab === "reviews" && (
-          <div className="flex">
+          <div className="">
             <div className="bg-gray-50 flex flex-col items-center justify-center w-1/6">
               <div className="flex flex-col items-center">
                 <div className="flex items-center gap-2">

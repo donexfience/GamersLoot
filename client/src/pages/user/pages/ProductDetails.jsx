@@ -162,15 +162,15 @@ const ProductDetails = () => {
             </div>
             <div className=" lg:w-1/2">
               <h1 className="text-2xl font-bold my-2">{product.name}</h1>
-              <div className="rating-status flex">
+              <div className="rating-status ">
                 {/* Display Rating and Review component if there are reviews */}
-                {product.numOfReviews > 0 && (
+                {product.numberOfReviews > 0 && (
                   <RatingandReview
                     numberOfReviews={product.numberOfReviews}
                     rating={product.rating}
                   />
                 )}
-
+                <div className="flex">
                 {/* Display "Hurry up" message if stock quantity is less than 10 */}
                 <p className="text-red-500">
                   {product.stockQuantity <= 10
@@ -187,6 +187,7 @@ const ProductDetails = () => {
                 >
                   {product.status === "published" ? "In Stock" : product.status}
                 </span>
+                </div>
               </div>
 
               <p className="description mt-3 font-semibold text-gray-500">

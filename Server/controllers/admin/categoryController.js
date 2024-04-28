@@ -12,9 +12,9 @@ const getCategories = async (req, res) => {
 
     if (status) {
       if (status === "active") {
-        filter.IsActive = true;
+        filter.isActive = true;
       } else {
-        filter.IsActive = false;
+        filter.isActive = false;
       }
     }
 
@@ -49,11 +49,7 @@ const createCategory = async (req, res) => {
       const nameRegex = new RegExp(formData.name, "i");
 
       // Check existing category
-      const existingCategory = await Category.find({
-        name: nameRegex,
-        _id: { $ne: id },
-      });
-      console.log(existingCategory, "!!!!!!!!!!!!!!!!!!!!!!");
+      const existingCategory = await Category.findOne({ name: nameRegex });
 
       if (existingCategory) {
         throw Error("Category with this name already exists");
@@ -90,35 +86,30 @@ const updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
     let formData = req.body;
-    console.log(req.body, "body........................................");
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw Error("Invalid ID");
     }
+
     if (formData.name) {
-      console.log(formData.name);
       const nameRegex = new RegExp(formData.name, "i");
 
-      // Check existing category
-      const existingCategory = await Category.find({
+      // Check existing categories excluding the current one being updated
+      const existingCategory = await Category.findOne({
         name: nameRegex,
         _id: { $ne: id },
       });
-      console.log(existingCategory, "!!!!!!!!!!!!!!!!!!!!!!");
 
       if (existingCategory) {
         throw Error("Category with this name already exists");
       }
     }
 
-    // Check if the category name already exists
     let imgURL = req?.file?.filename;
-    console.log(imgURL, "-----------imgurl----------------");
     if (imgURL) {
       formData = { ...formData, imgURL: imgURL };
     }
-    console.log(formData, "++++++++++++++++++++++++++++++++++++++++");
 
-    // Update category
     const category = await Category.findOneAndUpdate(
       { _id: id },
       { $set: { ...formData } },

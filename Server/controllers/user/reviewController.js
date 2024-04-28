@@ -151,7 +151,9 @@ const createNewReview = async (req, res) => {
 
     res.status(200).json({ review, updatedProduct });
   } catch (error) {
+    console.error(error)
     res.status(400).json({ error: error.message });
+
   }
 };
 

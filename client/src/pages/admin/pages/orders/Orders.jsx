@@ -15,7 +15,7 @@ import UpdateOrder from "./UpdateOrder";
 
 const Orders = () => {
   const dispatch = useDispatch();
-  const { loading, orders, error, totalAvailableProducts } = useSelector(
+  const { loading, orders, error, totalAvailableOrders } = useSelector(
     (state) => state.orders
   );
 
@@ -177,7 +177,7 @@ const Orders = () => {
           handleClick={handleFilter}
           number={10}
           page={page}
-          totalNumber={totalAvailableProducts}
+          totalNumber={totalAvailableOrders}
         />
       </div>
     </div>
