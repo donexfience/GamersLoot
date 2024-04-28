@@ -9,6 +9,7 @@ import addressReducer from "./reducers/user/addressSlice";
 import userOrderReducer from "./reducers/user/orderSlice";
 import reviewReducer from "./reducers/user/ReviewSlice";
 import orderReducer from "./reducers/admin/ordersSlice";
+import couponReducer from "./reducers/admin/couponSlice";
 export const store = configureStore({
   reducer: {
     user: userReducer,
@@ -26,5 +27,6 @@ export const store = configureStore({
     products: productReducer,
     customer: customerReducer,
     orders: orderReducer,
+    coupons:couponReducer
   },
 });

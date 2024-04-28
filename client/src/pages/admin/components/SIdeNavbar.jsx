@@ -43,7 +43,7 @@ const SIdeNavbar = () => {
         <BsCardChecklist/>
         Orders
         </NavLink>
-        <NavLink className='side-nav-link-sp text-white flex items-center mb-4 gap-2 justify-center hover:text-black hover:bg-white rounded py-3 px-2 mr-6' to='/admin/'>
+        <NavLink className='side-nav-link-sp text-white flex items-center mb-4 gap-2 justify-center hover:text-black hover:bg-white rounded py-3 px-2 mr-6' to='coupons'>
         <HiOutlineTicket/>
         Coupon
         </NavLink>

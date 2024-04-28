@@ -51,7 +51,7 @@ export const deleteOneProduct = createAsyncThunk(
 
 export const incrementCount = createAsyncThunk(
   "cart/incrementCount",
-  async ({ cartId, productId}, { rejectWithValue }) => {
+  async ({ cartId, productId }, { rejectWithValue }) => {
     return commonReduxRequests(
       "patch",
       `/user/cart-increment-quantity/${cartId}/item/${productId}`,
@@ -71,6 +71,33 @@ export const decrementCount = createAsyncThunk(
       "patch",
       `/user/cart-decrement-quantity/${cartId}/item/${productId}`,
       {},
+      appJson,
+      rejectWithValue
+    );
+  }
+);
+//remove coupons
+
+export const removeCoupon = createAsyncThunk(
+  "cart/removeCoupon",
+  async (req, { rejectWithValue }) => {
+    return commonReduxRequests(
+      "get",
+      "/user/coupon-remove",
+      {},
+      appJson,
+      rejectWithValue
+    );
+  }
+);
+//apply coupon
+export const applyCoupon = createAsyncThunk(
+  "cart/applyCoupon",
+  async (couponCode, { rejectWithValue }) => {
+    return commonReduxRequests(
+      "post",
+      `/user/coupon-apply`,
+      { code: couponCode },
       appJson,
       rejectWithValue
     );

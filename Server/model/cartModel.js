@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("./userModel");
 const Product = require("./ProductModel");
+const Coupon = require("./couponModel");
 
 const { Schema } = mongoose;
 const cartSchema = new Schema({
@@ -20,10 +21,20 @@ const cartSchema = new Schema({
       },
     },
   ],
-  
-  
+  coupon: {
+    type: Schema.Types.ObjectId,
+    ref: Coupon,
+  },
+  couponCode: {
+    type: String,
+  },
+  discount: {
+    type: Number,
+  },
+  type: {
+    type: String,
+  },
 });
 
-const Cart = mongoose.model("Cart",cartSchema);
-module.exports=Cart;
-
+const Cart = mongoose.model("Cart", cartSchema);
+module.exports = Cart;

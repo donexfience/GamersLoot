@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import {
-    decrementCount,
+  applyCoupon,
+  decrementCount,
   deleteEntireCart,
   deleteOneProduct,
   getCart,
   incrementCount,
+  removeCoupon,
 } from "../../actions/user/cartAction";
 
 const cartSlice = createSlice({
@@ -18,12 +20,13 @@ const cartSlice = createSlice({
     countLoading: false,
     totalPrice: 0,
     tax: 0,
-    shipping:0
-
+    shipping: 0,
+    discount: 0,
+    couponType: "",
+    couponCode: "",
   },
   reducers: {
     calculateTotalPrice: (state) => {
-      
       let sum = state.cart.reduce(
         (total, item) =>
           total + (item.product.price + item.product.markup) * item.quantity,
@@ -31,7 +34,7 @@ const cartSlice = createSlice({
       );
       state.tax = sum * 0.08;
       state.totalPrice = sum;
-      console.log(state.totalPrice)
+      console.log(state.totalPrice);
     },
     clearCartOnOrderPlaced: (state) => {
       state.loading = false;
@@ -40,6 +43,8 @@ const cartSlice = createSlice({
       state.cartId = "";
       state.totalPrice = 0;
       state.tax = 0;
+      state.shipping = 0;
+      (state.couponCode = ""), (state.couponType = ""), (state.discount = 0);
     },
   },
   extraReducers: (builder) => {
@@ -52,6 +57,9 @@ const cartSlice = createSlice({
         state.error = null;
         state.cart = payload.cart?.items || [];
         state.cartId = payload.cart?._id || "";
+        state.couponType = payload.cart?.type || "";
+        state.couponCode = payload.cart?.couponCode || "";
+        state.discount = payload.cart?.discount || "";
       })
       .addCase(getCart.rejected, (state, { payload }) => {
         state.loading = false;
@@ -84,7 +92,7 @@ const cartSlice = createSlice({
         state.loading = false;
         state.error = null;
         const { productId } = payload;
-        console.log("product-delete",productId)
+        console.log("product-delete", productId);
         state.cart = state.cart.filter((item) => {
           return item.product._id !== productId;
         });
@@ -133,8 +141,44 @@ const cartSlice = createSlice({
           return cartItem;
         });
         state.cart = updatedCart;
+      })
+
+      // coupon management is redux
+
+      .addCase(applyCoupon.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload;
+        toast.error(payload);
+      })
+      .addCase(applyCoupon.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(applyCoupon.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.discount = payload.discount;
+        state.couponType = payload.couponType;
+        state.couponCode = payload.couponCode;
+        toast.success("Coupon Applied");
+      })
+      // Removing coupon
+      .addCase(removeCoupon.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(removeCoupon.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.discount = 0;
+        state.couponType = "";
+        state.couponCode = "";
+        toast.success("Coupon Removed");
+      })
+      .addCase(removeCoupon.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload;
       });
   },
 });
 export default cartSlice.reducer;
-export const {calculateTotalPrice,clearCartOnOrderPlaced}= cartSlice.actions
+export const { calculateTotalPrice, clearCartOnOrderPlaced } =
+  cartSlice.actions;

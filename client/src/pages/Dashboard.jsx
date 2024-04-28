@@ -172,7 +172,7 @@ const Dashboard = () => {
         )}
         <Pagination
           handleClick={handleClick}
-          number={4}
+          number={5}
           page={page}
           totalNumber={totalAvailableProducts}
         />

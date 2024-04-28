@@ -45,6 +45,13 @@ export const timeAgo = (date) => {
   return formatDistanceToNow(new Date(date), { addSuffix: true });
 };
 
+export const getTomorrowOnwardsDateForInput = () => {
+  const today = new Date();
+  today.setDate(today.getDate() + 1);
+  const formattedMinDate = date.format(today, "YYYY-MM-DD");
+  return formattedMinDate;
+};
+
 export const renderStars = (rating) => {
   const filledStars = Math.floor(rating);
   const hasHalfStar = rating % 1 !== 0;

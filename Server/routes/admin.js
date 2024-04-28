@@ -28,6 +28,13 @@ const {
   getOrder,
   updateOrderStatus,
 } = require("../controllers/admin/orderController");
+const {
+  getCoupons,
+  getCoupon,
+  addCoupon,
+  deleteCoupon,
+  editCoupon,
+} = require("../controllers/admin/couponController");
 //category controller functions mounting them to corresponding suiitable routes
 
 router.get("/categories", getCategories);
@@ -40,10 +47,8 @@ router.post(
   upload.single("imgURL"),
   createCategory
 );
-module.exports = router;
 
 //product controller functions mounting them to corresponding suitabele routes
-
 router.get("/products", getProduct);
 router.get("/product/:id", getSingleProduct);
 router.patch("/product/:id", upload.any(), updateProduct);
@@ -60,7 +65,18 @@ router.patch("/customer/:id");
 router.post("/customer", upload.any());
 router.patch("/customer-block-unblock/:id", blockOrUnblockCustomer);
 
+//order controller functions mounting them to corresponding suitable routes
 router.get("/orders", getOrders);
 router.get("/clear-orders", clearOrder);
 router.get("/orders/:id", getOrder);
 router.patch(`/order-status/:id`, updateOrderStatus);
+
+// couopns controller functions mounting them to corresponding suitable routes
+
+router.get("/coupons", getCoupons);
+router.get("/coupon/:id", getCoupon);
+router.post("/coupons", addCoupon);
+router.delete("/coupons/:id", deleteCoupon);
+router.patch("/coupon/:id", editCoupon);
+
+module.exports = router;
