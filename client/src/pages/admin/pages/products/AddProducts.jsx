@@ -87,7 +87,7 @@ const AddProducts = () => {
       toast.error("Price Should be greater than 0");
       return;
     }
-    if (markup <= 0) {
+    if (markup < 0) {
       toast.error("Markup Should be greater than 0");
       return;
     }
