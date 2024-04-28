@@ -33,7 +33,17 @@ const {
   orderCount,
 } = require("../controllers/user/orderController");
 const upload = require("../middleware/upload");
-const { readProductReviews, readProductReview, createNewReview, EditReview, readOrderReview } = require("../controllers/user/reviewController");
+const {
+  readProductReviews,
+  readProductReview,
+  createNewReview,
+  EditReview,
+  readOrderReview,
+} = require("../controllers/user/reviewController");
+const {
+  applyCoupon,
+  removeCoupon,
+} = require("../controllers/user/couponController");
 const router = express.Router();
 //Logout
 
@@ -97,5 +107,9 @@ router.patch("/review/:id", EditReview);
 // Review on order details page
 router.get("/order-review/:id", readOrderReview);
 
+//coupon apply and remove
+
+router.post("/coupon-apply", applyCoupon);
+router.get("/coupon-remove", removeCoupon);
 
 module.exports = router;

@@ -217,6 +217,7 @@ const decrementQuantity = async (req, res) => {
   }
 };
 
+
 module.exports = {
   getCart,
   deleteCart,

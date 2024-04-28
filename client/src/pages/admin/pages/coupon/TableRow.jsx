@@ -32,7 +32,7 @@ const TableRow = ({ index, length, coupon }) => {
           ? date.format(new Date(coupon.expirationDate), "MMM DD YYYY")
           : "No Data"}
       </td>
-      <td className="admin-table-cell">
+      <td className="admin-table-cell ps-10">
         <div className="flex items-center gap-2 text-lg">
           <span
             className="hover:text-gray-500"

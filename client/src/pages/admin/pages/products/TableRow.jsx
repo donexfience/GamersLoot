@@ -32,18 +32,18 @@ const TableRow = ({ index, length, product }) => {
       <td className="admin-table-row">
         <div className="line-clamp-2">{product.description}</div>
       </td>
-      <td className="ml-12">{product?.category?.name || ""}</td>
-      <td className="admin-table-row">{product.stockQuantity}</td>
-      <td className="admin-table-row">{product.price}</td>
+      <td className="px-7">{product?.category?.name || ""}</td>
+      <td className="admin-table-row px-12">{product.stockQuantity}</td>
+      <td className="admin-table-row px-12">{product.price}</td>
       <td className="admin-table-row capitalize shrink-0">
         <StatusComponent status={product.status} />
       </td>
-      <td className="admin-table-row">
+      <td className="admin-table-row px-3">
         {product.createdAt
           ? date.format(new Date(product.createdAt), "MMM DD YYYY")
           : "No Data"}
       </td>
-      <td className="admin-table-row">
+      <td className="admin-table-row px-12">
         <div className="flex items-center gap-2 text-lg">
           <span
             className="hover:text-gray-500"

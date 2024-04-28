@@ -19,41 +19,61 @@ const getCoupons = async (req, res) => {
 const applyCoupon = async (req, res) => {
   try {
     const { code } = req.body;
+
+    // Find the coupon by code, ensuring it's active and not expired
     const TodayDate = new Date();
     const coupon = await Coupon.findOne({
       code,
       expirationDate: { $gt: TodayDate },
-    });
-    if (!coupon) {
-      throw Error("coupon not found");
+      isActive: true,
+    }); 
+    if(!coupon){
+      throw Error("coupon not found")
     }
+    if (coupon.used)
+      if (!coupon) {
+        throw Error("Coupon not found or inactive");
+      }
+
+    // Check if the coupon usage limit is reached
     if (coupon.used === coupon.maximumUses) {
-      throw Error("Coupon Usage Limit Reached");
+      throw Error("Coupon usage limit reached");
     }
+    // Verify user ID from JWT token
     const token = req.cookies.user_token;
     const { _id } = jwt.verify(token, process.env.SECRET);
+
     if (!mongoose.Types.ObjectId.isValid(_id)) {
-      throw Error("Invalid ID !!!");
+      throw Error("Invalid user ID");
     }
 
-    const cart = await Cart.findOne({ user: _id }).populate("items.productId", {
+    // Find the user's cart and populate items
+    const cart = await Cart.findOne({ user: _id }).populate("items.product", {
       name: 1,
       price: 1,
       markup: 1,
     });
+
+    if (!cart) {
+      throw Error("Cart is empty");
+    }
+
+    // Calculate total price and quantity of items in the cart
     let totalQuantity = 0;
     let sum = 0;
-    cart.items.map((item) => {
-      sum = sum + (item.product.price + item.product.markup) * item.quantity;
-      totalQuantity = totalQuantity + item.quantity;
+    cart.items.forEach((item) => {
+      sum += (item.product.price + item.product.markup) * item.quantity;
+      totalQuantity += item.quantity;
     });
+
+    // Check if the total price meets the minimum purchase amount required by the coupon
     if (sum < coupon.minimumPurchaseAmount) {
-      throw Error("total price is greater than coupon purchase limit");
+      throw Error("Total price is less than the coupon purchase limit");
     }
+
+    // Update the cart with the coupon details
     const updatedCart = await Cart.findOneAndUpdate(
-      {
-        id: cart._id,
-      },
+      { _id: cart._id },
       {
         $set: {
           coupon: coupon._id,
@@ -63,15 +83,22 @@ const applyCoupon = async (req, res) => {
         },
       }
     );
+
     if (!updatedCart) {
-      throw Error("cart is not updated");
+      throw Error("Cart update failed");
     }
+
+    // Decrease the usage count of the coupon by 1
+    coupon.used++;
+    await coupon.save();
+
     res.status(200).json({
       discount: coupon.value,
       couponType: coupon.type,
       couponCode: code,
     });
   } catch (error) {
+    console.error(error);
     res.status(400).json({ error: error.message });
   }
 };
@@ -79,22 +106,46 @@ const removeCoupon = async (req, res) => {
   try {
     const token = req.cookies.user_token;
     const { _id } = jwt.verify(token, process.env.SECRET);
+
     if (!mongoose.Types.ObjectId.isValid(_id)) {
-      throw Error("invalid user Id");
+      throw Error("Invalid user ID");
     }
-    await Cart.findOneAndUpdate(
+
+    const cart = await Cart.findOne({ user: _id });
+    const couponId = cart.coupon;
+
+    if (!couponId) {
+      throw Error("No coupon applied to remove");
+    }
+
+    const updatedCart = await Cart.findOneAndUpdate(
       { user: _id },
       { $set: { coupon: null, couponCode: null, discount: null, type: null } },
       { new: true }
     );
+
+    if (!updatedCart) {
+      throw Error("Cart update failed");
+    }
+
+    const coupon = await Coupon.findById(couponId);
+    if (!coupon) {
+      throw Error("Coupon not found");
+    }
+
+
+    coupon.used--;
+    await coupon.save();
+
     res.status(200).json({ success: true });
   } catch (error) {
+    console.error(error);
     res.status(400).json({ error: error.message });
   }
 };
 
-module.exports ={
-    getCoupons,
-    applyCoupon,
-    removeCoupon
-}
+module.exports = {
+  getCoupons,
+  applyCoupon,
+  removeCoupon,
+};
