@@ -49,6 +49,8 @@ export const updateCategory = createAsyncThunk(
       );
       return data;
     } catch (error) {
+      console.log(error)
+      toast.error(error.response.data.error)
       return handleError(error, rejectWithValue);
     }
   }

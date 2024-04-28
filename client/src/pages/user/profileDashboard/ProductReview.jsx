@@ -1,6 +1,12 @@
 import { Formik, useFormikContext } from "formik";
 import React, { useState } from "react";
 import { AiFillStar, AiOutlineClose, AiOutlineStar } from "react-icons/ai";
+import { URL } from "../../../Common/api";
+import * as Yup from "yup";
+import {Form,Field,ErrorMessage} from 'formik'
+import { useDispatch } from "react-redux";
+import { createReview } from "../../../redux/actions/user/uesrReviewAction";
+
 
 //start priniting function
 
@@ -22,7 +28,7 @@ const starRating = () => {
             i <= rating ? "text-yellow-500" : "text-gray-100"
           }`}
         >
-          {i <= rating ? <AiFillStar /> : <AiOutlineStar />}
+          {i <= rating ? <AiFillStar className="" /> : <AiOutlineStar className="text-black" />}
         </span>
       );
     }
@@ -30,9 +36,28 @@ const starRating = () => {
   };
   return <div className="flex">{PrintStarts()}</div>;
 };
-const ProductReview = ({ closeToggle, id, reviewProduct }) => {
+const ProductReview = ({ closeToggle, id, reviewingProduct }) => {
+  const dispatch = useDispatch();
+  const validationSchema = Yup.object().shape({
+    rating: Yup.number().required("Rating is required"),
+    title: Yup.string(),
+    body: Yup.string(),
+  });
+  const initialValues = {
+    rating: "",
+    title: "",
+    body: "",
+  };
+  const handleSubmit = (value) => {
+    console.log(value)
+    const createdActions=dispatch(createReview({ ...value, order: id, product: reviewingProduct }));
+    if(createReview.fulfilled.match(createdActions)){
+      closeToggle();
+    }
+  };
+
   return (
-    <div className="bg-white w-5/6 lg:w-2/6 shadow-xl overflow-y-auto rouded-lg">
+    <div className="bg-white w-5/6 lg:w-full shadow-2xl overflow-y-auto rouded-lg">
       <div className="bg-white pt-5 pb-5 px-5 flex items-center justify-between">
         <h1 className="font-bold text-lg">Write a Review</h1>
         <AiOutlineClose
@@ -42,9 +67,9 @@ const ProductReview = ({ closeToggle, id, reviewProduct }) => {
       </div>
       <div className="px-5 pt-5 flex items-center gap-5">
         <div className="w-10 h-10 overflow-clip flex justify-center items-center shrink-0">
-          {reviewProduct.imageURL ? (
+          {reviewingProduct.imageURL ? (
             <img
-              src={`${URL}/img/${reviewProduct.imageURL}`}
+              src={`${URL}/img/${reviewingProduct.imageURL}`}
               alt="img"
               className="object-contain w-full h-full"
             />
@@ -54,7 +79,7 @@ const ProductReview = ({ closeToggle, id, reviewProduct }) => {
         </div>
         <div>
           <p className="lg:text-lg font-semibold line-clamp-1">
-            {reviewProduct.name}
+            {reviewingProduct.name}
           </p>
         </div>
       </div>
@@ -68,7 +93,7 @@ const ProductReview = ({ closeToggle, id, reviewProduct }) => {
             <label htmlFor="rating">
               <p>Rating</p>
 
-              <Field name="rating" as={starRating} />
+              <Field name="rating " as={starRating} />
               <ErrorMessage
                 className="text-sm text-red-500"
                 name="rating"
@@ -79,7 +104,7 @@ const ProductReview = ({ closeToggle, id, reviewProduct }) => {
               <p className="mt-3">Title</p>
               <Field
                 name="title"
-                className="w-full py-2 px-5 rounded mt-2"
+                className="w-full py-2 px-5 rounded mt-2 border-2 "
                 placeholder="Write down your review Title"
               />
               <ErrorMessage
@@ -94,7 +119,7 @@ const ProductReview = ({ closeToggle, id, reviewProduct }) => {
               <Field
                 name="body"
                 as="textarea"
-                className="h-36 lg:h-52 w-full p-5 rounded mt-2"
+                className="h-36 lg:h-52 w-full p-5 rounded mt-2 border-2"
                 placeholder="Write down your feedback about our product & services"
               />
               <ErrorMessage
@@ -103,7 +128,7 @@ const ProductReview = ({ closeToggle, id, reviewProduct }) => {
                 component="span"
               />
             </label>
-            <button className="btn-blue text-white w-full mt-3" type="submit">
+            <button type="submit" className="bg-violet-500 rounded-md py-3 text-white w-full mt-3" >
               Publish Review
             </button>
           </Form>

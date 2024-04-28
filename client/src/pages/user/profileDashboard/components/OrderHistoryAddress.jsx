@@ -1,7 +1,6 @@
 import React from "react";
 
 const OrderHistoryAddress = ({ title, address }) => {
-  console.log(address);
   return (
     <div className="flex">
       <div>

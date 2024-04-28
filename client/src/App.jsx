@@ -35,6 +35,7 @@ import OrderDetail from "./pages/user/profileDashboard/OrderDetail";
 import ProfilePage from "./pages/user/profileDashboard/ProfilePage";
 import Orders from "./pages/admin/pages/orders/Orders";
 import OrderDetailAdmin from "./pages/admin/pages/orders/OrderDetailAdmin";
+import Address from "./pages/user/profileDashboard/Address/Address";
 
 function App() {
   const { user } = useSelector((state) => state.user);
@@ -118,6 +119,7 @@ function App() {
             <Route path="profile" element={<ProfilePage />} />
             <Route path="order-history" element={<OrderHistory />} />
             <Route path="order-history/detail/:id" element={<OrderDetail />} />
+            <Route path="address" element={<Address/>}/>
           </Route>
         </Routes>
         {user ? user.role === "user" && <Footer /> : <Footer />}

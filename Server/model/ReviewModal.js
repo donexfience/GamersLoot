@@ -10,7 +10,7 @@ const reviewSchema = new Schema(
       ref: User,
       required: true,
     },
-    Product: {
+    product: {
       type: Schema.Types.ObjectId,
       ref: Product,
       required: true,

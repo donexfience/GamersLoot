@@ -9,19 +9,16 @@ const SortButton = ({ sort, handleClick }) => {
     <div className="{shrink-0 flex gap-2 items-center}">
       <p className="shrink-0 pt-3 text-white ">Sort By :</p>
       <select
-        className="border text-black bg-violet-400 border-violet-500 shadow-xd py-3 px-2 rounded-lg font-bold "
+        className="border text-black shadow-lg shadow-xd py-3 px-2 rounded-lg font-bold "
         onChange={(e) => {
           handleChange("sort", e.target.value);
         }}
       >
-        <option className="hover:bg-gray-200 py-2 px-3 rounded-lg" value="">
-          Newest to Oldest
-        </option>
         <option
           className="hover:bg-gray-200 py-2 px-3 rounded-lg"
           value="created-desc"
         >
-          Oldest to newest
+          New arrivals
         </option>
         <option
           className="hover:bg-gray-200 py-2 px-3 rounded-lg"
@@ -34,6 +31,36 @@ const SortButton = ({ sort, handleClick }) => {
           value="price-desc"
         >
           Price High to Low
+        </option>
+        <option
+          className="hover:bg-gray-200 py-2 px-3 rounded-lg"
+          value="price-desc"
+        >
+          Popularity
+        </option>
+        <option
+          className="hover:bg-gray-200 py-2 px-3 rounded-lg"
+          value="averagerating"
+        >
+          Average ratings
+        </option>
+        <option
+          className="hover:bg-gray-200 py-2 px-3 rounded-lg"
+          value="featured"
+        >
+          Featured
+        </option>
+        <option
+          className="hover:bg-gray-200 py-2 px-3 rounded-lg"
+          value="name-dsc"
+        >
+          z-a
+        </option>
+        <option
+          className="hover:bg-gray-200 py-2 px-3 rounded-lg"
+          value="name-asc"
+        >
+          a-z
         </option>
       </select>
     </div>

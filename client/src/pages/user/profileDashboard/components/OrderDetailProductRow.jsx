@@ -10,7 +10,7 @@ const OrderDetailsProductRow = ({
   status,
   toggleReviewModal,
 }) => {
-  console.log(item.productId);
+
   const isLast = index === length - 1;
   const classes = isLast ? "p-4" : "p-4 border-b border-gray-200 ";
   return (
@@ -49,7 +49,9 @@ const OrderDetailsProductRow = ({
           <td className="flex items-center justify-center">
             <p
               className="font-semibold flex items-center gap-1 text-white cursor-pointer bg-violet-500 p-3 mr-22 hover:bg-blue-100  rounded-lg shrink-0"
-              onClick={() => toggleReviewModal(item.productId)}
+              onClick={() => {
+                console.log(item)
+                toggleReviewModal(item.productId)}}
             >
               Leave a Review <BiMessageSquareDetail />
             </p>

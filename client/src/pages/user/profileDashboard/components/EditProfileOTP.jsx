@@ -56,11 +56,12 @@ const EditProfileOTP = ({ otp, isOTPVerified, setOTP, verifyOTP }) => {
           />
           <button
             className="bg-violet-500 px-3 py-2 rounded-md text-white"
-            onClick={()=>verifyOTP}
+            onClick={()=>verifyOTP()}
             type="button"
-            disabled={verifyOTP}
+            disabled={isOTPVerified}
+          
           >
-            Verify
+          {isOTPVerified ? "verified" :"verify"}
           </button>
         </div>
       </div>

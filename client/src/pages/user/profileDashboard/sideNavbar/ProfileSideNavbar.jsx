@@ -38,7 +38,7 @@ const ProfileSideNavbar = () => {
         <AiOutlineHeart />
         Wishlist
       </NavLink>
-      <NavLink className="side-nav-link-sp flex items-center gap-3  text-violet-500 font-bold" to="addresses">
+      <NavLink className="side-nav-link-sp flex items-center gap-3  text-violet-500 font-bold" to="address">
         <GiMailbox />
         Addresses
       </NavLink>

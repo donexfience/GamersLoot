@@ -148,7 +148,7 @@ const Dashboard = () => {
             <SortButton handleClick={handleClick} sort={sort} />
           </div>
           <div className="shrink-0 hidden ml-5 lg:block">
-            {userProducts.length}/{totalAvailableProducts} Results Loaded
+            {userProducts?.length}/{totalAvailableProducts} Results Loaded
           </div>
         </div>
         {loading ? (
@@ -158,8 +158,8 @@ const Dashboard = () => {
         ) : (
           <div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-5">
-              {userProducts && userProducts.length > 0 ? (
-                userProducts.map((product, index) => (
+              {userProducts && userProducts?.length > 0 ? (
+                userProducts?.map((product, index) => (
                   <ProductCard product={product} key={index} />
                 ))
               ) : (

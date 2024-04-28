@@ -43,7 +43,7 @@ const SpecialCategory = () => {
       <div className="grid grid-cols-2 mx-auto lg:flex gap-12 p-10 justify-center">
         {list.map((li, index) => {
           return (
-            <div className=" h-34  border-2  border-white bg-transparent p-4">
+            <div className=" h-34  border-2  hover:bg-red-400 hover:border-0  border-white bg-transparent p-4">
               <div className="flex items-center justify-center mt-4">
               <FaGamepad className="text-white text-4xl"/>
               </div>

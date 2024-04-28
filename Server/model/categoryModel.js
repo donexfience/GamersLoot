@@ -12,7 +12,7 @@ const categorySchema= new Schema({
     imgURL:{
         type:String
     },
-    IsActive:{
+    isActive:{
         type:Boolean,
         default:true
     },

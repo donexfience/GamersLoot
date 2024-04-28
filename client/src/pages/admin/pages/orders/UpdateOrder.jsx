@@ -59,6 +59,7 @@ const UpdateOrder = ({ toggleModal, datas }) => {
                 as="select"
                 name="status"
                 className="capitalize px-5 py-2 w-full bg-white shadow-md rounded-lg"
+                disabled={status === "delivered"} // Disable the select field if status is "delivered"
               >
                 <option
                   value="pending"
@@ -125,6 +126,11 @@ const UpdateOrder = ({ toggleModal, datas }) => {
                 min={orderdDate}
                 max={todyDate}
                 className="px-5 py-2 w-full shadow-md border  rounded-lg"
+              />
+              <ErrorMessage
+                name="date"
+                component="div"
+                className="text-red-500"
               />
             </div>
             <div className="py-2">

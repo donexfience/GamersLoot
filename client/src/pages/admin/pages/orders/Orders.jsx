@@ -27,17 +27,18 @@ const Orders = () => {
   const [page, setPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedOrderForUpdate, setSelectedOrderForUpdate] = useState(null);
-  console.log("🚀 ~ file: Orders.jsx:30 ~ Orders ~ selectedOrderForUpdate:", selectedOrderForUpdate)
+
 
   const [updateModal, setUpdateModal] = useState(false);
   const toggleUpdate = (data) => {
-    if (data.status === "canceled") {
+    console.log(data.status);
+    if (data.status === "cancelled") {
       toast.error("can't Edit Product is canceled");
+    } else {
+      setUpdateModal(!updateModal);
+      setSelectedOrderForUpdate(data);
     }
-    setUpdateModal(!updateModal);
-    setSelectedOrderForUpdate(data)
   };
-  
 
   //filter handling
 

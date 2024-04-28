@@ -24,9 +24,9 @@ const CartProductRow = ({ item, isLast, toggleProductConfirm }) => {
   };
 
   return (
-    <tr className={isLast ? "" : "border mt-4 mb-4"}>
-      <td className="flex hover: cursor-pointer items-center hover:text-violet-500" onClick={() => navigate(`/product/${item.product._id}`)}>
-        <div className="flex bg-grey-100 items-center gap-x-3">
+    <tr className={isLast ? "border  p-2 shadow-md" : "border mt-4 mb-4"}>
+      <td className="flex hover: cursor-pointer items-center px-4  hover:text-violet-500 " onClick={() => navigate(`/product/${item.product._id}`)}>
+        <div className="flex bg-grey-100 items-center gap-x-3 p-2">
           <div className="ml-6 md-3 w-12 h-10 flex-shrink-0">
             {item.product.imageURL ? (
               <img src={`${URL}/img/${item.product.imageURL}`} alt="Products-cart" className="object-contain w-full h-full" />
@@ -37,7 +37,7 @@ const CartProductRow = ({ item, isLast, toggleProductConfirm }) => {
           <p className="w-52 h-10   text-black font-semibold">{item.product.name}</p>
         </div>
       </td>
-      <td className="text-black font-semibold">{item.product.price + item.product.markup}</td>
+      <td className=" text-black font-semibold">{item.product.price + item.product.markup}</td>
       <td className="w-24 text-center text-black font-semibold ">
         {countLoading ? (
           <JustLoading size={10} />

@@ -63,7 +63,7 @@ const Cart = () => {
       <div className="lg:w-2/3 bg-white border border-gray-200 shadow-lg ">
         <BreadCrumbs list={["Home", "Cart"]} />
 
-        <div className="mb-4 bg-white  p-4 flex items-center justify-evenly">
+        <div className="mb-4 bg-white  p-4 flex items-center justify-between">
           <h2 className="text-violet-500 font-bold text-lg ">Product Cart</h2>
           <div className="">
             <button
@@ -145,7 +145,7 @@ const Cart = () => {
           </div>
         )}
       </div>
-      <div className="lg:w-1/3 shadow-lg bg-white ">
+      <div className="lg:w-1/3 h-1/3 shadow-lg bg-white ">
         <div className="bg-white border p-5    ">
           <h3 className="font-bold text-violet-500">Cart Total</h3>
           <TotalPrice/>

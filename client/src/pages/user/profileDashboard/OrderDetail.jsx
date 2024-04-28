@@ -16,6 +16,7 @@ import StatusHistoryLoadingBar from "./components/StatusHistoryProgressBar";
 import OrderDetailProductRow from "./components/OrderDetailProductRow";
 import OrderDetailsProductRow from "./components/OrderDetailProductRow";
 import OrderHistoryAddress from "./components/OrderHistoryAddress";
+import YourReview from "./components/YourReview";
 
 const OrderDetail = () => {
   const naviagte = useNavigate();
@@ -31,8 +32,9 @@ const OrderDetail = () => {
   const [reviewModal, setReviewModal] = useState(false);
   const [reviewProduct, setReviewProduct] = useState(null);
   const toggleReviewModal = (review) => {
-    setReviewModal(!reviewModal);
     setReviewProduct(review);
+    console.log(review, "--------------------------------");
+    setReviewModal(!reviewModal);
   };
   //fetching id from the URL
 
@@ -51,12 +53,11 @@ const OrderDetail = () => {
       setError(error);
     }
   };
-  console.log(orderData);
   //fetching data at initial
   useEffect(() => {
     loadData();
   }, [id]);
-  console.log(orderData);
+
   return (
     <div className="w-full">
       {reviewModal && (
@@ -64,7 +65,7 @@ const OrderDetail = () => {
           content={
             <ProductReview
               closeToggle={toggleReviewModal}
-              reviewProduct={reviewProduct}
+              reviewingProduct={reviewProduct}
               id={id}
             />
           }
@@ -208,6 +209,11 @@ const OrderDetail = () => {
                       />
                     </div>
                   )}
+                {orderData && (
+                  <div className="pt-5">
+                    <YourReview id={id} products={orderData.productId} />
+                  </div>
+                )}
 
                 <div
                   className=" font-bold lg:flex items-center justify-center gap-10
@@ -224,6 +230,7 @@ const OrderDetail = () => {
                       />
                     )}
                   </div>
+
                   <div className="border-b lg:border-b-0  pr-4">
                     <p className="text-violet-500 font-bold text-xl pb-4">
                       Shipping Address
@@ -244,7 +251,6 @@ const OrderDetail = () => {
                 </div>
               </div>
             </div>
-            {/* review component */}
           </div>
         </div>
       )}

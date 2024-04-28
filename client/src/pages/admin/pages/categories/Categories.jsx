@@ -42,7 +42,8 @@ const Categories = () => {
     }
     setSearchParams(params.toString() ? "?" + params.toString() : "");
   };
-
+  
+  console.log(categories,'===============')
   useEffect(() => {
     dispatch(getCategories(searchParams));
     const params = new URLSearchParams(window.location.search);
@@ -133,8 +134,9 @@ const Categories = () => {
                           : "No Data"}
                       </td>
                       <td>
+                        {console.log(category.isActive,"00000000000")}
                         <StatusComponent
-                          status={category.IsActive ? "Active" : "Blocked"}
+                          status={category.isActive ? "Active" : "Blocked"}
                         />
                       </td>
                       <td className="admin-table-row">

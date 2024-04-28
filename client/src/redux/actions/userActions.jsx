@@ -6,6 +6,7 @@ import {
   configMultiPart,
 } from "../../Common/configurations";
 import { URL, commonReduxRequests } from "../../Common/api";
+import toast from "react-hot-toast";
 
 export const logout = createAsyncThunk(
   "user/logout",
@@ -97,6 +98,7 @@ export const editUserProfile = createAsyncThunk(
       );
       return data;
     } catch (error) {
+      toast.error(error.response.data.error)
       return handleError(error, rejectWithValue);
     }
   }

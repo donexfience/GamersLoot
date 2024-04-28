@@ -28,11 +28,12 @@ const EditCategory = () => {
 
   const showConfirm = (value) => {
     toggleModal();
+    console.log(value,"ooooooooooooooooooooo")
     const updatedFormData = new FormData();
     updatedFormData.append("name", value.title);
     updatedFormData.append("description", value.description);
     updatedFormData.append("imgURL", value.imageURL);
-    updatedFormData.append("IsActive", value.isActive);
+    updatedFormData.append("isActive", value.isActive);
     setFormData(updatedFormData);
   };
 

@@ -256,8 +256,8 @@ const ProductDetails = () => {
           <div className="mt-5">
             <RelatedProducts id={id} />
           </div>
-          <div className="border border-red-500">
-            <UserReview />
+          <div className="">
+            <UserReview product={product} id={id} />
           </div>
         </>
       ) : (

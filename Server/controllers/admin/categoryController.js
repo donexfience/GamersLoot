@@ -8,7 +8,7 @@ const getCategories = async (req, res) => {
     const { status, search, page = 1, limit = 10 } = req.query;
 
     let filter = {};
-    console.log(status,'-------status')
+    console.log(status, "-------status");
 
     if (status) {
       if (status === "active") {
@@ -44,11 +44,20 @@ const createCategory = async (req, res) => {
       formData = { ...formData, imgURL: imgURL };
     }
 
-    // Check if the category name already exists
-    const existingCategory = await Category.findOne({ name: formData.name });
+    if (formData.name) {
+      console.log(formData.name);
+      const nameRegex = new RegExp(formData.name, "i");
 
-    if (existingCategory) {
-        throw Error("category with this name already exist")
+      // Check existing category
+      const existingCategory = await Category.find({
+        name: nameRegex,
+        _id: { $ne: id },
+      });
+      console.log(existingCategory, "!!!!!!!!!!!!!!!!!!!!!!");
+
+      if (existingCategory) {
+        throw Error("Category with this name already exists");
+      }
     }
 
     const category = await Category.create(formData);
@@ -58,7 +67,6 @@ const createCategory = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-
 
 //deleting cateogory
 const deleteCategory = async (req, res) => {
@@ -82,30 +90,52 @@ const updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
     let formData = req.body;
+    console.log(req.body, "body........................................");
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw Error("Invalid ID");
     }
+    if (formData.name) {
+      console.log(formData.name);
+      const nameRegex = new RegExp(formData.name, "i");
 
+      // Check existing category
+      const existingCategory = await Category.find({
+        name: nameRegex,
+        _id: { $ne: id },
+      });
+      console.log(existingCategory, "!!!!!!!!!!!!!!!!!!!!!!");
+
+      if (existingCategory) {
+        throw Error("Category with this name already exists");
+      }
+    }
+
+    // Check if the category name already exists
     let imgURL = req?.file?.filename;
-    console.log(imgURL,"-----------imgurl----------------")
+    console.log(imgURL, "-----------imgurl----------------");
     if (imgURL) {
       formData = { ...formData, imgURL: imgURL };
     }
-    console.log(formData,"++++++++++++++++++++++++++++++++++++++++")
+    console.log(formData, "++++++++++++++++++++++++++++++++++++++++");
+
+    // Update category
     const category = await Category.findOneAndUpdate(
       { _id: id },
       { $set: { ...formData } },
       { new: true }
     );
+
     if (!category) {
-      throw Error("No such Cateogory");
+      throw Error("No such Category");
     }
+
     res.status(200).json({ category });
   } catch (error) {
-    console.error(error,"category update--------------")
+    console.error(error, "Category update error");
     res.status(400).json({ error: error.message });
   }
 };
+
 // Only getting one Category
 const getCategory = async (req, res) => {
   try {
@@ -123,7 +153,7 @@ const getCategory = async (req, res) => {
 
     res.status(200).json({ category });
   } catch (error) {
-    console.error("error is thrown",error)
+    console.error("error is thrown", error);
     res.status(400).json({ error: error.message });
   }
 };

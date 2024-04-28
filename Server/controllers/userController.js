@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../model/userModel");
+const bcrypt = require("bcrypt");
 const { default: mongoose } = require("mongoose");
 const createToken = (_id) => {
   return jwt.sign({ _id }, process.env.SECRET, { expiresIn: "1d" });
@@ -35,17 +36,41 @@ const editUser = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       throw Error("Invalid Id");
     }
-    let formData = req.body;
+    let { password, newPassword, confirmPassword, ...formData } = req.body;
+    const user = await User.findById(_id);
+    if (!user) {
+      throw Error("User not found");
+    }
     const profileImgURL = req?.file?.filename;
     if (profileImgURL) {
       formData = { ...formData, profileImgURL: profileImgURL };
     } else {
       formData = { ...formData, profileImgURL: "" };
     }
-    console.log(profileImgURL, "---------------------");
+
+    // Check if newPassword and confirmPassword are provided and match
+    if (newPassword && confirmPassword && newPassword !== confirmPassword) {
+      throw Error("New password and confirm password don't match");
+    }
+
+    // Check if password is provided and validate it against the user's current password
+    if (password) {
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        throw Error("Old password is not correct");
+      }
+
+      // If newPassword is provided, hash it and update the password field
+      if (newPassword) {
+        const hasedPassword = await bcrypt.hash(newPassword, 10);
+        formData.password = hasedPassword;
+      }
+    }
+
+    // Update the user with the new form data
     const updateUser = await User.findByIdAndUpdate(
-      { _id },
-      { $set: { ...formData } },
+      _id,
+      { $set: formData },
       { new: true }
     );
 
@@ -58,7 +83,6 @@ const editUser = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-
 const signUpUser = async (req, res) => {
   try {
     let userCredentials = req.body;

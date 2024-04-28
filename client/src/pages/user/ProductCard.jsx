@@ -5,6 +5,7 @@ import { FaHeart, FaStar } from "react-icons/fa"; // Example: Heart and Star ico
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
+  console.log(product,"--------------product----------card")
 
   // Calculate the discounted price
   const discountedPrice = product.price - (product.price * product.offer) / 100;

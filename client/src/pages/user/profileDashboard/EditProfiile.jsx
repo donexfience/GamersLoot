@@ -8,6 +8,7 @@ import { editUserProfile } from "../../../redux/actions/userActions";
 import * as Yup from "yup";
 import {
   AiOutlineClose,
+  AiOutlineLock,
   AiOutlineMail,
   AiOutlinePhone,
   AiOutlineUser,
@@ -33,6 +34,9 @@ const EditProfiile = ({ closeToggle }) => {
     phoneNumber: user.phoneNumber || "",
     profileImgURL: user.profileImgURL || user.profileImageURL || "",
     dateOfBirth: getPassedDateOnwardDateForInput(user.dateOfBirth) || "",
+    password: "",
+    newPassword: "",
+    newPasswordAgain: "",
   };
   console.log(initialValues, "================");
   const validationSchema = Yup.object().shape({
@@ -43,10 +47,21 @@ const EditProfiile = ({ closeToggle }) => {
       .typeError("Phone number should be digits")
       .moreThan(999999999, "Not valid phone number"),
     dateOfBirth: Yup.date(),
+    password: Yup.string().matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+      "Must contain 8 Characters, One UpperCase, One Number and One Special Case Character"
+    ),
+    newPassword: Yup.string().matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+      "Must contain 8 Characters, One UpperCase, One Number and One Special Case Character"
+    ),
+    newPasswordAgain: Yup.string().oneOf(
+      [Yup.ref("newPassword"), null],
+      "Password doesn't match with original"
+    ),
   });
 
   const handleSubmit = async (values) => {
-    console.log("🚀 ~ file: EditProfiile.jsx:49 ~ handleSubmit ~ values:", values)
     if (user.email !== values.email) {
       if (!isOTPVerified) {
         setEmailChanged(true);
@@ -67,30 +82,38 @@ const EditProfiile = ({ closeToggle }) => {
         }
       } else {
         // If OTP is verified, proceed with editing user profile
-        const userData = {
+        let userData = {
           firstName: values.firstName,
           lastName: values.lastName,
           phoneNumber: values.phoneNumber,
           dateOfBirth: values.dateOfBirth,
           email: values.email,
           profileImgURL: values.profileImgURL || "",
+          newPassword: "",
+          password: "",
+          passwordAgain: "",
         };
-        console.log("🚀 ~ file: EditProfiile.jsx:77 ~ handleSubmit ~ userData:", userData)
 
         dispatch(editUserProfile(userData));
         closeToggle();
       }
     } else {
       // If email is not changed, directly proceed with editing user profile
-      const userData = {
+      let userData = {
         firstName: values.firstName,
         lastName: values.lastName,
         phoneNumber: values.phoneNumber,
         dateOfBirth: values.dateOfBirth,
         email: values.email,
         profileImgURL: values.profileImgURL || "",
+        password: values.password || "",
+        newPassword: values.newPassword || "",
+        confirmPassword: values.newPasswordAgain || "",
       };
-      console.log("🚀 ~ file: EditProfiile.jsx:93 ~ handleSubmitdasdsadsa ~ userData:", userData)
+      // // console.log(
+      // // "🚀 ~ file: EditProfiile.jsx:93 ~ handleSubmitdasdsadsa ~ userData:",
+      // // userData
+      // // );
 
       dispatch(editUserProfile(userData));
       closeToggle();
@@ -98,6 +121,8 @@ const EditProfiile = ({ closeToggle }) => {
   };
 
   const verifyOTP = async () => {
+
+    console.log("calling",newEmail,otp);
     const data = await commonRequests("post", "/auth/validate-otp", {
       email: newEmail,
       otp: parseInt(otp),
@@ -126,21 +151,19 @@ const EditProfiile = ({ closeToggle }) => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={async(value) => {
-          handleSubmit(value)
+        onSubmit={async (value) => {
+          handleSubmit(value);
         }}
         enableReinitialize
       >
         {({ values, setFieldValue }) => (
-          <Form className="lg:flex sm:flex-row gap-5 p-5 w-full">
-            <div className="w-full lg:w-auto">
-              {" "}
-              {/* Set width to auto for mobile and full width for larger screens */}
+          <Form className="lg:flex lg:flex-row lg:gap-5 p-5 w-full">
+            <div className="w-1/2  mb-5 lg:mb-0">
               {values.profileImgURL &&
               typeof values.profileImgURL === "string" ? (
                 <div className="bg-white py-6 rounded-md text-center">
                   {console.log("hello")}
-                  <div className="mx-auto w-56 h-56">
+                  <div className="mx-auto w-36 h-36">
                     {" "}
                     {/* Center the image and restrict its width */}
                     <img
@@ -170,7 +193,8 @@ const EditProfiile = ({ closeToggle }) => {
                 name="profileImgURL"
               />
             </div>
-            <div className="w-3/4">
+            <div className="w-full lg:w-3/4">
+              {/* User details section */}
               <InputWithIcon
                 icon={<AiOutlineUser />}
                 name="firstName"
@@ -192,10 +216,25 @@ const EditProfiile = ({ closeToggle }) => {
                 placeholder="Enter your Number"
               />
               <InputWithIcon
-              types={"date"}
+                types={"date"}
                 icon={<RiCalendarEventFill />}
                 name="dateOfBirth"
                 placeholder="Enter your Number"
+              />
+              <InputWithIcon
+                icon={<AiOutlineLock />}
+                name="password"
+                placeholder="enter your old password"
+              />
+              <InputWithIcon
+                icon={<AiOutlineLock />}
+                name="newPassword"
+                placeholder="enter your new password "
+              />
+              <InputWithIcon
+                icon={<AiOutlineLock />}
+                name="newPasswordAgain"
+                placeholder="enter new password Again "
               />
               {emailChanged && (
                 <EditProfileOTP
@@ -203,10 +242,11 @@ const EditProfiile = ({ closeToggle }) => {
                   otp={otp}
                   setOTP={setOTP}
                   verifyOTP={verifyOTP}
+                  
                 />
               )}
               <button
-                className="ml-3 bg-violet-500 text-white py-2 px-3 rounded-md
+                className="border-2 font-bold border-violet-500 text-black py-2 px-5 rounded-md
               "
                 type="submit"
               >

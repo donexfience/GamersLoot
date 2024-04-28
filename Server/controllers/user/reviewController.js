@@ -6,8 +6,9 @@ const Order = require("../../model/orderModel");
 //getting all the reviews for the product Details page
 const readProductReviews = async (req, res) => {
   try {
-    const { _id } = req.params;
-    if (mongoose.Types.ObjectId.isValid(id)) {
+    const { id } = req.params;
+    console.log(id,"idof product reviews")
+    if (mongoose.Types.ObjectId.isValid(_id)) {
       throw Error("Invalid ID!!!");
     }
     const reviews = await Review.find({ Product: _id }).populate("user", {
@@ -20,6 +21,7 @@ const readProductReviews = async (req, res) => {
     }
     res.status(200).json({ reviews });
   } catch (error) {
+    console.error(error)
     res.status(400).json({ error: error.message });
   }
 };
@@ -42,6 +44,7 @@ const readProductReview = async (req, res) => {
 
     res.status(200).json({ review });
   } catch (error) {
+    console.error(error);
     res.status(400).json({ error: error.message });
   }
 };
@@ -50,6 +53,7 @@ const EditReview = async (req, res) => {
   try {
     const { id } = req.params;
     const body = req.body;
+
     const exist = await Review.findOne({ _id: id });
     if (!exist) {
       throw Error("No reviews found");
@@ -59,17 +63,18 @@ const EditReview = async (req, res) => {
       throw Error("Product not found");
     }
     //finding the change in rating
+
     const ratingChange = body.numberOfReviews + exist.rating;
     const newRates =
       (product.rating * product.numberOfReviews + ratingChange) /
       product.numberOfReviews;
     //updating rating in product
+    
     await Product.findByIdAndUpdate(
       body.product,
       { $set: { rating: newRates } },
       { new: true }
     );
-    //updated review
 
     const updatedReview = await Review.findByIdAndUpdate(
       exist._id,
@@ -80,7 +85,6 @@ const EditReview = async (req, res) => {
       lastName: 1,
       profileImgURL: 1,
     });
-    //sending response
 
     res.status(200).json({ review: updatedReview });
   } catch (error) {
@@ -92,8 +96,9 @@ const EditReview = async (req, res) => {
 const createNewReview = async (req, res) => {
   try {
     const token = req.cookies.user_token;
-    const { _id } = jwt.verify(tok, process.env.SECRET);
+    const { _id } = jwt.verify(token, process.env.SECRET);
     const body = req.body;
+    console.log(body, "-----------------");
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       throw Error("not valid id of user");
     }
@@ -108,7 +113,7 @@ const createNewReview = async (req, res) => {
       product: body.product,
       order: body.order,
     });
-
+    console.log(reviewExists, "==============================");
     if (reviewExists) {
       throw Error("You have already reviewed. Please go to end of page");
     }
@@ -128,6 +133,9 @@ const createNewReview = async (req, res) => {
       newNumberOfReviews = product.numberOfReviews + 1;
     }
 
+    // Round the newRating to one decimal place
+    newRating = parseFloat(newRating.toFixed(1));
+
     const updatedProduct = await Product.findByIdAndUpdate(
       body.product,
       {
@@ -143,6 +151,7 @@ const createNewReview = async (req, res) => {
 
     res.status(200).json({ review, updatedProduct });
   } catch (error) {
+    console.error(error);
     res.status(400).json({ error: error.message });
   }
 };
@@ -150,7 +159,7 @@ const createNewReview = async (req, res) => {
 const readOrderReview = async (req, res) => {
   try {
     const token = req.cookies.user_token;
-    const { _id } = jwt.verify(tok, process.env.SECRET);
+    const { _id } = jwt.verify(token, process.env.SECRET);
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       throw Error("Invalid user");
     }
@@ -163,18 +172,17 @@ const readOrderReview = async (req, res) => {
     }
     const order = await Order.findOne(find);
 
-    const reviews = await Review.find({ order: order._id, user: _id }).populate(
-      "user",
-      {
+    const reviews = await Review.find({ order: order._id, user: _id })
+      .populate("user", {
         firstName: 1,
         lastName: 1,
         profileImgURL: 1,
-      }
-    );
+      })
+      .populate("product");
     if (!reviews) {
       throw Error("No Review Found");
     }
-
+    console.log(reviews, "-------------reviews-----------------");
     res.status(200).json({ reviews });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -186,5 +194,5 @@ module.exports = {
   readProductReview,
   readProductReviews,
   EditReview,
-  readOrderReview
+  readOrderReview,
 };
