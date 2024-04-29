@@ -19,6 +19,9 @@ const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  //wallet 
+
+  const [walletbalance,setWalletBalance]=useState(0);
   // taking the cart details for checkout
 
   const { cart, loading, error } = useSelector((state) => state.cart);
