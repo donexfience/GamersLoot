@@ -44,6 +44,11 @@ const {
   applyCoupon,
   removeCoupon,
 } = require("../controllers/user/couponController");
+const {
+  createRazorPayOrder,
+  getKey,
+  verifyPayment,
+} = require("../controllers/user/paymentController");
 const router = express.Router();
 //Logout
 
@@ -111,5 +116,11 @@ router.get("/order-review/:id", readOrderReview);
 
 router.post("/coupon-apply", applyCoupon);
 router.get("/coupon-remove", removeCoupon);
+
+//razorpay payment config
+
+router.get("/razor-key", getKey);
+router.post("/razor-order", createRazorPayOrder);
+router.post("/razor-verify", verifyPayment);
 
 module.exports = router;
