@@ -40,6 +40,7 @@ import CreateCoupon from "./pages/admin/pages/coupon/CreateCoupon";
 import Coupons from "./pages/admin/pages/coupon/Coupons";
 import EditCoupon from "./pages/admin/pages/coupon/EditCoupon";
 import Wishlist from "./pages/user/wishlist/Wishlist";
+import FindCoupon from "./pages/user/profileDashboard/Coupon/FindCoupon";
 
 function App() {
   const { user } = useSelector((state) => state.user);
@@ -131,6 +132,7 @@ function App() {
             <Route path="order-history/detail/:id" element={<OrderDetail />} />
             <Route path="address" element={<Address />} />
             <Route path="wishlist" element={<Wishlist />} />
+            <Route path="coupons" element={<FindCoupon/>}/>
           </Route>
         </Routes>
         {user ? user.role === "user" && <Footer /> : <Footer />}

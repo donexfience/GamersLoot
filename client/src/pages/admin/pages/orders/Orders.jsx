@@ -100,6 +100,7 @@ const Orders = () => {
             <UpdateOrder
               toggleModal={toggleUpdate}
               datas={selectedOrderForUpdate}
+              orders ={orders}
             />
           }
         />

@@ -44,7 +44,9 @@ const cartSlice = createSlice({
       state.totalPrice = 0;
       state.tax = 0;
       state.shipping = 0;
-      (state.couponCode = ""), (state.couponType = ""), (state.discount = 0);
+      state.couponCode = "",
+      state.couponType = "",
+      state.discount = 0;
     },
   },
   extraReducers: (builder) => {

@@ -59,7 +59,7 @@ const Pagination = ({ handleClick, page, number, totalNumber }) => {
       for (let i = 1; i <= paginationNum; i++) {
         paginationButtons.push(
           <p
-            className={`pagination${page === i ? "-active" : "text-red-500"} font-bold border bg-violet-500 text-white border-violet-600  py-2 px-4 rounded-3xl`}
+            className={`pagination${page === i ? "-active" : "text-red-500"} font-bold border-2 text-black border-violet-600  py-1 px-3 rounded-3xl`}
             onClick={() => handleClick("page", i)}
             key={i}
           >

@@ -4,24 +4,20 @@ import { BiBox, BiCartAlt, BiCheckCircle, BiDockLeft, BiPackage, BiSolidTruck } 
 import { FaShippingFast, FaRegHandshake } from "react-icons/fa";
 
 const StatusHistoryLoadingBar = ({ statusHistory }) => {
-  let loadingPercentage = 0;
-
-  if (statusHistory.length === 2) {
-    loadingPercentage = 35;
-  }
-  if (statusHistory.length === 3) {
-    loadingPercentage = 68;
-  }
-  if (statusHistory.length === 4) {
-    loadingPercentage = 100;
-  }
-
   const list = [
     { name: "Order Placed", icon: <BiCartAlt /> },
     { name: "Packaging", icon: <BiBox /> },
-    { name: "Shipped", icon: <BiSolidTruck />  },
+    { name: "Shipped", icon: <BiSolidTruck /> },
     { name: "Delivered", icon: <BiCheckCircle /> },
   ];
+
+  const calculateLoadingPercentage = () => {
+    const statusesCompleted = statusHistory.filter(status => status !== "pending");
+    const totalStatuses = list.length;
+    return (statusesCompleted.length / totalStatuses) * 100;
+  };
+
+  const loadingPercentage = calculateLoadingPercentage();
 
   return (
     <div className="relative h-24">
@@ -31,12 +27,12 @@ const StatusHistoryLoadingBar = ({ statusHistory }) => {
             <div
               key={index}
               className={`w-6 h-6  rounded-full flex justify-center items-center text-white ${
-                index <= statusHistory.length - 1
+                index < statusHistory.length
                   ? "bg-blue-500"
                   : "border-4 border-blue-500 bg-white"
               }`}
             >
-              {index <= statusHistory.length - 1 && <TiTick />}
+              {index < statusHistory.length && <TiTick />}
             </div>
             <span className="text-2xl text-blue-500 mt-3">{status.icon}</span>
             <p className="text-sm font-semibold">{status.name}</p>

@@ -7,7 +7,7 @@ import { cancelOrder } from "../../../redux/actions/user/orderAction";
 const CancelOrder = ({ id, closeToggle, loadData }) => {
   const dispatch = useDispatch();
   const initialValues = {
-    return: "",
+    reason: "",
   };
   const validationSchema = Yup.object().shape({
     reason: Yup.string().required("canelation reason is required"),

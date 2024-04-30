@@ -13,7 +13,7 @@ const getOrders = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       throw Error("Invalid ID");
     }
-    const { page = 1, limit = 10 } = req.query;
+    const { page = 1, limit = 7 } = req.query;
     const skip = (page - 1) * limit;
     const orders = await Order.find(
       { user: _id },
@@ -83,7 +83,7 @@ const createOrder = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       throw Error("Invalid ID");
     }
-    const { address, paymentMode, notes } = req.body;
+    const { address, paymentMode, notes,couponCode } = req.body;
     console.log(address,"--------------------------")
     const addressData = await Address.findOne({ _id: address });
     console.log(addressData,"---------------")
@@ -109,6 +109,7 @@ const createOrder = async (req, res) => {
     }));
     let orderData = {
       user: _id,
+      couponCode:couponCode,
       address: addressData,
       products: products,
       subTotal: sum,

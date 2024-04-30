@@ -9,7 +9,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { AiOutlineClose } from "react-icons/ai";
 import { updateOrderStatus } from "../../../../redux/actions/admin/orderAction";
 
-const UpdateOrder = ({ toggleModal, datas }) => {
+const UpdateOrder = ({ toggleModal, datas, orders }) => {
   const dispatch = useDispatch();
   const { id, status, paymentMode, deliveryDate } = datas;
   const orderdDate = getPassedDateOnwardDateForInput(deliveryDate);
@@ -21,10 +21,12 @@ const UpdateOrder = ({ toggleModal, datas }) => {
     status: status,
     description: "",
     paymentStatus: "",
+    returndate: "",
   };
   const validationSchema = Yup.object().shape({
     status: Yup.string().required("Status is required"),
     date: Yup.date().nullable().required("Date is required"),
+    returndate: Yup.date().nullable().required("Date is required"),
     description: Yup.string(),
     paymentStatus: Yup.string().nullable(),
   });
@@ -36,9 +38,10 @@ const UpdateOrder = ({ toggleModal, datas }) => {
       toggleModal({});
     });
   };
+  console.log(orders, "========orderdata admin table row");
 
   return (
-    <div className="w-full bg-white p-4 rounded-lg ">
+    <div className="w-full bg-white p-6 rounded-lg shadow-md">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -46,112 +49,132 @@ const UpdateOrder = ({ toggleModal, datas }) => {
       >
         {({ values }) => (
           <Form className="w-full">
-            <div className="flex items-center justify-between">
-              <h1 className="font-bold ">Update Order</h1>
+            <div className="flex items-center justify-between mb-4">
+              <h1 className="font-bold text-lg">Update Order</h1>
               <AiOutlineClose
-                className="font-bold cursor-pointer tex-xl"
+                className="cursor-pointer text-xl"
                 onClick={toggleModal}
               />
             </div>
-            <div className="py-2">
-              <p>Status</p>
+            <div className="mb-4">
+              <label htmlFor="status" className="block mb-1 font-semibold">
+                Status
+              </label>
               <Field
                 as="select"
                 name="status"
-                className="capitalize px-5 py-2 w-full bg-white shadow-md rounded-lg"
-                disabled={status === "delivered"} // Disable the select field if status is "delivered"
+                className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+                disabled={status === "delivered"}
               >
-                <option
-                  value="pending"
-                  disabled={
-                    status === "pending" ||
-                    status === "processing" ||
-                    status === "shipped" ||
-                    status === "delivered"
-                  }
-                >
+                <option value="pending" disabled={status !== "pending"}>
                   Pending
                 </option>
                 <option
                   value="processing"
-                  disabled={
-                    status === "processing" ||
-                    status === "shipped" ||
-                    status === "delivered"
-                  }
+                  disabled={status === "delivered" || status === "processing"}
                 >
                   Processing
                 </option>
                 <option
                   value="shipped"
-                  disabled={status === "shipped" || status === "delivered"}
+                  disabled={
+                    status === "shipped" ||
+                    status === "delivered" ||
+                    status === "processing"
+                  }
                 >
                   Shipped
                 </option>
                 <option value="delivered">Delivered</option>
                 <option value="cancelled">Cancelled</option>
-                {/* <option value="returned">Returned</option> */}
               </Field>
+
               <ErrorMessage
                 name="status"
                 component="div"
-                className="text-red-500"
+                className="text-red-500 text-sm mt-1"
               />
             </div>
             {values.status === "delivered" &&
               paymentMode === "cashOnDelivery" && (
-                <div key={values.status}>
-                  <p>payment Collected or Not</p>
+                <div className="mb-4">
+                  <label
+                    htmlFor="paymentStatus"
+                    className="block mb-1 font-semibold"
+                  >
+                    Payment Collected or Not
+                  </label>
                   <Field
                     as="select"
                     name="paymentStatus"
-                    className="w-full px-5 py-2 border rounded-lg shadow-lg"
+                    className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
                   >
-                    <option value="">choose Yes or No</option>
+                    <option value="">Choose Yes or No</option>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
                   </Field>
                   <ErrorMessage
                     name="paymentStatus"
                     component="div"
-                    className="text-red-500"
+                    className="text-red-500 text-sm mt-1"
                   />
                 </div>
               )}
-            <div className="py-2">
-              <p>Date</p>
+            <div className="mb-4">
+              <label htmlFor="date" className="block mb-1 font-semibold">
+                Date
+              </label>
               <Field
                 type="date"
                 name="date"
                 min={orderdDate}
                 max={todyDate}
-                className="px-5 py-2 w-full shadow-md border  rounded-lg"
+                className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
               />
               <ErrorMessage
                 name="date"
                 component="div"
-                className="text-red-500"
+                className="text-red-500 text-sm mt-1"
               />
             </div>
-            <div className="py-2">
-              <p>Description</p>
+            <div className="mb-4">
+              <label htmlFor="date" className="block mb-1 font-semibold">
+                Return Date
+              </label>
+              <Field
+                type="date"
+                name="returndate"
+                min={orderdDate}
+                className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+              />
+              <ErrorMessage
+                name="returndate"
+                component="div"
+                className="text-red-500 text-sm mt-1"
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="description" className="block mb-1 font-semibold">
+                Description
+              </label>
               <Field
                 type="text"
                 name="description"
                 as="textarea"
-                className="px-5 py-2 w-full shadow-md border rounded-lg"
+                rows="4"
+                className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
               />
               <ErrorMessage
                 name="description"
                 component="div"
-                className="text-red-500"
+                className="text-red-500 text-sm mt-1"
               />
             </div>
             <button
               type="submit"
-              className="bg-violet-500 p-3 rounded-md text-white font-bold"
+              className="bg-violet-500 px-6 py-3 rounded-md text-white font-bold hover:bg-violet-600 focus:outline-none focus:bg-violet-600"
             >
-              update
+              Update
             </button>
           </Form>
         )}

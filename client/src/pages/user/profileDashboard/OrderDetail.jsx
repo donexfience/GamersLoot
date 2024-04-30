@@ -10,13 +10,14 @@ import backbutton from "../../../assets/backbutton.png";
 import { TiCancel } from "react-icons/ti";
 import date from "date-and-time";
 import OrderDates from "./components/OrderDates";
-import { modifyPaymentText } from "../../../Common/Functions";
+import { formatDate, modifyPaymentText } from "../../../Common/Functions";
 import StatusComponent from "../../../components/StatusComponent";
 import StatusHistoryLoadingBar from "./components/StatusHistoryProgressBar";
 import OrderDetailProductRow from "./components/OrderDetailProductRow";
 import OrderDetailsProductRow from "./components/OrderDetailProductRow";
 import OrderHistoryAddress from "./components/OrderHistoryAddress";
 import YourReview from "./components/YourReview";
+import ReturnOrder from "./ReturnOrder";
 
 const OrderDetail = () => {
   const naviagte = useNavigate();
@@ -28,6 +29,13 @@ const OrderDetail = () => {
   const [cancelModal, setCancelModal] = useState(false);
   const togglecancelModal = () => {
     setCancelModal(!cancelModal);
+  };
+
+  //return modal
+
+  const [returnModal, setReutrnModal] = useState(false);
+  const toggleReturnModal = () => {
+    setReutrnModal(!returnModal);
   };
   const [reviewModal, setReviewModal] = useState(false);
   const [reviewProduct, setReviewProduct] = useState(null);
@@ -58,6 +66,7 @@ const OrderDetail = () => {
     loadData();
   }, [id]);
 
+  console.log(orderData.statusHistory, "----------------------");
   return (
     <div className="w-full">
       {reviewModal && (
@@ -78,6 +87,17 @@ const OrderDetail = () => {
               id={id}
               closeToggle={togglecancelModal}
               loadData={loadData}
+            />
+          }
+        />
+      )}
+      {returnModal && (
+        <Modal
+          content={
+            <ReturnOrder
+              closeToggle={toggleReturnModal}
+              loadData={loadData}
+              id={id}
             />
           }
         />
@@ -111,8 +131,11 @@ const OrderDetail = () => {
                     </button>
                   )}
                   {orderData.status === "delivered" && (
-                    <div>
-                      <p className="text-orange-500">Click here to Return</p>
+                    <div className="border border-violet-500 px-2 text-blue-500 rounded-md font-bold py-4">
+                      <p className="text-lg">
+                        Last Date for Return is:{" "}
+                        {formatDate(orderData.statusHistory[1].returndate)}
+                      </p>
                     </div>
                   )}
                 </div>
@@ -178,6 +201,10 @@ const OrderDetail = () => {
                             key={index}
                             status={orderData.status}
                             toggleReviewModal={toggleReviewModal}
+                            statusHistory={
+                              orderData.statusHistory[1].returndate
+                            }
+                            toggleReturnModal={toggleReturnModal}
                           />
                         ))}
                     </tbody>

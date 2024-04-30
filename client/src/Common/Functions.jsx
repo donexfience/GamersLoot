@@ -75,3 +75,11 @@ export const renderStars = (rating) => {
 
   return stars;
 };
+
+
+export const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString();
+};
+
+

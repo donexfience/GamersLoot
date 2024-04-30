@@ -25,11 +25,10 @@ const Checkout = () => {
   // taking the cart details for checkout
 
   const { cart, loading, error } = useSelector((state) => state.cart);
-  const { totalPrice, shipping, tax, couponType, discount } = useSelector(
-    (state) => state.cart
-  );
+  const { totalPrice, shipping, tax, couponType, discount, couponCode } =
+    useSelector((state) => state.cart);
 
-  console.log(cart, "0000000000000");
+  console.log(couponCode, "0000000000000");
 
   //selected address
   const [selectedAddress, setSelectedAddress] = useState("");
@@ -73,6 +72,7 @@ const Checkout = () => {
           address: selectedAddress,
           paymentMode: selectedPayment,
           notes: delieveryMessage,
+          couponCode:couponCode
         },
         config
       );

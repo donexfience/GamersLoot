@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const User = require("./userModel");
-const Counter =require('./counterModel')
+const Counter = require("./counterModel");
 const { Schema } = mongoose;
-const Product =require('../model/ProductModel')
+const Product = require("../model/ProductModel");
 
 const StatusHistorySchema = new Schema({
   status: {
@@ -30,6 +30,9 @@ const StatusHistorySchema = new Schema({
   },
   reason: {
     type: String,
+  },
+  returndate: {
+    type:Date,
   },
 });
 
@@ -177,28 +180,28 @@ const OrderSchema = new Schema(
 
 //generating order Id
 OrderSchema.pre("save", async function (next) {
-    if (!this.isNew) {
-      return next();
-    }
-  
-    try {
-      const counter = await Counter.findOne({ model: "Order", field: "orderId" });
-  
-      // Checking if order counter is alreaddy exist in counter collection
-      
-      if (counter) {
-        this.orderId = counter.count + 1;
-        counter.count += 1;
-        await counter.save();
-      } else {
-        await Counter.create({ model: "Order", field: "orderId" });
-        this.orderId = 9072082624;
-      }
-  
-      return next();
-    } catch (error) {
-      return next(error);
-    }
-  });
+  if (!this.isNew) {
+    return next();
+  }
 
-  module.exports = mongoose.model("Order",OrderSchema)
+  try {
+    const counter = await Counter.findOne({ model: "Order", field: "orderId" });
+
+    // Checking if order counter is alreaddy exist in counter collection
+
+    if (counter) {
+      this.orderId = counter.count + 1;
+      counter.count += 1;
+      await counter.save();
+    } else {
+      await Counter.create({ model: "Order", field: "orderId" });
+      this.orderId = 9072082624;
+    }
+
+    return next();
+  } catch (error) {
+    return next(error);
+  }
+});
+
+module.exports = mongoose.model("Order", OrderSchema);

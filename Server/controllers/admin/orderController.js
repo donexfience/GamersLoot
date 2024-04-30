@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
+const Payment=require('../../model/paymentModel')
 const Order = require("../../model/orderModel");
+const uuid =require ('uuid')
+
 const getOrder = async (req, res) => {
   try {
     const { id } = req.params;
@@ -35,7 +38,8 @@ const updateOrderStatus = async (req, res) => {
     } else {
       finder.orderId = id;
     }
-    const { status, date, paymentStatus, description } = req.body;
+    const { status, date, paymentStatus, description, returndate } = req.body;
+    console.log(req.body)
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw Error("Invalid ID!!!");
@@ -59,14 +63,16 @@ const updateOrderStatus = async (req, res) => {
           status,
           description,
           date: new Date(date),
+          returndate
         },
       };
     }
+    console.log(updateOptions,'--=-=-=-=-=-=-=-=-=-=-=');
 
     const updated = await Order.findOneAndUpdate(finder, updateOptions, {
       new: true,
     });
-
+console.log(updated,',.,.,.,.,.,,.,.,.,');
     if (!updated) {
       throw Error("Something went wrong");
     }
@@ -155,16 +161,16 @@ const getOrders = async (req, res) => {
 
     const skip = (page - 1) * limit;
 
-    const orders = await Order.find(filter, {
-      address: 0,
-      statusHistory: 0,
-      products: { $slice: 1 },
-    })
-      .skip(skip)
-      .limit(limit)
-      .populate("user", { firstName: 1, lastName: 1 })
-      .populate("products.productId", { imageURL: 1, name: 1 })
-      .sort({ createdAt: -1 });
+    const orders = await Order.find(filter)
+    .select("-address") 
+    .select("statusHistory") 
+    .slice("products", 1) 
+    .skip(skip)
+    .limit(limit)
+    .populate("user", { firstName: 1, lastName: 1 })
+    .populate("products.productId", { imageURL: 1, name: 1 })
+    .sort({ createdAt: -1 });
+  
 
     const totalAvailableOrders = await Order.countDocuments(filter);
 

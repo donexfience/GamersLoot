@@ -46,7 +46,7 @@ const ProfileSideNavbar = () => {
         <AiOutlineWallet />
         Wallet
       </NavLink>
-      <NavLink className="side-nav-link-sp flex items-center gap-3  text-violet-500 font-bold" to="find-coupons">
+      <NavLink className="side-nav-link-sp flex items-center gap-3  text-violet-500 font-bold" to="coupons">
         <TiTicket />
         Find Coupons
       </NavLink>

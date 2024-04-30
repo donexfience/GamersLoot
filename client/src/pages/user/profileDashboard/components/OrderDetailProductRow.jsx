@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { BiMessageSquareDetail } from "react-icons/bi";
 import { URL } from "../../../../Common/api";
+import { IoMdUndo } from "react-icons/io";
 
 const OrderDetailsProductRow = ({
   length,
@@ -9,10 +10,24 @@ const OrderDetailsProductRow = ({
   item,
   status,
   toggleReviewModal,
+  statusHistory,
 }) => {
-
   const isLast = index === length - 1;
   const classes = isLast ? "p-4" : "p-4 border-b border-gray-200 ";
+
+  const [isReturnable, setIsReturnable] = useState(false);
+
+  useEffect(() => {
+    const givenDate = new Date(statusHistory);
+    const today = new Date();
+
+    if (givenDate > today) {
+      setIsReturnable(true);
+    } else {
+      setIsReturnable(false);
+    }
+  }, [statusHistory]);
+
   return (
     <tr className={classes}>
       <td className="admin-table-row">
@@ -43,20 +58,36 @@ const OrderDetailsProductRow = ({
       <td className="admin-table-row">
         {item.price + item.markup * item.quantity}
       </td>
-      {status !== "pending" &&
-        status !== "processing" &&
-        status !== "shipped" && (
+      <div className="flex gap-8">
+        {status !== "pending" &&
+          status !== "processing" &&
+          status !== "shipped" && (
+            <td className="flex items-center justify-center">
+              <p
+                className="font-semibold flex items-center gap-1 text-white cursor-pointer bg-violet-500 p-3 mr-22 hover:bg-blue-100  rounded-lg shrink-0"
+                onClick={() => {
+                  console.log(item);
+                  toggleReviewModal(item.productId);
+                }}
+              >
+                Leave a Review <BiMessageSquareDetail />
+              </p>
+            </td>
+          )}
+        {isReturnable && (
           <td className="flex items-center justify-center">
             <p
-              className="font-semibold flex items-center gap-1 text-white cursor-pointer bg-violet-500 p-3 mr-22 hover:bg-blue-100  rounded-lg shrink-0"
+              className="font-semibold flex items-center gap-1 text-white cursor-pointer bg-blue-500 px-4 py-3 mr-22 hover:bg-blue-100  rounded-lg shrink-0"
               onClick={() => {
-                console.log(item)
-                toggleReviewModal(item.productId)}}
+                console.log(item);
+                toggleReviewModal(item.productId);
+              }}
             >
-              Leave a Review <BiMessageSquareDetail />
+              Return <IoMdUndo/>
             </p>
           </td>
         )}
+      </div>
     </tr>
   );
 };
