@@ -39,6 +39,7 @@ import Address from "./pages/user/profileDashboard/Address/Address";
 import CreateCoupon from "./pages/admin/pages/coupon/CreateCoupon";
 import Coupons from "./pages/admin/pages/coupon/Coupons";
 import EditCoupon from "./pages/admin/pages/coupon/EditCoupon";
+import Wishlist from "./pages/user/wishlist/Wishlist";
 
 function App() {
   const { user } = useSelector((state) => state.user);
@@ -93,6 +94,12 @@ function App() {
             path="/order-confirmation"
             element={<ProtectedRoute element={<OrderConfirmation />} />}
           />
+          {/* wishlist */}
+
+          <Route
+            path="/wishlist"
+            element={<ProtectedRoute element={<Wishlist />} />}
+          />
 
           {/* Admin Routes */}
           {(user && user.role === "admin") ||
@@ -123,6 +130,7 @@ function App() {
             <Route path="order-history" element={<OrderHistory />} />
             <Route path="order-history/detail/:id" element={<OrderDetail />} />
             <Route path="address" element={<Address />} />
+            <Route path="wishlist" element={<Wishlist />} />
           </Route>
         </Routes>
         {user ? user.role === "user" && <Footer /> : <Footer />}
@@ -151,7 +159,7 @@ function AdminRoutes() {
         {/* coupon  management*/}
         <Route path="coupons" element={<Coupons />} />
         <Route path="coupons/create" element={<CreateCoupon />} />
-        <Route path="coupons/edit/:id" element={<EditCoupon/>}/>
+        <Route path="coupons/edit/:id" element={<EditCoupon />} />
       </Route>
     </Routes>
   );

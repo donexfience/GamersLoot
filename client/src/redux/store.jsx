@@ -10,6 +10,7 @@ import userOrderReducer from "./reducers/user/orderSlice";
 import reviewReducer from "./reducers/user/ReviewSlice";
 import orderReducer from "./reducers/admin/ordersSlice";
 import couponReducer from "./reducers/admin/couponSlice";
+import wishlistReducer from "./reducers/user/wishlistSlice";
 export const store = configureStore({
   reducer: {
     user: userReducer,
@@ -20,6 +21,7 @@ export const store = configureStore({
     address: addressReducer,
     userOrders: userOrderReducer,
     reviews: reviewReducer,
+    wishlist:wishlistReducer,
 
     //Admin side reducers in store
 

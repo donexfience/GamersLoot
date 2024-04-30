@@ -118,7 +118,7 @@ const Navbar = () => {
               <NavLink to="/cart" className="text-black hover:text-blue-400 p-2">
                 <AiOutlineShoppingCart className="text-xl" />
               </NavLink>
-              <NavLink to="/" className="text-black hover:text-blue-400 p-2">
+              <NavLink to="dashboard/wishlist" className="text-black hover:text-blue-400 p-2">
                 <AiOutlineHeart className="text-xl" />
               </NavLink>
               <button

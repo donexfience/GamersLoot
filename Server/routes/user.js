@@ -49,6 +49,7 @@ const {
   getKey,
   verifyPayment,
 } = require("../controllers/user/paymentController");
+const { addTowishlist, deleteOneProductw, deleteWishlist, getWishlist, addToCartFromWishlist } = require("../controllers/user/wishlistController");
 const router = express.Router();
 //Logout
 
@@ -122,5 +123,13 @@ router.get("/coupon-remove", removeCoupon);
 router.get("/razor-key", getKey);
 router.post("/razor-order", createRazorPayOrder);
 router.post("/razor-verify", verifyPayment);
+
+//wishlist
+
+router.post("/wishlist", addTowishlist);
+router.get('/wishlist',getWishlist)
+router.delete('/wishlist/:id',deleteWishlist)
+router.delete("/wishlist/:wishlist/item/:productId", deleteOneProductw);
+router.post('/wishlist/addToCart',addToCartFromWishlist)
 
 module.exports = router;

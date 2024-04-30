@@ -4,7 +4,7 @@ import ProfileSideNavbar from './sideNavbar/ProfileSideNavbar'
 
 const ProfileDashboard = () => {
   return (
-    <div className='flex gap-12 py-20 lg:px-9 bmin-h-screen bg-white'>
+    <div className='flex  py-20 lg:px-9 bmin-h-screen bg-white'>
         <ProfileSideNavbar/>
         <Outlet/>
     </div>

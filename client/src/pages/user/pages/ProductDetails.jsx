@@ -16,6 +16,7 @@ import RelatedProducts from "../components/RelatedProducts";
 import UserReview from "../components/UserReview";
 import { addToBuyNowStore } from "../../../redux/reducers/user/buyNowSlice";
 import AnimatedCartButton from "../components/cartAnimatedbutton/AnimatedCartButton";
+import { asyncThunkCreator } from "@reduxjs/toolkit";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -110,6 +111,32 @@ const ProductDetails = () => {
         setCartLoading(false);
       });
   };
+
+  //adding to wishlist
+
+  const [wishlistLoading, setWishlistLoading] = useState(false);
+  const addToWishlist = async () => {
+    setCartLoading(true);
+    await axios
+      .post(
+        `${URL}/user/wishlist`,
+        {
+          product: id,
+        },
+
+        { ...config, withCredentials: true }
+      )
+      .then((data) => {
+        toast.success("Added to Wishlist");
+        setCartLoading(false);
+      })
+      .catch((error) => {
+        const err = error.response.data.error;
+        toast.error(err);
+        setCartLoading(false);
+      });
+  };
+
   return (
     <div className="px-5 lg:px-30 py-20 bg-white">
       {loading ? (
@@ -171,22 +198,24 @@ const ProductDetails = () => {
                   />
                 )}
                 <div className="flex">
-                {/* Display "Hurry up" message if stock quantity is less than 10 */}
-                <p className="text-red-500">
-                  {product.stockQuantity <= 10
-                    ? `Hurry up ${product.stockQuantity} left`
-                    : `Huge collection available`}
-                </p>
+                  {/* Display "Hurry up" message if stock quantity is less than 10 */}
+                  <p className="text-red-500">
+                    {product.stockQuantity <= 10
+                      ? `Hurry up ${product.stockQuantity} left`
+                      : `Huge collection available`}
+                  </p>
 
-                {/* Display the product status */}
-                <span className="divider font-bold ml-2 mr-2">|</span>
-                <span
-                  className={`font-semibold capitalize ${
-                    product.status === "published" && "text-green-600"
-                  } ${product.status === "low quantity" && "text-red-600"}`}
-                >
-                  {product.status === "published" ? "In Stock" : product.status}
-                </span>
+                  {/* Display the product status */}
+                  <span className="divider font-bold ml-2 mr-2">|</span>
+                  <span
+                    className={`font-semibold capitalize ${
+                      product.status === "published" && "text-green-600"
+                    } ${product.status === "low quantity" && "text-red-600"}`}
+                  >
+                    {product.status === "published"
+                      ? "In Stock"
+                      : product.status}
+                  </span>
                 </div>
               </div>
 
@@ -257,7 +286,9 @@ const ProductDetails = () => {
                   Buy now
                 </button>
                 <div className="border-2 border-gray-500 rounded-lg p-3 ml-3">
-                  <AiFillHeart />
+                  <button onClick={addToWishlist} disabled={wishlistLoading}>
+                    <AiFillHeart />
+                  </button>
                 </div>
               </div>
             </div>

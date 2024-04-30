@@ -83,10 +83,10 @@ const Checkout = () => {
       navigateOrderConfirmation(order.data.order);
       dispatch(clearCartOnOrderPlaced());
     } catch (error) {
-      toast.error( error.response?.data?.error ) 
-    setOrderPlaceLoading(false);
+      toast.error(error.response?.data?.error);
+      setOrderPlaceLoading(false);
+    }
   };
-  }
   //razorpay order saving in b_end
   const saveOrderRazor = async (response) => {
     console.log(response, "--------------------");
@@ -104,7 +104,7 @@ const Checkout = () => {
       );
 
       const { order } = orderResponse.data;
-      console.log(order,response,"----------order response razor")
+      console.log(order, response, "----------order response razor");
       //saving payment
       await axios.post(
         `${URL}/user/razor-verify`,

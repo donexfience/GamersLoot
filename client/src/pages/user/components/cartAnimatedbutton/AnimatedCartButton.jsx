@@ -3,7 +3,7 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import { FaSpinner } from "react-icons/fa";
 import Delivery from '../../../../assets/Delivery.mp4'
 
-const AnimatedCartButton = ({ onClick, isLoading }) => {
+const  AnimatedCartButton = ({ onClick, isLoading }) => {
   const [isClicked, setIsClicked] = useState(false);
 
   const handleClick = () => {
