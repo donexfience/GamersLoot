@@ -27,6 +27,8 @@ const {
   clearOrder,
   getOrder,
   updateOrderStatus,
+  getReturnOrders,
+  updateReturnOrderStatus,
 } = require("../controllers/admin/orderController");
 const {
   getCoupons,
@@ -35,6 +37,7 @@ const {
   deleteCoupon,
   editCoupon,
 } = require("../controllers/admin/couponController");
+
 //category controller functions mounting them to corresponding suiitable routes
 
 router.get("/categories", getCategories);
@@ -70,6 +73,8 @@ router.get("/orders", getOrders);
 router.get("/clear-orders", clearOrder);
 router.get("/orders/:id", getOrder);
 router.patch(`/order-status/:id`, updateOrderStatus);
+router.get('/return-orders',getReturnOrders)
+router.patch('/order-return-status/:id',updateReturnOrderStatus)
 
 // couopns controller functions mounting them to corresponding suitable routes
 

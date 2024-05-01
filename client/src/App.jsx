@@ -41,6 +41,7 @@ import Coupons from "./pages/admin/pages/coupon/Coupons";
 import EditCoupon from "./pages/admin/pages/coupon/EditCoupon";
 import Wishlist from "./pages/user/wishlist/Wishlist";
 import FindCoupon from "./pages/user/profileDashboard/Coupon/FindCoupon";
+import ReturnOrder from "./pages/admin/pages/orders/ReturnOrder";
 
 function App() {
   const { user } = useSelector((state) => state.user);
@@ -158,11 +159,13 @@ function AdminRoutes() {
         {/* order management */}
         <Route path="orders" element={<Orders />} />
         <Route path="orders/detail/:id" element={<OrderDetailAdmin />} />
+        <Route path="orders/return-orders" element={<ReturnOrder/>}/>
         {/* coupon  management*/}
         <Route path="coupons" element={<Coupons />} />
         <Route path="coupons/create" element={<CreateCoupon />} />
         <Route path="coupons/edit/:id" element={<EditCoupon />} />
       </Route>
+
     </Routes>
   );
 }

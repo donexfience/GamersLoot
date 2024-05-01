@@ -83,7 +83,7 @@ const OrderDetailsProductRow = ({
                 console.log(item);
                 toggleReturnModal();
               }}
-              disabled={status==="return request"}
+              disabled={status==="return request" || "returned"}
               
             >
               Return <IoMdUndo/>

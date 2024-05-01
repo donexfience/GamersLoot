@@ -34,6 +34,9 @@ const StatusHistorySchema = new Schema({
   returndate: {
     type:Date,
   },
+  pickupdate:{
+    type:Date
+  }
 });
 
 const ProductSchema = new Schema({

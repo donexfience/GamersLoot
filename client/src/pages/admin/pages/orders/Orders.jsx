@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import toast from "react-hot-toast";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { getOrders } from "../../../../redux/actions/admin/orderAction";
 import Modal from "../../../../components/Modal";
 import BreadCrumbs from "../../components/BreadCrumbs";
@@ -14,6 +14,7 @@ import Pagination from "../../../../components/Pagination";
 import UpdateOrder from "./UpdateOrder";
 
 const Orders = () => {
+  const navigate =useNavigate()
   const dispatch = useDispatch();
   const { loading, orders, error, totalAvailableOrders } = useSelector(
     (state) => state.orders
@@ -122,6 +123,11 @@ const Orders = () => {
             handleClick={handleFilter}
           />
         </div>
+        <button className="bg-violet-500 px-3 mr-4 py-2 rounded-md text-white"
+        onClick={()=>navigate('return-orders')}
+        >
+          Return requests
+        </button>
       </div>
       <div className="p-5 w-full overflow-y-auto text-sm">
         <SearchBar
