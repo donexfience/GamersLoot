@@ -27,3 +27,16 @@ export const cancelOrder = createAsyncThunk(
     );
   }
 );
+
+export const returnOrder = createAsyncThunk(
+  "order/returnOrder",
+  async ({ id, formData }, { rejectWithValue }) => {
+    return commonReduxRequests(
+      "post",
+      `user/return-order/${id}`,
+      formData,
+      appJson,
+      rejectWithValue
+    );
+  }
+);

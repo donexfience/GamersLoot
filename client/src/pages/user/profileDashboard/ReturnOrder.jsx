@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import {  } from 'react-router-dom';
 import * as Yup from 'yup'
 import {Form} from 'formik'
+import { returnOrder } from '../../../redux/actions/user/orderAction';
 
 const ReturnOrder = ({ id, closeToggle, loadData }) => {
     const dispatch = useDispatch();
@@ -17,7 +18,8 @@ const ReturnOrder = ({ id, closeToggle, loadData }) => {
     });
   
     const handleSubmit = (value) => {
-      dispatch(cancelOrder({ formData: value, id: id }))
+      console.log("calling submit")
+      dispatch(returnOrder({ formData: value, id: id }))
         .then(() => {
           loadData();
           closeToggle();
@@ -68,10 +70,6 @@ const ReturnOrder = ({ id, closeToggle, loadData }) => {
       </div>
     );
 
-
-  return (
-    <div>ReturnOrder</div>
-  )
 }
 
 export default ReturnOrder

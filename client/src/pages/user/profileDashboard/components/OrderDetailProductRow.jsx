@@ -77,15 +77,17 @@ const OrderDetailsProductRow = ({
           )}
         {isReturnable && (
           <td className="flex items-center justify-center">
-            <p
+            <button
               className="font-semibold flex items-center gap-1 text-white cursor-pointer bg-blue-500 px-4 py-3 mr-22 hover:bg-blue-100  rounded-lg shrink-0"
               onClick={() => {
                 console.log(item);
                 toggleReturnModal();
               }}
+              disabled={status==="return request"}
+              
             >
               Return <IoMdUndo/>
-            </p>
+            </button>
           </td>
         )}
       </div>

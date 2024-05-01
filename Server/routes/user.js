@@ -31,6 +31,7 @@ const {
   getOrders,
   cancelOrder,
   orderCount,
+  returnOrder,
 } = require("../controllers/user/orderController");
 const upload = require("../middleware/upload");
 const {
@@ -49,7 +50,14 @@ const {
   getKey,
   verifyPayment,
 } = require("../controllers/user/paymentController");
-const { addTowishlist, deleteOneProductw, deleteWishlist, getWishlist, addToCartFromWishlist } = require("../controllers/user/wishlistController");
+const {
+  addTowishlist,
+  deleteOneProductw,
+  deleteWishlist,
+  getWishlist,
+  addToCartFromWishlist,
+} = require("../controllers/user/wishlistController");
+const { getWalletBalance } = require("../controllers/user/walletController");
 const router = express.Router();
 //Logout
 
@@ -103,6 +111,7 @@ router.get("/orders", getOrders);
 router.get("/order/:id", getOrder);
 router.post("/cancel-order/:id", cancelOrder);
 router.get("/order-count", orderCount);
+router.post('/return-order/:id',returnOrder)
 
 //review
 // Reviews
@@ -127,9 +136,13 @@ router.post("/razor-verify", verifyPayment);
 //wishlist
 
 router.post("/wishlist", addTowishlist);
-router.get('/wishlist',getWishlist)
-router.delete('/wishlist/:id',deleteWishlist)
+router.get("/wishlist", getWishlist);
+router.delete("/wishlist/:id", deleteWishlist);
 router.delete("/wishlist/:wishlist/item/:productId", deleteOneProductw);
-router.post('/wishlist/addToCart',addToCartFromWishlist)
+router.post("/wishlist/addToCart", addToCartFromWishlist);
+
+// wallet
+
+router.get("/wallet-total", getWalletBalance);
 
 module.exports = router;

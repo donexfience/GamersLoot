@@ -6,7 +6,7 @@ const getNewKeyboard = async (req, res) => {
   try {
     const keyboards = await Product.find(
       {
-        category: "6612bb52c41817854089aaab",
+        category: "662e9e1d1f9735e6fb9ba4cc",
         isActive: true,
       },
       { imageURL: 1, price: 1, markup: 1, name: 1 }

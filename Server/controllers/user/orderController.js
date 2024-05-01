@@ -156,9 +156,18 @@ const createOrder = async (req, res) => {
       }
       userWallet.balance -= order.totalPrice;
       await userWallet.save();
-
+      let counter = await Counter.findOne({
+        model: "wallet",
+        field: "transaction_id",
+      });
+      if (counter) {
+        counter.count += 1;
+        await counter.save();
+      } else {
+        await Counter.create({ field: "transaction_id", model: "wallet" });
+      }
       userWallet.transactions.push({
-        transaction_id: order._id,
+        transaction_id: counter.count + 1,
         amount: -order.totalPrice,
         type: "debit",
         description: `payment for the order ${order._id}`,
@@ -355,10 +364,44 @@ const orderCount = async (req, res) => {
   }
 };
 
+const returnOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { reason } = req.body;
+    let finder = {};
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      finder._id = id;
+    } else {
+      finder.orderId = id;
+    }
+    const orderDetails = await Order.findOne(finder).populate(
+      "products.productId"
+    );
+    const order = await Order.findOneAndUpdate(
+      finder,
+      {
+        $set: { status: "return request" },
+        $push: {
+          statusHistory: {
+            status: "return request",
+            date: Date.now(),
+            reason: reason,
+          },
+        },
+      },
+      { new: true }
+    );
+    res.status(200).json({ order });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createOrder,
   getOrder,
   getOrders,
   cancelOrder,
   orderCount,
+  returnOrder,
 };

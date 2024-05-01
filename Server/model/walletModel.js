@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const User = require("./userModel");
-
+const Order = require("./orderModel");
 const { Schema } = mongoose;
 const walletSchema = new Schema({
   user: {
