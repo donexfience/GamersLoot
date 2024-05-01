@@ -1,10 +1,12 @@
 import React from "react";
 import { getStatusDates } from "../../../../Common/Functions";
 import date from "date-and-time";
+import { FaCalendarAlt, FaInfoCircle } from "react-icons/fa";
 
 const OrderDates = ({ orderData }) => {
   let statusArray = orderData.statusHistory;
   console.log(statusArray);
+  console.log(orderData, "sdfghjkjhgfdfghjk");
 
   if (orderData.status === "delivered") {
     return (
@@ -37,9 +39,49 @@ const OrderDates = ({ orderData }) => {
         </p>
         <p className="line-clamp-1">
           <span>Reason for Return:</span>{" "}
-          {orderData.statusHistory.find(
-            (status) => status.status === "return request"
-          ).reason}
+          {
+            orderData.statusHistory.find(
+              (status) => status.status === "return request"
+            ).reason
+          }
+        </p>
+      </div>
+    );
+  }
+  if (orderData.status === "returned") {
+    return (
+      <div>
+        <p>
+          <span className="text-violet-500">
+            <FaCalendarAlt className="inline mr-1" /> Returned accepted On:
+          </span>{" "}
+          {getStatusDates("return request", orderData.statusHistory)}
+        </p>
+        <p className="line-clamp-1">
+          <span>
+            <FaInfoCircle className="inline mr-1" /> Reason for Return:
+          </span>{" "}
+          {
+            orderData.statusHistory.find(
+              (status) => status.status === "return request"
+            ).reason
+          }
+        </p>
+        <p className="line-clamp-1">
+          <span>
+            <FaInfoCircle className="inline mr-1" /> Message from admin:
+          </span>{" "}
+          {
+            orderData.statusHistory.find(
+              (status) => status.status === "returned"
+            ).description
+          }
+        </p>
+        <p>
+          <span>
+            <FaCalendarAlt className="inline mr-1" /> Pickup date:
+          </span>{" "}
+          {getStatusDates("returned", orderData.statusHistory)}
         </p>
       </div>
     );

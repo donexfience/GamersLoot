@@ -29,11 +29,13 @@ const Address = () => {
 
   const [deleteId, setDeleteId] = useState("");
   const [deleteModal, setDeleteModal] = useState(false);
-  const toggleDelete = (deleteAdressId) => {
+  const toggleDelete = (deleteId) => {
     setDeleteModal(!deleteModal);
+    setDeleteId(deleteId);
   };
   const dispatchDelte = () => {
     dispatch(deleteAddress(deleteId));
+    toggleDelete("")
   };
   //edit address
   const [editAddress, setEditAddress] = useState({});
@@ -71,6 +73,7 @@ const Address = () => {
               key={index}
               setEditAddress={setEditAddress}
               toggleDelete={toggleDelete}
+              setDeleteId={setDeleteId}
               toggleEdit={toggleEdit}
             />
           ))
@@ -78,7 +81,10 @@ const Address = () => {
           <h1>No saved address found</h1>
         )}
         <div className="my-5">
-          <button className="bg-violet-500 p-3 rounded-md text-white" onClick={toggleAddAddress}>
+          <button
+            className="bg-violet-500 p-3 rounded-md text-white"
+            onClick={toggleAddAddress}
+          >
             Add a new Address
           </button>
         </div>

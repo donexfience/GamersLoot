@@ -21,14 +21,14 @@ const OrderDetailsProductRow = ({
   useEffect(() => {
     const givenDate = new Date(statusHistory);
     const today = new Date();
-
+    
     if (givenDate > today) {
       setIsReturnable(true);
     } else {
       setIsReturnable(false);
     }
   }, [statusHistory]);
-
+  
   return (
     <tr className={classes}>
       <td className="admin-table-row">
@@ -83,8 +83,7 @@ const OrderDetailsProductRow = ({
                 console.log(item);
                 toggleReturnModal();
               }}
-              disabled={status==="return request" || "returned"}
-              
+              disabled={status === "returned" || status === "return request"}
             >
               Return <IoMdUndo/>
             </button>
