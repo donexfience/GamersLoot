@@ -87,10 +87,9 @@ const applyCoupon = async (req, res) => {
     if (!updatedCart) {
       throw Error("Cart update failed");
     }
-
-    // Decrease the usage count of the coupon by 1
-    coupon.used++;
-    await coupon.save();
+// if we want to reduce the coupon count when removing a coupon
+    // coupon.used++;
+    // await coupon.save();
 
     res.status(200).json({
       discount: coupon.value,
@@ -133,9 +132,9 @@ const removeCoupon = async (req, res) => {
       throw Error("Coupon not found");
     }
 
-
-    coupon.used--;
-    await coupon.save();
+// if we want to reduce the coupon count when removing a coupon
+    // coupon.used--;
+    // await coupon.save();
 
     res.status(200).json({ success: true });
   } catch (error) {

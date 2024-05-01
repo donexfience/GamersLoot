@@ -5,6 +5,10 @@ const Cart = require("../../model/cartModel");
 const Order = require("../../model/orderModel");
 const Payment = require("../../model/paymentModel");
 const jwt = require("jsonwebtoken");
+const Counter = require("../../model/counterModel");
+const Wallet = require("../../model/walletModel");
+const Coupon = require("../../model/couponModel");
+const uuid = require("uuid");
 
 const getOrders = async (req, res) => {
   try {
@@ -83,10 +87,10 @@ const createOrder = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       throw Error("Invalid ID");
     }
-    const { address, paymentMode, notes,couponCode } = req.body;
-    console.log(address,"--------------------------")
+    const { address, paymentMode, notes, couponCode } = req.body;
+    console.log(address, "--------------------------");
     const addressData = await Address.findOne({ _id: address });
-    console.log(addressData,"---------------")
+    console.log(addressData, "---------------");
     const cart = await Cart.findOne({ user: _id }).populate("items.product", {
       name: 1,
       price: 1,
@@ -109,7 +113,7 @@ const createOrder = async (req, res) => {
     }));
     let orderData = {
       user: _id,
-      couponCode:couponCode,
+      couponCode: couponCode,
       address: addressData,
       products: products,
       subTotal: sum,
@@ -124,16 +128,51 @@ const createOrder = async (req, res) => {
       ],
       ...(notes ? notes : {}),
     };
-    console.log(orderData,"000000000000000000000000")
+    console.log(orderData, "000000000000000000000000");
     const updateProductCount = products.map((item) => {
       return updateProductList(item.productId, -item.quantity);
     });
     await Promise.all(updateProductCount);
     const order = await Order.create(orderData);
-    console.log(order,"suceessssssssssssssssssssssssssss")
+    console.log(order, "suceessssssssssssssssssssssssssss");
     if (order) {
       await Cart.findByIdAndDelete(cart._id);
     }
+    //if the couopn is used
+    if (cart.coupon) {
+      await Coupon.findOneAndUpdate(
+        { code: cart.coupon },
+        { $inc: { used: 1 } }
+      );
+    }
+
+    if (paymentMode === "myWallet") {
+      let userWallet = await Wallet.findOne({ user: _id });
+      if (!userWallet) {
+        throw Error("No such wallet found");
+      }
+      if (userWallet.balance < order.totalPrice) {
+        throw Error("Insufficient balance in wallet");
+      }
+      userWallet.balance -= order.totalPrice;
+      await userWallet.save();
+
+      userWallet.transactions.push({
+        transaction_id: order._id,
+        amount: -order.totalPrice,
+        type: "debit",
+        description: `payment for the order ${order._id}`,
+        order: order._id,
+      });
+      await userWallet.save();
+    }
+    await Payment.create({
+      payment_id: `walletUser${_id}${uuid.v4()}`,
+      user: _id,
+      order: order._id,
+      status: "success",
+      paymentMode: "myWallet",
+    });
     res.status(200).json({ order });
   } catch (error) {
     console.error(error, "--------------------------");
@@ -180,18 +219,65 @@ const cancelOrder = async (req, res) => {
     );
 
     //updating payment of delivery in payment collection
+    //if the payment is done by using wallet
 
-    await Payment.findOneAndUpdate(
-      { order: order._id },
-      {
-        $set: {
-          status: "refunded",
-        },
+    if (order.paymentMode !== "cashOnDelivery") {
+      const token = req.cookies.user_token;
+      const { _id } = jwt.verify(token, process.env.SECRET);
+      //if the order is created by wallet there will be a counter we need to update counter
+
+      let counter = await Counter.findOne({
+        field: "transaction_id",
+        model: "wallet",
+      });
+      if (counter) {
+        counter.count += 1;
+        await counter.save();
+      } else {
+        counter = await Counter.create({
+          field: "transaction_id",
+          model: "wallet",
+        });
       }
-    );
+      const exists = await Wallet.findOne({ user: _id });
+      if (exists) {
+        exists.transactions.push({
+          transaction_id: counter.count,
+          amount: order.totalPrice,
+          type: "credit",
+          description: `Refund for order cancelation with order id ${order._id}`,
+          order: order._id,
+        });
+        await exists.save();
+      } else {
+        const wallet = await Wallet.create({
+          user: _id,
+          balance: order.totalPrice,
+          transactions: [
+            {
+              transaction_id: counter.count + 1,
+              amount: order.totalPrice,
+              type: "credit",
+              description: `Refund for order cancelation with order id ${order._id}`,
+              order: order._id,
+            },
+          ],
+        });
+      }
+      //update payment status to refundedF
+      await Payment.updateOne(
+        { order: order._id },
+        {
+          $set: {
+            status: "refunded",
+          },
+        }
+      );
+    }
+
     res.status(200).json({ order });
   } catch (error) {
-    console.error(error,"error from cancel order")
+    console.error(error, "error from cancel order");
     res.status(400).json({ error: error.message });
   }
 };

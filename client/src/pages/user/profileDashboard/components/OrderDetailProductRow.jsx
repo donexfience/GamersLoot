@@ -11,6 +11,7 @@ const OrderDetailsProductRow = ({
   status,
   toggleReviewModal,
   statusHistory,
+  toggleReturnModal
 }) => {
   const isLast = index === length - 1;
   const classes = isLast ? "p-4" : "p-4 border-b border-gray-200 ";
@@ -80,7 +81,7 @@ const OrderDetailsProductRow = ({
               className="font-semibold flex items-center gap-1 text-white cursor-pointer bg-blue-500 px-4 py-3 mr-22 hover:bg-blue-100  rounded-lg shrink-0"
               onClick={() => {
                 console.log(item);
-                toggleReviewModal(item.productId);
+                toggleReturnModal();
               }}
             >
               Return <IoMdUndo/>

@@ -20,6 +20,7 @@ import YourReview from "./components/YourReview";
 import ReturnOrder from "./ReturnOrder";
 
 const OrderDetail = () => {
+  const today = new Date();
   const naviagte = useNavigate();
   const [orderData, setOrderData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -202,7 +203,9 @@ const OrderDetail = () => {
                             status={orderData.status}
                             toggleReviewModal={toggleReviewModal}
                             statusHistory={
-                              orderData.statusHistory[1].returndate
+                              (orderData.statusHistory[1] &&
+                                orderData.statusHistory[1].returndate) ||
+                              today
                             }
                             toggleReturnModal={toggleReturnModal}
                           />
@@ -261,7 +264,7 @@ const OrderDetail = () => {
                     )}
                   </div>
                 </div>
-                {orderData.statusHistory &&
+                {orderData.statusHistory && 
                   (orderData.status === "pending" ||
                     orderData.status === "processing" ||
                     orderData.status === "shipped" ||
