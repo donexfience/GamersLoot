@@ -1,7 +1,7 @@
 import React from 'react'
 import { Field, ErrorMessage } from 'formik'
 
-const InputWithIcon = ({  name, icon, placeholder, types }) => {
+const InputWithIcon = ({  name, icon, placeholder, types ,value}) => {
   return (
     <div className="mb-4 mt-5">
       <div className="mt-3 relative">

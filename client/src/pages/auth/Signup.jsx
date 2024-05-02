@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Formik, Form, ErrorMessage } from "formik";
+import { Formik, Form, ErrorMessage, Field } from "formik";
 import Logo from "../../assets/LOGO.png";
 import { GoogleLogin } from "@react-oauth/google";
 import * as Yup from "yup";
@@ -11,11 +11,12 @@ import InputWithIcon from "../../components/InputWithIcon";
 import { css } from "@emotion/react";
 import { ClipLoader } from "react-spinners";
 
-import {    
+import {
   AiOutlineLock,
   AiOutlineUser,
   AiOutlineMail,
   AiOutlinePhone,
+  AiOutlineCode,
 } from "react-icons/ai";
 import { commonRequests } from "../../Common/api";
 import {
@@ -23,7 +24,7 @@ import {
   signUpUser,
 } from "../../redux/actions/userActions";
 import PasswordInputWithIcon from "../../components/PasswordInputWithIcon";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { updateError } from "../../redux/reducers/user/userSlice";
 import { appJson, config, configMultiPart } from "../../Common/configurations";
 import OTPEnterSection from "./register/OTPEnterSection";
@@ -31,9 +32,9 @@ import OTPExpired from "./components/OTPExpired";
 
 const Signup = () => {
   const override = css`
-  display: block;
-  margin: 0 auto;
-`;
+    display: block;
+    margin: 0 auto;
+  `;
 
   const { user, loading, error } = useSelector((state) => state.user);
   const [emailSec, setEmailSec] = useState(true);
@@ -48,6 +49,7 @@ const Signup = () => {
     passwordAgain: "",
     phoneNumber: "",
     profileImgURL: null,
+    referralCode: "",
   };
   const navigate = useNavigate();
   useEffect(() => {
@@ -58,6 +60,19 @@ const Signup = () => {
       dispatch(updateError(""));
     };
   }, [user]);
+
+  //referal code fetching while the page loads
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const referralCode = params.get("referralCode");
+    if (referralCode) {
+      // Update the referralCode field in initialValues
+      initialValues.referralCode = referralCode;
+    }
+  }, [location.search]);
+
+  console.log(initialValues.referralCode)
   const validationSchema = Yup.object().shape({
     firstName: Yup.string().trim().required("First name is required"),
     lastName: Yup.string().trim().required("Last name is required"),
@@ -82,7 +97,7 @@ const Signup = () => {
   const dispatch = useDispatch();
 
   const dispatchSignup = () => {
-    console.log(data,'........')
+    console.log(data, "........");
     let formData = new FormData();
     formData.append("firstName", data.firstName);
     formData.append("lastName", data.lastName);
@@ -93,7 +108,10 @@ const Signup = () => {
     if (data.profileImgURL) {
       formData.append("profileImgURL", data.profileImgURL);
     }
-    console.log("---------------------------------------------",data)
+    formData.append("referralCode", data.referralCode);
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
 
     dispatch(signUpUser(formData));
   };
@@ -158,7 +176,10 @@ const Signup = () => {
                   <CustomSingleFileInput
                     onChange={(file) => {
                       setFieldValue("profileImgURL", file);
-                      console.log(file,'1111111111111111111111111111111111111');
+                      console.log(
+                        file,
+                        "1111111111111111111111111111111111111"
+                      );
                     }}
                   />
                   <ErrorMessage
@@ -199,6 +220,22 @@ const Signup = () => {
                   placeholder="Enter Your Phone Number"
                   icon={<AiOutlinePhone />}
                 />
+                  <div className="mb-4 mt-5 hidden">
+                    <div className="mt-3 relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        {<AiOutlineCode />}
+                      </div>
+                      <Field
+                        className="appearance-none block w-full  bg-white text-gray-700 border-b border-gray-300 py-2 pl-10 pr-3 focus:outline-none focus:bg-white focus:border-indigo-500"
+                        name="referralCode"
+                        type="text"
+                        placeholder="Enter your referral Code"
+                        autoComplete="username"
+                        readOnly
+                      />
+                    </div>
+                  </div>
+
                 <button
                   className="bg-violet-500 text-white py-2 px-4 mt-2 rounded-md hover:bg-violet-600 focus:outline-none focus:ring focus:ring-violet-400 w-full"
                   disabled={otpLoading}

@@ -34,7 +34,7 @@ const SortButton = ({ sort, handleClick }) => {
         </option>
         <option
           className="hover:bg-gray-200 py-2 px-3 rounded-lg"
-          value="price-desc"
+          value="popular"
         >
           Popularity
         </option>

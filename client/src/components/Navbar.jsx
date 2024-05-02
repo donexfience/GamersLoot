@@ -37,12 +37,16 @@ const Navbar = () => {
     if (location.pathname === "/") {
       setNavbarColor("text-black"); // Change to the desired color
     }
-    if (location.pathname === "/login") {
+    if (location.pathname === "/login" && !user) {
+      setNavbarColor("text-black"); // Change to the desired color
+    }
+    if (location.pathname === "/signup") {
       setNavbarColor("text-black"); // Change to the desired color
     }
    else if (location.pathname.includes("/product/")) {
     setNavbarColor("text-black"); // Change to the desired color for paths containing "/product/"
-  } 
+  }
+
    else {
       setNavbarColor("text-white"); // Change to the default color
     }
@@ -141,7 +145,7 @@ const Navbar = () => {
                      className="inline-flex justify-center items-center w-full px-4 py-2 border border-indigo-500 rounded-md shadow-sm bg-indigo-500 text-sm font-medium text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                      onClick={toggleDropDown}
                    >
-                     Open Dropdown
+                     Choose one
                    </button>
              
                    {dropDown && (

@@ -1,7 +1,9 @@
 const jwt = require("jsonwebtoken");
 const User = require("../model/userModel");
 const bcrypt = require("bcrypt");
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
+const Wallet = require("../model/walletModel");
+const Counter = require("../model/counterModel");
 const createToken = (_id) => {
   return jwt.sign({ _id }, process.env.SECRET, { expiresIn: "1d" });
 };
@@ -9,6 +11,15 @@ const cookieConfig = {
   secure: true,
   httpOnly: true,
   maxAge: 100 * 60 * 60 * 24,
+};
+const referralCodeGenerator = (username) => {
+  // Generate a random number between 1000 and 9999
+  const referralCodeNumberPart = Math.floor(Math.random() * 9000) + 1000;
+
+  // Combine the username and random number to create the referral code
+  const referralCode = `${username}${referralCodeNumberPart}`;
+
+  return referralCode;
 };
 
 //to get user data when the first page load
@@ -86,10 +97,55 @@ const editUser = async (req, res) => {
 const signUpUser = async (req, res) => {
   try {
     let userCredentials = req.body;
-    console.log(userCredentials, "signup data");
+    console.log(
+      userCredentials,
+      "signup data================================="
+    );
     const profileImgURL = req?.file?.filename;
     if (profileImgURL) {
       userCredentials = { ...userCredentials, profileImgURL };
+    }
+
+    if (userCredentials.referralCode) {
+      let counter = await Counter.findOne({
+        field: "transaction_id",
+        model: "wallet",
+      });
+      if (counter) {
+        counter.count += 1;
+        await counter.save();
+      } else {
+        counter = await Counter.create({
+          field: "transaction_id",
+          model: "wallet",
+        });
+      }
+      let refercode = userCredentials.referralCode;
+      const walletUser = await User.findOne({ referralCode: refercode });
+      const wallet = await Wallet.findOne({ user: walletUser._id });
+      console.log(walletUser,'11111');
+      if (wallet) {
+        console.log(wallet,'222222222222');
+        wallet.balance += 1000;
+        await wallet.save();
+        console.log('wallet saved....');
+      } else {
+        console.log('user dont have the wallet');
+        const wallet = await Wallet.create({
+          user: walletUser._id,
+          balance: 1000,
+          transactions: [
+            {
+              transaction_id: counter.count + 1,
+              amount: "1000",
+              type: "credit",
+              description: `Refferal price for the user  order id ${userCredentials.firstName}`,
+              
+            },
+          ],
+        });
+        console.log(wallet,'wallet user created and saved');
+      }
     }
     const user = await User.signup(userCredentials, "user", true);
 
@@ -97,6 +153,7 @@ const signUpUser = async (req, res) => {
     res.cookie("user_token", token, cookieConfig);
     res.status(200).json(user);
   } catch (error) {
+    console.error(error);
     res.status(400).json({ error: error.message });
   }
 };

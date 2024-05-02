@@ -9,9 +9,11 @@ import TotalOrders from "../../../assets/TotalOrders.mp4";
 import Pending from "../../../assets/Pending.mp4";
 import ProfileImage from "../../../components/ProfileImage";
 import GamersLootLogo from "../../../components/GamersLootLogo";
-
+import { AiOutlineArrowDown } from "react-icons/ai";
+import toast from "react-hot-toast";
 const Dash = () => {
   const { user } = useSelector((state) => state.user);
+  console.log(user, "-[[[[[[[[]]]]]]]]]]]");
   const [orderDatas, setOrderDatas] = useState({});
   const loadOrderCounts = async () => {
     try {
@@ -28,6 +30,12 @@ const Dash = () => {
   }, []);
   console.log(orderDatas, "---------------------");
 
+  const handleCopyToClipboard = () => {
+    const referralLink = `http://localhost:5173/signup?referralCode=${user.referralCode}`;
+    navigator.clipboard.writeText(referralLink).then(() => {
+      toast.success("Referral link copied to clipboard!");
+    });
+  };
   return (
     <div className="bg-white shadow-lg min-h-screen lg:px-3">
       <div className="flex flex-col lg:flex-row justify-between w-full gap-10">
@@ -147,7 +155,7 @@ const Dash = () => {
             got you covered with the latest and greatest in gaming accessories,
             consoles, and more.
           </p>
-          <GamersLootLogo/>
+          <GamersLootLogo />
         </div>
         {user && (
           <div>
@@ -171,13 +179,21 @@ const Dash = () => {
                 <span className="text-gray-500">{user.phoneNumber}</span>
               </p>
               <Link to="profile">
-                <button className="text-blue-500  font-bold my-2">Edit Account </button>
+                <button className="text-blue-500  font-bold my-2">
+                  Edit Account{" "}
+                </button>
               </Link>
               <Link to="order-history">
-                <button className="text-blue-500  font-bold my-2"> | Order History </button>
+                <button className="text-blue-500  font-bold my-2">
+                  {" "}
+                  | Order History{" "}
+                </button>
               </Link>
               <Link to="address">
-                <button className="text-blue-500  font-bold my-2">  |  Edit Address</button>
+                <button className="text-blue-500  font-bold my-2">
+                  {" "}
+                  | Edit Address
+                </button>
               </Link>
             </div>
             <div className="p-5 border-t border-violet-500">
@@ -190,6 +206,36 @@ const Dash = () => {
                 Remember to use a strong and unique password to protect your
                 account.
               </p>
+            </div>
+            <div className="bg-white shadow-lg min-h-screen lg:px-3 w-full">
+              <div className="flex flex-col lg:flex-row justify-between w-full gap-10">
+                {/* Your other code */}
+                <div className="p-5 border-t border-violet-500 w-full">
+                  <h1 className="text-lg font-semibold mb-3">
+                    Your Referral code
+                  </h1>
+                  <p className="text-gray-500">
+                    Refer other people by using your referral link.
+                    <p className="text-blue-500 font-bold pt-3 flex items-center gap-4">
+                      Link below <AiOutlineArrowDown />
+                    </p>
+                  </p>
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      value={`http://localhost:5173/signup?referralCode=${user.referralCode}`}
+                      className="form-input w-full rounded-md mr-2"
+                      readOnly
+                    />
+                    <button
+                      className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                      onClick={handleCopyToClipboard}
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}
