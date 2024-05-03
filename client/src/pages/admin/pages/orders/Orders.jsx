@@ -12,9 +12,11 @@ import RangeDatePicker from "../../../../components/RangeDatePicker";
 import OrderRow from "./OrderRow";
 import Pagination from "../../../../components/Pagination";
 import UpdateOrder from "./UpdateOrder";
+import ExportModal from "./ExportModal";
+import { FiDownload } from "react-icons/fi";
 
 const Orders = () => {
-  const navigate =useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, orders, error, totalAvailableOrders } = useSelector(
     (state) => state.orders
@@ -29,12 +31,14 @@ const Orders = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedOrderForUpdate, setSelectedOrderForUpdate] = useState(null);
 
-
   const [updateModal, setUpdateModal] = useState(false);
   const toggleUpdate = (data) => {
     console.log(data.status);
     if (data.status === "cancelled") {
       toast.error("can't Edit Product is canceled");
+    } else if (data.status === "returned") {
+      toast.error("Cannot Edit Returned Product");
+      return;
     } else {
       setUpdateModal(!updateModal);
       setSelectedOrderForUpdate(data);
@@ -62,6 +66,13 @@ const Orders = () => {
       }
     }
     setSearchParams(params.toString() ? "?" + params.toString() : "");
+  };
+
+  //export toggle
+
+  const [showExportModal, setShowExportModal] = useState(false);
+  const toggleExportModal = () => {
+    setShowExportModal(!showExportModal);
   };
 
   // Removing filters
@@ -101,10 +112,13 @@ const Orders = () => {
             <UpdateOrder
               toggleModal={toggleUpdate}
               datas={selectedOrderForUpdate}
-              orders ={orders}
+              orders={orders}
             />
           }
         />
+      )}
+      {showExportModal && (
+        <Modal content={<ExportModal toggleExportModal={toggleExportModal} />} />
       )}
       <div className="flex justify-between items-center font-semibold">
         <div>
@@ -123,11 +137,23 @@ const Orders = () => {
             handleClick={handleFilter}
           />
         </div>
-        <button className="bg-violet-500 px-3 mr-4 py-2 rounded-md text-white"
-        onClick={()=>navigate('return-orders')}
-        >
-          Return requests
-        </button>
+        <div className="flex gap-1 mr-3 ">
+          <button
+            className="bg-violet-500 px-3 mr-4 py-2 rounded-md text-white"
+            onClick={() => navigate("return-orders")}
+          >
+            Return requests
+          </button>
+          <div className="flex gap-3">
+            <button
+              className="admin-btn bg-violet-500 active:bg-red-400  flex px-3 items-center rounded gap-2 text-white"
+              onClick={toggleExportModal}
+            >
+              <FiDownload />
+              Export
+            </button>
+          </div> 
+        </div>
       </div>
       <div className="p-5 w-full overflow-y-auto text-sm">
         <SearchBar

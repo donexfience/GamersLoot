@@ -38,6 +38,10 @@ const {
   deleteCoupon,
   editCoupon,
 } = require("../controllers/admin/couponController");
+const {
+  generateOrderPDF,
+  generateOrderExcel,
+} = require("../controllers/admin/orderExportController");
 
 //category controller functions mounting them to corresponding suiitable routes
 
@@ -86,4 +90,6 @@ router.post("/coupons", addCoupon);
 router.delete("/coupons/:id", deleteCoupon);
 router.patch("/coupon/:id", editCoupon);
 
+router.get("/order-generate-pdf", generateOrderPDF);
+router.get("/order-generate-excel", generateOrderExcel);
 module.exports = router;

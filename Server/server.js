@@ -33,6 +33,7 @@ const publicRoutes = require("./routes/public");
 //Authentication Middlewares
 
 const { requireAuth, requireAdminAuth } = require("./middleware/requireAuth");
+const checkoffer = require("./util/cronJob");
 
 //Routes Mounting
 app.use("/api/auth", authRoutes);
@@ -47,7 +48,8 @@ app.use("/api/img", express.static(__dirname + "/public/products/"));
 app.use("/api/off", express.static(__dirname + "/public/official/"));
 
 // cron job util call to work when the server start working
-cronJob();
+// cronJob();
+checkoffer()
 
 
 mongoose.connect(process.env.MONGO_URL).then(() => {

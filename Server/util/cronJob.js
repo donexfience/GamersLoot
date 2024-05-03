@@ -3,28 +3,36 @@ const mongoose = require("mongoose");
 const CatOffer = require("../model/categoryoffer");
 const Product = require("../model/ProductModel");
 const checkoffer = async () => {
-  cron.schedule("0 0 * * *", async () => {
-    try {
-      // Find active offers within the date range
-      const currentDate = new Date();
-      const activeOffers = await Offer.find({
-        startingDate: { $lte: currentDate },
-        endingDate: { $gte: currentDate },
-      });
+  try {
+    console.log("cron job working");
+    // Find active offers within the date range
+    const currentDate = new Date();
+    const activeOffers = await CatOffer.find({
+      endingDate: { $gte: currentDate },
+    });
 
-      for (const offers of activeOffers) {
-        const products = await Product.find({ category: offers.category });
-        for (const product of products) {
-          if (!product.offer || product.offer < offers.offer) {
-            product.offer = offers.offer;
-            await product.save();
-          }
+    for (const offers of activeOffers) {
+      const products = await Product.find({ category: offers.category });
+      for (const product of products) {
+        if (product.offer > 0) {
+          product.offer -= offers.offer;
+          await product.save();
+          console.log("offer deleted successfully");
         }
       }
-      console.log("product updated successfully");
-    } catch (error) {
-      console.error(error, "error of updating cateogory offer");
     }
-  });
+  } catch (error) {
+    console.error(error, "error of updating cateogory offer");
+  }
 };
-module.exports=checkoffer
+
+// cron.schedule("*/10 * * * * *", async () => {
+//   try {
+//     await checkoffer();
+//   } catch (error) {
+//     console.error("Error in cron job:", error);
+//   }
+// });
+module.exports = checkoffer;
+
+//

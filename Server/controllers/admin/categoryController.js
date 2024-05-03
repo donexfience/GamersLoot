@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Category = require("../../model/categoryModel");
 const CatOffer = require("../../model/categoryoffer");
+const Product = require("../../model/ProductModel");
 
 //getting all category list to admin dashboard
 
@@ -152,11 +153,19 @@ const getCategory = async (req, res) => {
 
 const createCatOffer = async (req, res) => {
   try {
-
     const formData = req.body;
-    console.log(formData,'ppppppppppppppppp',req.body)
+    console.log(formData, "ppppppppppppppppp", req.body);
     const newData = await CatOffer.create(formData);
-    res.status(200).json({  newData, message: "success" });
+    const products = await Product.find({ category: formData.category });
+    console.log("befor", products);
+    for (const product of products) {
+      if (!product.offer || product.offer < newData.offer) {
+        product.offer = newData.offer;
+        await product.save();
+      }
+    }
+    console.log(products, "after");
+    res.status(200).json({ newData, message: "success" });
   } catch (error) {
     console.error(error);
     res.status(400).json({ error: error.message });
