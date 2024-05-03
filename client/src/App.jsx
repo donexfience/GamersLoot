@@ -42,6 +42,7 @@ import EditCoupon from "./pages/admin/pages/coupon/EditCoupon";
 import Wishlist from "./pages/user/wishlist/Wishlist";
 import FindCoupon from "./pages/user/profileDashboard/Coupon/FindCoupon";
 import ReturnOrder from "./pages/admin/pages/orders/ReturnOrder";
+import CreateOffer from "./pages/admin/pages/categories/CreateOffer";
 
 function App() {
   const { user } = useSelector((state) => state.user);
@@ -133,7 +134,7 @@ function App() {
             <Route path="order-history/detail/:id" element={<OrderDetail />} />
             <Route path="address" element={<Address />} />
             <Route path="wishlist" element={<Wishlist />} />
-            <Route path="coupons" element={<FindCoupon/>}/>
+            <Route path="coupons" element={<FindCoupon />} />
           </Route>
         </Routes>
         {user ? user.role === "user" && <Footer /> : <Footer />}
@@ -149,6 +150,7 @@ function AdminRoutes() {
         {/* cateogories */}
         <Route path="categories" element={<Categories />} />
         <Route path="categories/create" element={<CreateCategory />} />
+        <Route path="categories/create/offer/:id" element={<CreateOffer />} />
         <Route path="categories/edit/:id" element={<EditCategory />} />
         {/* product */}
         <Route path="product" element={<Products />} />
@@ -159,13 +161,12 @@ function AdminRoutes() {
         {/* order management */}
         <Route path="orders" element={<Orders />} />
         <Route path="orders/detail/:id" element={<OrderDetailAdmin />} />
-        <Route path="orders/return-orders" element={<ReturnOrder/>}/>
+        <Route path="orders/return-orders" element={<ReturnOrder />} />
         {/* coupon  management*/}
         <Route path="coupons" element={<Coupons />} />
         <Route path="coupons/create" element={<CreateCoupon />} />
         <Route path="coupons/edit/:id" element={<EditCoupon />} />
       </Route>
-
     </Routes>
   );
 }

@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { URL } from "../../../Common/api";
 import {
+  appJson,
   config,
   configMultiPart,
   handleError,
@@ -19,8 +20,27 @@ export const createNewCategory = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      console.log(error)
-      toast.error(error.response.data.error)
+      console.log(error);
+      toast.error(error.response.data.error);
+      return handleError(error, rejectWithValue);
+    }
+  }
+);
+
+export const createNewOffer = createAsyncThunk(
+  "admin/categories/createNewOffer",
+  async (formData, { rejectWithValue }) => {
+    console.log(formData);
+    try {
+      const { data } = await axios.post(
+        `${URL}/admin/category/offer`,
+        formData,
+        appJson
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.error);
       return handleError(error, rejectWithValue);
     }
   }
@@ -32,7 +52,7 @@ export const getCategories = createAsyncThunk(
     try {
       const { data } = await axios.get(`${URL}/admin/categories?${queries}`);
       return data;
-      console.log(data)
+      console.log(data);
     } catch (error) {
       return handleError(error, rejectWithValue);
     }
@@ -49,8 +69,8 @@ export const updateCategory = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      console.log(error)
-      toast.error(error.response.data.error)
+      console.log(error);
+      toast.error(error.response.data.error);
       return handleError(error, rejectWithValue);
     }
   }

@@ -5,6 +5,7 @@ const {
   getCategories,
   updateCategory,
   createCategory,
+  createCatOffer,
 } = require("../controllers/admin/categoryController");
 const router = express.Router();
 const upload = require("../middleware/upload");
@@ -50,6 +51,7 @@ router.post(
   upload.single("imgURL"),
   createCategory
 );
+router.post("/category/offer", createCatOffer);
 
 //product controller functions mounting them to corresponding suitabele routes
 router.get("/products", getProduct);
@@ -73,8 +75,8 @@ router.get("/orders", getOrders);
 router.get("/clear-orders", clearOrder);
 router.get("/orders/:id", getOrder);
 router.patch(`/order-status/:id`, updateOrderStatus);
-router.get('/return-orders',getReturnOrders)
-router.patch('/order-return-status/:id',updateReturnOrderStatus)
+router.get("/return-orders", getReturnOrders);
+router.patch("/order-return-status/:id", updateReturnOrderStatus);
 
 // couopns controller functions mounting them to corresponding suitable routes
 

@@ -8,9 +8,10 @@ import FilterArray from "./FilterArray";
 import { AiOutlinePlus, AiOutlineEdit } from "react-icons/ai";
 import JustLoading from "../../../../components/JustLoading";
 import Pagination from "../../../../components/Pagination";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 import StatusComponent from "../../../../components/StatusComponent";
 import { URL } from "../../../../Common/api";
+import { FaMoneyBillWave } from "react-icons/fa";
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -42,8 +43,7 @@ const Categories = () => {
     }
     setSearchParams(params.toString() ? "?" + params.toString() : "");
   };
-  
-  console.log(categories,'===============')
+
   useEffect(() => {
     dispatch(getCategories(searchParams));
     const params = new URLSearchParams(window.location.search);
@@ -62,13 +62,15 @@ const Categories = () => {
             handleClick={handleFilter}
           />
         </div>
-        <button
-          className="flex items-center text-sm bg-violet-600 hover:bg-blue-600 text-white font-semibold rounded-md px-4 py-3 focus:outline-none focus:ring focus:ring-blue-300 transition duration-300 ease-in-out mr-4"
-          onClick={() => navigate("create")}
-        >
-          <AiOutlinePlus className="mr-2" />
-          Create New Category
-        </button>
+        <div className="flex justify-between">
+          <button
+            className="flex items-center text-sm bg-violet-600 hover:bg-blue-600 text-white font-semibold rounded-md px-4 py-3 focus:outline-none focus:ring focus:ring-blue-300 transition duration-300 ease-in-out mr-4"
+            onClick={() => navigate("create")}
+          >
+            <AiOutlinePlus className="mr-2" />
+            Create New Category
+          </button>
+        </div>
       </div>
       <div className="p-5 w-full overflow-y-auto text-sm">
         <SearchBar
@@ -80,7 +82,7 @@ const Categories = () => {
       <div className="overflow-x-scroll lg:overflow-hidden bg-white rounded-lg ml-5 mr-5 mt-3">
         {loading ? (
           <div className="flex items-center justify-center h-96">
-            <JustLoading size={10}/>
+            <JustLoading size={10} />
           </div>
         ) : (
           categories && (
@@ -97,15 +99,12 @@ const Categories = () => {
               <tbody>
                 {categories.map((category, index) => {
                   const isLast = index === categories.length - 1;
-                  const classes = isLast 
-                    ? "p-4"
-                    : "p-4 border-b border ";
+                  const classes = isLast ? "p-4" : "p-4 border-b border ";
 
                   return (
                     <tr
                       key={index}
                       className={`${classes} hover:bg-gray-200 active:bg-gray-300 cursor-pointer mr-6`}
-                      onClick={() => navigate(`edit/${category._id}`)}
                     >
                       <td className="admin-table-row flex items-center gap-2 font-semibold ml-8 mt-3">
                         <div className="w-10 h-10 overflow-clip flex justify-center items-center">
@@ -122,19 +121,16 @@ const Categories = () => {
 
                         {category.name}
                       </td>
-                      <td  className="admin-table-row p-3 mt-2 ml-10 font-semibold overflow-x">
+                      <td className="admin-table-row p-3 mt-2 ml-10 font-semibold overflow-x">
                         {category.description}
                       </td>
                       <td className="admin-table-row p-5 ml-6 font-semibold">
                         {category.createdAt
-                          ? format(
-                              new Date(category.createdAt),
-                              "MMM dd yyyy"
-                            )
+                          ? format(new Date(category.createdAt), "MMM dd yyyy")
                           : "No Data"}
                       </td>
                       <td>
-                        {console.log(category.isActive,"00000000000")}
+                        {console.log(category.isActive, "00000000000")}
                         <StatusComponent
                           status={category.isActive ? "Active" : "Blocked"}
                         />
@@ -147,6 +143,14 @@ const Categories = () => {
                           >
                             <AiOutlineEdit className="font-semibold" />
                           </span>
+                          <span
+                            className="hover:text-gray-500"
+                            onClick={() =>
+                              navigate(`create/offer/${category._id}`)
+                            }
+                          >
+                            <FaMoneyBillWave />
+                          </span>
                         </div>
                       </td>
                     </tr>
@@ -158,10 +162,12 @@ const Categories = () => {
         )}
       </div>
       <div className="py-5">
-        <Pagination handleClick={handleFilter}
-        page={page}
-        number={10}
-        totalNumber={totalAvailableCategories}/>
+        <Pagination
+          handleClick={handleFilter}
+          page={page}
+          number={10}
+          totalNumber={totalAvailableCategories}
+        />
       </div>
     </div>
   );

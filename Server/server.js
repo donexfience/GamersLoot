@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const logger = require("morgan");
 const mongoose = require("mongoose");
+const cronJob = require("./util/cronJob");
 
 const app = express();
 
@@ -44,6 +45,11 @@ app.use("/api/public", publicRoutes);
 
 app.use("/api/img", express.static(__dirname + "/public/products/"));
 app.use("/api/off", express.static(__dirname + "/public/official/"));
+
+// cron job util call to work when the server start working
+cronJob();
+
+
 mongoose.connect(process.env.MONGO_URL).then(() => {
   app.listen(process.env.PORT, () => {
     console.log(`Listening on Port: ${process.env.PORT}-DB Connected`);

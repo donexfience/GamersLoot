@@ -16,6 +16,14 @@ const categorySchema= new Schema({
         type:Boolean,
         default:true
     },
+    offer:{
+        type:Number,
+        default:0,
+    
+    },
+    offferEndDate:{
+        type:Date
+    }
 },
     {timestamps:true}
 )

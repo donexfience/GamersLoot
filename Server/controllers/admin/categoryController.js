@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Category = require("../../model/categoryModel");
+const CatOffer = require("../../model/categoryoffer");
 
 //getting all category list to admin dashboard
 
@@ -149,10 +150,23 @@ const getCategory = async (req, res) => {
   }
 };
 
+const createCatOffer = async (req, res) => {
+  try {
+
+    const formData = req.body;
+    console.log(formData,'ppppppppppppppppp',req.body)
+    const newData = await CatOffer.create(formData);
+    res.status(200).json({  newData, message: "success" });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+};
 module.exports = {
   updateCategory,
   getCategories,
   createCategory,
   deleteCategory,
   getCategory,
+  createCatOffer,
 };
