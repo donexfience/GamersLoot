@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import ImageUploadIcon from "./ImageUploadIcon";
-
+import ReactCrop from 'react-image-crop'
 const CustomFileInput = ({ onChange }) => {
   const [droppedFiles, setDroppedFiles] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -33,22 +33,27 @@ const CustomFileInput = ({ onChange }) => {
   };
 
   const handleFileChange = (e) => {
-    const files = Array.from(e.target.files).slice(0, 5);
-    setDroppedFiles(files);
-    onChange(files);
+    const newFiles = Array.from(e.target.files).slice(0, 5);
+    const updatedFiles = [...droppedFiles, ...newFiles];
+    setDroppedFiles(updatedFiles);
+    onChange(updatedFiles);
   };
 
   const handleClearFiles = () => {
     setDroppedFiles([]);
     onChange([]);
   };
+  const handleDeleteFile = (index) => {
+    const newFile = [...droppedFiles];
+    newFile.splice(index, 1);
+    setDroppedFiles(newFile);
+    onChange(newFile);
+  };
 
   return (
     <div
       className={`border-dashed border-2 border-violet-600 p-8 rounded-lg text-center h-full ${
-        isDragging
-          ? "bg-blue-100 border-blue-500"
-          : "bg-white border-gray-200"
+        isDragging ? "bg-blue-100 border-blue-500" : "bg-white border-gray-200"
       }`}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
@@ -81,7 +86,7 @@ const CustomFileInput = ({ onChange }) => {
                 key={index}
                 className="bg-white p-2 rounded-lg shadow-lg mb-2 w-24 h-24"
               >
-                {file.type.startsWith("image/") ? (
+                {file.type && file.type.startsWith("image/") ? (
                   <img
                     src={URL.createObjectURL(file)}
                     alt={file.name}
@@ -92,11 +97,18 @@ const CustomFileInput = ({ onChange }) => {
                 )}
 
                 <p className="flex-grow truncate text-xs mt-3">{file.name}</p>
+                <button
+                  className="absolute bg-red-500 text-white px-2 py-1  rounded text-sm"
+                  onClick={() => handleDeleteFile(index)}
+                >
+                  X
+                </button>
               </div>
             ))}
           </div>
+
           <button
-            className="mt-4 bg-red-500 text-white font-bold py-2 px-4 rounded"
+            className="mt-24 bg-red-500 text-white font-bold py-2 px-4 rounded"
             onClick={handleClearFiles}
           >
             Clear Files

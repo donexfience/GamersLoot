@@ -3013,6 +3013,11 @@ react-bootstrap@^2.10.2:
     uncontrollable "^7.2.1"
     warning "^4.0.3"
 
+react-crop-image@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-crop-image/-/react-crop-image-1.0.0.tgz#98db621a38e9b2a4050d7e824dba3fcb19cdca4d"
+  integrity sha512-TqztXD6W1pR6rR51L4rxuhYmdjNmQ4Dw0djcJX3HqFkmihPXvktkiIqsonz/e+X7wz/QG9nTueBXTP1v+WqIXA==
+
 react-day-picker@^8.10.0:
   version "8.10.0"
   resolved "https://registry.npmjs.org/react-day-picker/-/react-day-picker-8.10.0.tgz"
@@ -3042,6 +3047,11 @@ react-icons@^5.0.1:
   version "5.0.1"
   resolved "https://registry.npmjs.org/react-icons/-/react-icons-5.0.1.tgz"
   integrity sha512-WqLZJ4bLzlhmsvme6iFdgO8gfZP17rfjYEJ2m9RsZjZ+cc4k1hTzknEz63YS1MeT50kVzoa1Nz36f4BEx+Wigw==
+
+react-image-crop@^11.0.5:
+  version "11.0.5"
+  resolved "https://registry.yarnpkg.com/react-image-crop/-/react-image-crop-11.0.5.tgz#c7abcf9cae28305d253d55d481158a594a937867"
+  integrity sha512-A/Y/kspOzki1zDL/bSgwWIY1X3CQ9F1QwpdnncWLBVAktnKfAZDIQnWmjXzuzEjZHDMsBlArytIcPBVi6DNklg==
 
 react-is@^16.13.1, react-is@^16.3.2, react-is@^16.7.0:
   version "16.13.1"

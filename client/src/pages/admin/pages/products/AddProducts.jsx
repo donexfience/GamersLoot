@@ -71,7 +71,6 @@ const AddProducts = () => {
 
     formData.append("imageURL", imageURL);
 
-
     for (const file of moreImageURL) {
       console.log(file, "filessssssssssssssssssssssssss");
       formData.append("moreImageURL", file);
@@ -82,6 +81,9 @@ const AddProducts = () => {
     if (stockQuantity <= 0) {
       toast.error("Quantity Should be greater than 0");
       return;
+    }
+    if (offer < 0) {
+      toast.error("Offer should be greater than 0");
     }
     if (price <= 0) {
       toast.error("Price Should be greater than 0");
@@ -120,12 +122,12 @@ const AddProducts = () => {
       value: attributeValue,
       isHighlight: attributeHighlight,
     };
-    console.log(attributeName,":name")
-    console.log(attributeValue,":")
-    console.log(attributeHighlight,":")
+    console.log(attributeName, ":name");
+    console.log(attributeValue, ":");
+    console.log(attributeHighlight, ":");
 
-    setAttributes([attribute,...attributes]);
-    console.log(attributes,"aaaaaaaaaaaaaaaaaaaa")
+    setAttributes([attribute, ...attributes]);
+    console.log(attributes, "aaaaaaaaaaaaaaaaaaaa");
     setAttributeHighlight(false);
     setAttributeName("");
     setAttributeValue("");
