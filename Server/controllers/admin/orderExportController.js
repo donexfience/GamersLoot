@@ -20,6 +20,7 @@ const generateOrderPDF = async (req, res) => {
       "products",
       "products.productId",
     ]);
+    console.log("downloading", orders, "orders downloading");
     const pdfBuffer = await generatePDF(orders);
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", "attachment;filename=orders.pdf");
@@ -43,41 +44,69 @@ const generatePDF = async (orderData) => {
 
       // Headers
       const headers = [
-        "_id",
-        "user._id",
+        "orderId",
         "user.firstName",
         "user.email",
         "status",
-        "address.address",
-        "address.city",
+        "address",
         "subTotal",
         "shipping",
         "tax",
         "totalPrice",
       ];
-      const columnWidths = headers.map((header) =>
-        Math.max(
-          header.length,
-          ...orderData.map((item) => String(item[header]).length)
-        )
+
+      // Calculate column widths dynamically
+      const columnWidths = headers.map(
+        (header) =>
+          Math.max(
+            header.length,
+            ...orderData.map((item) => {
+              const nestedProperties = header.split(".");
+              let value = item;
+              for (const prop of nestedProperties) {
+                value = value[prop];
+              }
+              return String(value).length;
+            })
+          ) + 10 // Add some extra padding for readability
       );
+
       const generateTableRow = (y, values) => {
         values.forEach((value, index) => {
-          doc.text(value, 50 + index * 100, y);
+          doc.text(value || "", 50 + index * 150, y); // Adjusted column width
           if (index < values.length - 1) {
             doc
-              .moveTo(50 + (index + 1) * 100, y)
-              .lineTo(50 + (index + 1) * 100, y + 15);
+              .moveTo(50 + (index + 1) * 150, y)
+              .lineTo(50 + (index + 1) * 150, y + 15);
           }
         });
       };
-      generateTableRow(doc.y + 10, headers);
+
+      // Set column widths
+      generateTableRow(
+        doc.y + 10,
+        headers.map((header, index) => {
+          const value =
+            header === "user.email" ? "Email" : header.replace(".", " ");
+          return value.padEnd(columnWidths[index]);
+        })
+      );
 
       doc.moveDown();
       orderData.forEach((item) => {
+        const address = `${item.address.address}, ${item.address.city}, ${item.address.regionState}, ${item.address.country}`;
         generateTableRow(
           doc.y,
-          headers.map((header) => String(item[header]))
+          headers.map((header) => {
+            const nestedProperties = header.split(".");
+            let value = item;
+            for (const prop of nestedProperties) {
+              value = value[prop];
+            }
+            return header === "address"
+              ? address
+              : String(value).padEnd(columnWidths[headers.indexOf(header)]);
+          })
         );
         doc.moveDown();
       });
@@ -87,6 +116,7 @@ const generatePDF = async (orderData) => {
     }
   });
 };
+
 const generateOrderExcel = async (req, res) => {
   const { startingDate, endingDate } = req.query;
   try {
