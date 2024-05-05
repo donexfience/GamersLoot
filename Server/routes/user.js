@@ -32,6 +32,8 @@ const {
   cancelOrder,
   orderCount,
   returnOrder,
+  getCouponUsedOrders,
+  getOrdersWithCoupon,
 } = require("../controllers/user/orderController");
 const upload = require("../middleware/upload");
 const {
@@ -44,6 +46,7 @@ const {
 const {
   applyCoupon,
   removeCoupon,
+  getSearchcoupon,
 } = require("../controllers/user/couponController");
 const {
   createRazorPayOrder,
@@ -57,7 +60,10 @@ const {
   getWishlist,
   addToCartFromWishlist,
 } = require("../controllers/user/wishlistController");
-const { getWalletBalance } = require("../controllers/user/walletController");
+const {
+  getWalletBalance,
+  getWallet,
+} = require("../controllers/user/walletController");
 const router = express.Router();
 //Logout
 
@@ -108,10 +114,11 @@ router.patch("/address/:id", updateAddress);
 //order
 router.post("/order", createOrder);
 router.get("/orders", getOrders);
+router.get("/getCouponOrders", getOrdersWithCoupon);
 router.get("/order/:id", getOrder);
 router.post("/cancel-order/:id", cancelOrder);
 router.get("/order-count", orderCount);
-router.post('/return-order/:id',returnOrder)
+router.post("/return-order/:id", returnOrder);
 
 //review
 // Reviews
@@ -126,6 +133,7 @@ router.get("/order-review/:id", readOrderReview);
 
 router.post("/coupon-apply", applyCoupon);
 router.get("/coupon-remove", removeCoupon);
+router.get("/searchedcoupons", getSearchcoupon);
 
 //razorpay payment config
 
@@ -142,7 +150,7 @@ router.delete("/wishlist/:wishlist/item/:productId", deleteOneProductw);
 router.post("/wishlist/addToCart", addToCartFromWishlist);
 
 // wallet
-
+router.get("/wallet", getWallet);
 router.get("/wallet-total", getWalletBalance);
 
 module.exports = router;

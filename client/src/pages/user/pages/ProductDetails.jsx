@@ -137,6 +137,13 @@ const ProductDetails = () => {
       });
   };
 
+  //discount and price
+
+  const discountedPrice =
+    product.price +
+    product.markup -
+    ((product.price + product.markup) * product.offer) / 100;
+
   return (
     <div className="px-5 lg:px-30 py-20 bg-white">
       {loading ? (
@@ -230,30 +237,22 @@ const ProductDetails = () => {
                 </span>
               </p>
               <p className="text-xl font-semibold my-2">
-                <span className="text-blue-600 text-2xl">
-                  {product.price + product.markup}₹
+                <span className="text-blue-600">
+                  {discountedPrice.toFixed(1)}₹
                 </span>
                 {"  "}
                 {product.offer && (
                   <>
-                    <span className="text-gray-500 text-lg line-through">
-                      {parseInt(
-                        ((product.price + product.markup) *
-                          (product.offer + 100)) /
-                          100
-                      )}
-                      ₹
+                    <span className="text-gray-500 line-through">
+                      {(product.price + product.markup)}₹
                     </span>
-                    <span className="bg-orange-500 text-white px-3 py-1 ml-5 text-base rounded">
-                      {product.offer}% Off
-                    </span>
-                    <span>
-                      {" "}
-                      <FaInfoCircle className="text-sm mt-2 " />
+                    <span className="bg-orange-500 px-3 py-1 ml-5 text-base rounded">
+                      {product.offer.toFixed(1)}% Off
                     </span>
                   </>
                 )}
               </p>
+
               {product.attributes &&
                 product.attributes.slice(0, 4).map((at, index) => (
                   <div key={index}>

@@ -30,6 +30,7 @@ const {
   updateOrderStatus,
   getReturnOrders,
   updateReturnOrderStatus,
+  getCouponUsedOrders,
 } = require("../controllers/admin/orderController");
 const {
   getCoupons,
@@ -42,6 +43,7 @@ const {
   generateOrderPDF,
   generateOrderExcel,
 } = require("../controllers/admin/orderExportController");
+
 
 //category controller functions mounting them to corresponding suiitable routes
 

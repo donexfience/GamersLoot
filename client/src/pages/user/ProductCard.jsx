@@ -8,7 +8,9 @@ const ProductCard = ({ product }) => {
   console.log(product, "--------------product----------card");
 
   // Calculate the discounted price
-  const discountedPrice = product.price - (product.price * product.offer) / 100;
+  const discountedPrice = (product.price + product.markup) - ((product.price + product.markup) * product.offer) / 100;
+
+
 
   return (
     <div

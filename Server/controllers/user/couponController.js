@@ -26,9 +26,9 @@ const applyCoupon = async (req, res) => {
       code,
       expirationDate: { $gt: TodayDate },
       isActive: true,
-    }); 
-    if(!coupon){
-      throw Error("coupon not found")
+    });
+    if (!coupon) {
+      throw Error("coupon not found");
     }
     if (coupon.used)
       if (!coupon) {
@@ -70,7 +70,11 @@ const applyCoupon = async (req, res) => {
     if (sum < coupon.minimumPurchaseAmount) {
       throw Error("Total price is less than the coupon purchase limit");
     }
-
+    if (coupon.type === "fixed") {
+      if (coupon.value > sum) {
+        throw Error("Coupon cant be applied");
+      }
+    }
     // Update the cart with the coupon details
     const updatedCart = await Cart.findOneAndUpdate(
       { _id: cart._id },
@@ -87,7 +91,7 @@ const applyCoupon = async (req, res) => {
     if (!updatedCart) {
       throw Error("Cart update failed");
     }
-// if we want to reduce the coupon count when removing a coupon
+    // if we want to reduce the coupon count when removing a coupon
     // coupon.used++;
     // await coupon.save();
 
@@ -132,7 +136,7 @@ const removeCoupon = async (req, res) => {
       throw Error("Coupon not found");
     }
 
-// if we want to reduce the coupon count when removing a coupon
+    // if we want to reduce the coupon count when removing a coupon
     // coupon.used--;
     // await coupon.save();
 
@@ -143,8 +147,38 @@ const removeCoupon = async (req, res) => {
   }
 };
 
+const getSearchcoupon = async (req, res) => {
+  const { code, expirationDate, type, minimumPurchaseAmount } = req.query;
+  let filter = {};
+  if (code) {
+    filter.code = code;
+  }
+  if (expirationDate) {
+    filter.expirationDate = expirationDate;
+  }
+  if (type) {
+    filter.type = type;
+  }
+  if (minimumPurchaseAmount) {
+    const minPurchaseAmount = parseFloat(minimumPurchaseAmount);
+    // Check if minPurchaseAmount is a valid number
+    if (!isNaN(minPurchaseAmount)) {
+      filter.minimumPurchaseAmount = minPurchaseAmount;
+    }
+  }
+  try {
+    const coupons = await Coupon.find(filter);
+    res.status(200).json({ coupons });
+  } catch (error) {
+    console.error("Error fetching coupons:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
 module.exports = {
   getCoupons,
   applyCoupon,
   removeCoupon,
+  getSearchcoupon
 };

@@ -181,6 +181,9 @@ const getOrders = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+
+
 const clearOrder = async (req, res) => {
   try {
     const data = await Order.deleteMany({});

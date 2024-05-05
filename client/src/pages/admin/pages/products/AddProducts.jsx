@@ -56,7 +56,6 @@ const AddProducts = () => {
     setMoreImageURL(files);
   };
   console.log("moreimage", moreImageURL);
-
   const handleSave = () => {
     const formData = new FormData();
     formData.append("name", name);
@@ -282,11 +281,18 @@ const AddProducts = () => {
           {/* outer div */}
         </div>
       </div>
-      <div className="add multiple  ml-5 mr-8 overflow-auto">
+      <div className="add multiple  ml-5 mr-8  overflow-auto">
         <h1 className="font-bold">Product Images</h1>
         <p className="admin-label my-2">Drop Here</p>
         <CustomFileInput onChange={handleMultipleImageInput} />
+
         {/* multi image div ending */}
+      </div>
+      <div className="flex justify-center items-center font-bold">
+        <button className="bg-violet-500 mt-3 text-white rounded p-2"
+        >
+          crop Images
+        </button>
       </div>
       <div className="attribute-div">
         <h1 className="font-bold mb-2 ml-5 mt-4">Product Attributes</h1>

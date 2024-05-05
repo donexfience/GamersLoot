@@ -41,6 +41,41 @@ const getOrders = async (req, res) => {
   }
 };
 
+const getOrdersWithCoupon = async (req, res) => {
+  try {
+    const token = req.cookies.user_token;
+    const { _id } = jwt.verify(token, process.env.SECRET);
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      throw Error("Invalid ID");
+    }
+    const { page = 1, limit = 7 } = req.query;
+    const skip = (page - 1) * limit;
+    const orders = await Order.find(
+      { user: _id, couponCode: { $exists: true, $ne: "" } }, 
+      {
+        address: 0,
+        paymentMode: 0,
+        deliveryDate: 0,
+        user: 0,
+        statusHistory: 0,
+        products: { $slice: 1 },
+      }
+    )
+      .skip(skip)
+      .limit(limit)
+      .populate("products.productId", { name: 1 })
+      .sort({ createdAt: -1 });
+    const totalAvailableOrders = await Order.countDocuments({
+      user: _id,
+      couponCode: { $exists: true, $ne: null },
+    });
+    console.log(orders, "[[[[[[[[[[[[[[[");
+    res.status(200).json({ orders, totalAvailableOrders });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 //stock updating
 //increment or decremnt product count and updating status
 
@@ -404,4 +439,5 @@ module.exports = {
   cancelOrder,
   orderCount,
   returnOrder,
+  getOrdersWithCoupon,
 };

@@ -7,7 +7,7 @@ const createRazorPayOrder = async (req, res) => {
   try {
     const { amount } = req.body;
     console.log(amount, "----------------");
-    const amountInPaise = amount * 100;
+    const amountInPaise = amount;
     const instance = new RazorPay({
       key_id: process.env.KEY_ID,
       key_secret: process.env.KEY_SECRET,

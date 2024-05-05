@@ -11,6 +11,7 @@ import reviewReducer from "./reducers/user/ReviewSlice";
 import orderReducer from "./reducers/admin/ordersSlice";
 import couponReducer from "./reducers/admin/couponSlice";
 import wishlistReducer from "./reducers/user/wishlistSlice";
+import walletReducer from "./reducers/user/walletSlice";
 export const store = configureStore({
   reducer: {
     user: userReducer,
@@ -21,7 +22,8 @@ export const store = configureStore({
     address: addressReducer,
     userOrders: userOrderReducer,
     reviews: reviewReducer,
-    wishlist:wishlistReducer,
+    wishlist: wishlistReducer,
+    wallet: walletReducer,
 
     //Admin side reducers in store
 
@@ -29,6 +31,6 @@ export const store = configureStore({
     products: productReducer,
     customer: customerReducer,
     orders: orderReducer,
-    coupons:couponReducer
+    coupons: couponReducer,
   },
 });

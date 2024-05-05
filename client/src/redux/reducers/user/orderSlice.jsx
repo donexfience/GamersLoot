@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { cancelOrder, getOrders, returnOrder } from "../../actions/user/orderAction";
+import {
+  cancelOrder,
+  getCouonUsedOrders,
+  getOrders,
+  returnOrder,
+} from "../../actions/user/orderAction";
 import toast from "react-hot-toast";
 
 const userOrdersSlice = createSlice({
@@ -22,6 +27,20 @@ const userOrdersSlice = createSlice({
         state.totalAvailableOrders = payload.totalAvailableOrders;
       })
       .addCase(getOrders.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.userOrders = null;
+        state.error = payload;
+      })
+      .addCase(getCouonUsedOrders.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getCouonUsedOrders.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.userOrders = payload.orders;
+        state.totalAvailableOrders = payload.totalAvailableOrders;
+      })
+      .addCase(getCouonUsedOrders.rejected, (state, { payload }) => {
         state.loading = false;
         state.userOrders = null;
         state.error = payload;
@@ -63,7 +82,7 @@ const userOrdersSlice = createSlice({
           state.userOrders[index] = payload.order;
         }
         toast.success("Order return requested Successfully");
-      })
+      });
   },
 });
 

@@ -137,14 +137,14 @@ const Checkout = () => {
       data: { order },
     } = await axios.post(
       `${URL}/user/razor-order`,
-      { amount: parseInt(finalTotal / 100) },
+      { amount: parseInt(finalTotal) },
       config
     );
 
     //razor pay configurations
     let options = {
       key: key,
-      amount: parseInt(finalTotal / 100),
+      amount: parseInt(finalTotal),
       currency: "INR",
       name: "GamersLoot",
       description: "Test Transaction",

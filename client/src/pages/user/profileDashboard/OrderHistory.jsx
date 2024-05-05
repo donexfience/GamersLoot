@@ -8,7 +8,6 @@ import date from "date-and-time";
 import { BsArrowRight } from "react-icons/bs";
 import Pagination from "../../../components/Pagination";
 
-
 const OrderHistory = () => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -53,11 +52,21 @@ const OrderHistory = () => {
               <table className="w-full min-w-max table-auto text-sm shadow-lg">
                 <thead>
                   <tr className="">
-                    <td className="px-5 py-2 font-bold text-violet-400">Product Name</td>
-                    <td className="px-5 py-2 font-bold text-violet-400">orderd Date</td>
-                    <td className="px-5 py-2 font-bold text-violet-400">Status</td>
-                    <td className="px-5 py-2 font-bold text-violet-400">Total</td>
-                    <td className="px-5 py-2 font-bold text-violet-400">Action</td>
+                    <td className="px-5 py-2 font-bold text-violet-400">
+                      Product Name
+                    </td>
+                    <td className="px-5 py-2 font-bold text-violet-400">
+                      orderd Date
+                    </td>
+                    <td className="px-5 py-2 font-bold text-violet-400">
+                      Status
+                    </td>
+                    <td className="px-5 py-2 font-bold text-violet-400">
+                      Total
+                    </td>
+                    <td className="px-5 py-2 font-bold text-violet-400">
+                      Action
+                    </td>
                   </tr>
                 </thead>
                 <tbody>
@@ -90,7 +99,9 @@ const OrderHistory = () => {
                             <Link
                               to={`detail/${item.orderId || item._id}`}
                               className="flex items-center gap-2 underline text-blue-500"
-                            >View order Details <BsArrowRight/></Link>
+                            >
+                              View order Details <BsArrowRight />
+                            </Link>
                           </td>
                         </tr>
                       );
@@ -104,12 +115,10 @@ const OrderHistory = () => {
             </div>
           )}
           <Pagination
-          handleClick={handleFilter}
-          number={3}
-          page={page}
-          totalNumber={totalAvailableOrders}
-
-          
+            handleClick={handleFilter}
+            number={10}
+            page={page}
+            totalNumber={totalAvailableOrders}
           />
         </div>
       </div>

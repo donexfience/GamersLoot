@@ -27,6 +27,7 @@ const CreateCoupon = () => {
   };
   //coupon creating function
   const createCouponFunction = () => {
+    
     dispatch(createCoupon(formData));
     toggleShow();
     navigate(-1);
@@ -37,10 +38,13 @@ const CreateCoupon = () => {
     description: Yup.string().required("Description is required"),
     type: Yup.string().required("Type is required"),
     value: Yup.number().min(0).required("Value is required"),
-    minimumPurchaseAmount: Yup.number().min(0).required("Value is required"),
-    maximumUses: Yup.number().min(0).required("Value is required"),
+    minimumPurchaseAmount: Yup.number()
+      .min(0)
+      .required("Minimum purchase amount is required"),
+    maximumUses: Yup.number().min(0).required("Maximum uses is required"),
     expirationDate: Yup.date().required("Expiry date is required"),
   });
+  
   const initialValues = {
     code: "",
     description: "",

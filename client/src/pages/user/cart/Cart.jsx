@@ -15,6 +15,7 @@ import CartEmpty from "../../../assets/CartEmpty.jpg";
 import TotalPrice from "./TotalPrice";
 import { AiOutlineDelete } from "react-icons/ai";
 import toast from "react-hot-toast";
+import { FaSearch } from "react-icons/fa";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -182,11 +183,14 @@ const Cart = () => {
                 value={inputCouponCode}
                 onChange={(e)=>setInputCouponCode(e.target.value)}
                 />
-                <div className="pt-3">
+                <div className="pt-3 flex justify-between">
                   <button className="bg-violet-500 border border-black text-white rounded-md p-3"
                   onClick={dispatchApplyCoupons}
                   >
                     Apply Coupon
+                  </button>
+                  <button className="flex items-center gap-2 border-2 px-2" onClick={()=>navigate('/dashboard/coupons-search')}>
+                   <FaSearch/> find coupon
                   </button>
                 </div>
               </div>

@@ -14,7 +14,18 @@ export const getOrders = createAsyncThunk(
     );
   }
 );
-
+export const getCouonUsedOrders = createAsyncThunk(
+  "order/getCouponUsedOrders",
+  async (queries, { rejectWithValue }) => {
+    return commonReduxRequests(
+      "get",
+      `/user/getCouponOrders${queries && `?${queries}`}`,
+      null,
+      appJson,
+      rejectWithValue
+    );
+  }
+);
 export const cancelOrder = createAsyncThunk(
   "order/cancelOrder",
   async ({ id, formData }, { rejectWithValue }) => {
