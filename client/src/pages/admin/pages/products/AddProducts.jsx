@@ -288,12 +288,6 @@ const AddProducts = () => {
 
         {/* multi image div ending */}
       </div>
-      <div className="flex justify-center items-center font-bold">
-        <button className="bg-violet-500 mt-3 text-white rounded p-2"
-        >
-          crop Images
-        </button>
-      </div>
       <div className="attribute-div">
         <h1 className="font-bold mb-2 ml-5 mt-4">Product Attributes</h1>
         <form

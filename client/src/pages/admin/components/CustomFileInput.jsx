@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import ImageUploadIcon from "./ImageUploadIcon";
-import CroppingModal from "./CroppingModal"; // Import the CroppingModal component
+import ImageCrop from "../../../components/ImageCropping"; // Import the ImageCrop component
 
 const CustomFileInput = ({ onChange }) => {
   const [droppedFiles, setDroppedFiles] = useState([]);
@@ -57,16 +57,11 @@ const CustomFileInput = ({ onChange }) => {
     setCroppingIndex(index);
   };
 
-  const handleSaveCroppedImage = (croppedArea, croppedAreaPixels) => {
-    // Handle saving cropped image data here
-    // You can use the index of the image being cropped to update the corresponding image data
-    console.log("Cropped area:", croppedArea);
-    console.log("Cropped area pixels:", croppedAreaPixels);
-    // Update the droppedFiles state with the cropped image data
-    // For example:
-    // const updatedFiles = [...droppedFiles];
-    // updatedFiles[croppingIndex] = croppedImageData;
-    // setDroppedFiles(updatedFiles);
+  const handleSaveCroppedImage = (croppedImage) => {
+    const updatedFiles = [...droppedFiles];
+    updatedFiles[croppingIndex] = croppedImage;
+    setDroppedFiles(updatedFiles);
+    setCroppingIndex(-1);
   };
 
   return (
@@ -99,11 +94,11 @@ const CustomFileInput = ({ onChange }) => {
       />
       {droppedFiles.length > 0 && (
         <div className="mt-4">
-          <div className="flex gap-5 justify-center flex-wrap">
+          <div className="flex gap-5  justify-center flex-wrap">
             {droppedFiles.map((file, index) => (
               <div
                 key={index}
-                className="bg-white p-2 rounded-lg shadow-lg mb-2 w-24 h-24 relative"
+                className="bg-white p-2 rounded-lg shadow-lg mb-2 w-64 h-64 relative"
               >
                 {file.type && file.type.startsWith("image/") ? (
                   <img
@@ -116,7 +111,7 @@ const CustomFileInput = ({ onChange }) => {
                 )}
                 <button
                   className="absolute top-0 right-0 bg-blue-500 text-white px-2 py-1 rounded text-xs"
-                  onClick={() => handleCropImage(index)} // Trigger cropping modal
+                  onClick={() => handleCropImage(index)}
                 >
                   Crop
                 </button>
@@ -127,6 +122,15 @@ const CustomFileInput = ({ onChange }) => {
                 >
                   X
                 </button>
+                {croppingIndex === index && (
+                  <ImageCrop
+                    image={file}
+                    setImage={(croppedImage) =>
+                      handleSaveCroppedImage(croppedImage)
+                    }
+                    offCrop={() => setCroppingIndex(-1)}
+                  />
+                )}
               </div>
             ))}
           </div>
@@ -138,14 +142,6 @@ const CustomFileInput = ({ onChange }) => {
             Clear Files
           </button>
         </div>
-      )}
-      {console.log(droppedFiles[croppingIndex])}
-      {croppingIndex !== -1 && (
-        <CroppingModal
-          image={droppedFiles[croppingIndex]}
-          onClose={() => setCroppingIndex(-1)} // Close cropping modal
-          onSave={handleSaveCroppedImage} // Save cropped image data
-        />
       )}
     </div>
   );
