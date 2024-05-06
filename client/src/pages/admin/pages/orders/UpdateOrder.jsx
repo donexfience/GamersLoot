@@ -12,9 +12,13 @@ import { updateOrderStatus } from "../../../../redux/actions/admin/orderAction";
 const UpdateOrder = ({ toggleModal, datas, orders }) => {
   const dispatch = useDispatch();
   const { id, status, paymentMode, deliveryDate } = datas;
+  console.log(datas, "dddddd");
   const orderdDate = getPassedDateOnwardDateForInput(deliveryDate);
   console.log(orderdDate, "=========");
   const todyDate = getTodayOnwardDateForInput();
+  const currentDate = new Date();
+  const returnDate = new Date(currentDate);
+  returnDate.setDate(returnDate.getDate() + 7);
 
   const initialValues = {
     date: "",
@@ -25,8 +29,6 @@ const UpdateOrder = ({ toggleModal, datas, orders }) => {
   };
   const validationSchema = Yup.object().shape({
     status: Yup.string().required("Status is required"),
-    date: Yup.date().nullable().required("Date is required"),
-    returndate: Yup.date().nullable().required("Date is required"),
     description: Yup.string(),
     paymentStatus: Yup.string().nullable(),
   });
@@ -129,8 +131,11 @@ const UpdateOrder = ({ toggleModal, datas, orders }) => {
                 name="date"
                 min={orderdDate}
                 max={todyDate}
+                value={todyDate}
+                readOnly
                 className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
               />
+
               <ErrorMessage
                 name="date"
                 component="div"
@@ -145,8 +150,11 @@ const UpdateOrder = ({ toggleModal, datas, orders }) => {
                 type="date"
                 name="returndate"
                 min={orderdDate}
+                value={returnDate.toISOString().split("T")[0]} 
+                readOnly
                 className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
               />
+
               <ErrorMessage
                 name="returndate"
                 component="div"

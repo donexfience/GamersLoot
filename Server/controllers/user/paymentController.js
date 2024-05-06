@@ -8,13 +8,16 @@ const createRazorPayOrder = async (req, res) => {
     const { amount } = req.body;
     console.log(amount, "----------------");
     const amountInPaise = amount;
+  
+
     const instance = new RazorPay({
       key_id: process.env.KEY_ID,
       key_secret: process.env.KEY_SECRET,
     });
 
     const options = {
-      amount: amountInPaise,
+      
+      amount: amountInPaise * 100,
       currency: "INR",
       receipt: crypto.randomBytes(10).toString("hex"),
     };

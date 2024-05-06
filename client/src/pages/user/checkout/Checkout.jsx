@@ -72,7 +72,7 @@ const Checkout = () => {
           address: selectedAddress,
           paymentMode: selectedPayment,
           notes: delieveryMessage,
-          couponCode:couponCode
+          couponCode: couponCode,
         },
         config
       );
@@ -144,7 +144,7 @@ const Checkout = () => {
     //razor pay configurations
     let options = {
       key: key,
-      amount: parseInt(finalTotal),
+      amount: parseInt(finalTotal) * 1000,
       currency: "INR",
       name: "GamersLoot",
       description: "Test Transaction",

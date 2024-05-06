@@ -17,7 +17,7 @@ const getOrders = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       throw Error("Invalid ID");
     }
-    const { page = 1, limit = 7 } = req.query;
+    const { page = 1, limit = 10 } = req.query;
     const skip = (page - 1) * limit;
     const orders = await Order.find(
       { user: _id },

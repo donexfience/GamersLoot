@@ -40,7 +40,9 @@ const updateOrderStatus = async (req, res) => {
     } else {
       finder.orderId = id;
     }
-    const { status, date, paymentStatus, description, returndate } = req.body;
+    const date = new Date();
+    console.log(date,"------------")
+    const { status, paymentStatus, description } = req.body;
     console.log(req.body);
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -60,12 +62,15 @@ const updateOrderStatus = async (req, res) => {
 
     // if the status is not ther wec creaing
     if (!statusExisted) {
+      const currentDate = new Date();
+      const returnDate = new Date(currentDate);
+      returnDate.setDate(returnDate.getDate() + 7);
       updateOptions.$push = {
         statusHistory: {
           status,
           description,
-          date: new Date(date),
-          returndate,
+          date: date,
+          returndate: returnDate,
         },
       };
     }
@@ -74,7 +79,6 @@ const updateOrderStatus = async (req, res) => {
     const updated = await Order.findOneAndUpdate(finder, updateOptions, {
       new: true,
     });
-    console.log(updated, ",.,.,.,.,.,,.,.,.,");
     if (!updated) {
       throw Error("Something went wrong");
     }
@@ -181,8 +185,6 @@ const getOrders = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-
-
 
 const clearOrder = async (req, res) => {
   try {
