@@ -34,6 +34,7 @@ const {
   returnOrder,
   getCouponUsedOrders,
   getOrdersWithCoupon,
+  generateInvoiceOrder,
 } = require("../controllers/user/orderController");
 const upload = require("../middleware/upload");
 const {
@@ -64,6 +65,9 @@ const {
   getWalletBalance,
   getWallet,
 } = require("../controllers/user/walletController");
+const {
+  generateInvoicePDF,
+} = require("../controllers/user/Invoice/InvoicePdfGen");
 const router = express.Router();
 //Logout
 
@@ -153,4 +157,7 @@ router.post("/wishlist/addToCart", addToCartFromWishlist);
 router.get("/wallet", getWallet);
 router.get("/wallet-total", getWalletBalance);
 
+//invoice for an order
+
+router.get("/order-invoice-pdf/:id", generateInvoiceOrder);
 module.exports = router;

@@ -18,6 +18,8 @@ import OrderDetailsProductRow from "./components/OrderDetailProductRow";
 import OrderHistoryAddress from "./components/OrderHistoryAddress";
 import YourReview from "./components/YourReview";
 import ReturnOrder from "./ReturnOrder";
+import { FaDownload } from "react-icons/fa";
+import { saveAs } from "file-saver";
 
 const OrderDetail = () => {
   const today = new Date();
@@ -67,7 +69,23 @@ const OrderDetail = () => {
     loadData();
   }, [id]);
 
-  console.log(orderData.statusHistory, "----------------------");
+  const apikey = import.meta.env.VITE_EASYINVOICE;
+  //download invioce for a order
+
+  const downloadInvoice = async () => {
+    try {
+      const response = await axios.get(`${URL}/user/order-invoice-pdf/${id}`, {
+        withCredentials: true,
+        responseType: 'blob',
+      });
+  
+      saveAs(response.data, 'invoice.pdf');
+    } catch (error) {
+      console.error('Error downloading invoice:', error);
+    }
+  };  
+
+  console.log(orderData, "999999999");
   return (
     <div className="w-full">
       {reviewModal && (
@@ -168,6 +186,12 @@ const OrderDetail = () => {
                   <p className="text-violet-500 font-bold">
                     {modifyPaymentText(orderData.paymentMode)}
                   </p>
+                  <button
+                    className="bg-violet-500 px-3 rounded-md  py-3 mt-3 text-white font-bold flex gap-3 items-center"
+                    onClick={downloadInvoice}
+                  >
+                    Invoice <FaDownload />
+                  </button>
                 </div>
                 <div className="3rd column">
                   <StatusComponent status={orderData.status} />
@@ -213,17 +237,31 @@ const OrderDetail = () => {
                     </tbody>
                   </table>
                 </div>
-                <div className="lg:flex w-full pt-8  sm:flex-col">
-                  <div className="sm:flex-col p-12 flex items-end  bg-gray-50">
-                    <div className="gap-10">
-                      <p className="font-bold text-violet-500">subTotal</p>
-                      <p>{orderData.subTotal}</p>
-                      <p className="font-bold text-violet-500">Shipping</p>
-                      <p>{orderData.shipping === 0 ? "Free" : ""}</p>
-                      <p className="font-bold text-violet-500">Discount</p>
-                      <p>{orderData.discount || 0}</p>
-                      <p className="cart-total-li-first">Tax</p>
-                      <p className="cart-total-li-second">{orderData.tax}₹</p>
+                <div className="flex justify-end">
+                  <div className="bg-gray-50 rounded-lg p-20 shadow-lg">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="flex flex-col">
+                        <p className="font-bold text-violet-500">Subtotal</p>
+                        <p>{orderData.subTotal}</p>
+                      </div>
+                      <div className="flex flex-col">
+                        <p className="font-bold text-violet-500">Shipping</p>
+                        <p>
+                          {orderData.shipping === 0
+                            ? "Free"
+                            : `${orderData.shipping}`}
+                        </p>
+                      </div>
+                      <div className="flex flex-col">
+                        <p className="font-bold text-violet-500">Discount</p>
+                        <p>{orderData.discount || 0}</p>
+                      </div>
+                      <div className="flex flex-col">
+                        <p className="font-bold text-violet-500">Tax</p>
+                        <p>{orderData.tax}₹</p>
+                      </div>
+                    </div>
+                    <div className="flex justify-between mt-4">
                       <p className="font-semibold text-gray-500">Total</p>
                       <p className="font-semibold">{orderData.totalPrice}₹</p>
                     </div>
@@ -264,7 +302,7 @@ const OrderDetail = () => {
                     )}
                   </div>
                 </div>
-                {orderData.statusHistory && 
+                {orderData.statusHistory &&
                   (orderData.status === "pending" ||
                     orderData.status === "processing" ||
                     orderData.status === "shipped" ||

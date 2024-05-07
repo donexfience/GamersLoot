@@ -36,7 +36,7 @@ const Checkout = () => {
   //if any offers
   let offer = 0;
   const finalTotal = totalPrice + shipping + tax - offer;
-
+  //
   //handling payment
   const [selectedPayment, setSelectedPayment] = useState(null);
   // console.log(selectedPayment,"selectedpayment state")
@@ -64,27 +64,31 @@ const Checkout = () => {
   //cash on delievery saving on backend
 
   const saveOrderOnCashOnDelivery = async () => {
-    setOrderPlaceLoading(true);
-    try {
-      const order = await axios.post(
-        `${URL}/user/order`,
-        {
-          address: selectedAddress,
-          paymentMode: selectedPayment,
-          notes: delieveryMessage,
-          couponCode: couponCode,
-        },
-        config
-      );
-      // navigation state
-      setOrderData(true);
-      toast.success("Order Placed");
-      setOrderPlaceLoading(false);
-      navigateOrderConfirmation(order.data.order);
-      dispatch(clearCartOnOrderPlaced());
-    } catch (error) {
-      toast.error(error.response?.data?.error);
-      setOrderPlaceLoading(false);
+    if (totalPrice > 1000) {
+      toast.error("Order above 1000 should not be allowed for COD");
+    } else {
+      setOrderPlaceLoading(true);
+      try {
+        const order = await axios.post(
+          `${URL}/user/order`,
+          {
+            address: selectedAddress,
+            paymentMode: selectedPayment,
+            notes: delieveryMessage,
+            couponCode: couponCode,
+          },
+          config
+        );
+        // navigation state
+        setOrderData(true);
+        toast.success("Order Placed");
+        setOrderPlaceLoading(false);
+        navigateOrderConfirmation(order.data.order);
+        dispatch(clearCartOnOrderPlaced());
+      } catch (error) {
+        toast.error(error.response?.data?.error);
+        setOrderPlaceLoading(false);
+      }
     }
   };
   //razorpay order saving in b_end

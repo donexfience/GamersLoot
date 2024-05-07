@@ -89,6 +89,7 @@ const addToCart = async (req, res) => {
       cart = await Cart.create({
         user: _id,
         items: [{ product: items.product, quantity: items.quantity }],
+        shipping: 40,
       });
     }
     res.status(200).json({ cart: cart });
@@ -110,7 +111,7 @@ const deleteCart = async (req, res) => {
     }
     res.status(200).json({ cartItem });
   } catch (error) {
-    console.error(error)
+    console.error(error);
     res.status(400).json({ error: error.message });
   }
 };
@@ -144,21 +145,21 @@ const deleteOneProduct = async (req, res) => {
 };
 const incrementQuantity = async (req, res) => {
   try {
-    console.log(req.params)
+    console.log(req.params);
     const { cartId, ProductId } = req.params;
     let cart = await Cart.findOne({ _id: cartId });
     let [product] = cart.items.filter((item) => {
       return item.product.toString() === ProductId;
     });
-    console.log(product)
+    console.log(product);
     let productOriginalData = await Product.findById(product.product, {
       stockQuantity: 1,
     });
     if (product.quantity >= productOriginalData.stockQuantity) {
       throw Error("Insufficient Products");
     }
-    if(product.quantity>=5){
-      throw Error("Maximum limit exceed")
+    if (product.quantity >= 5) {
+      throw Error("Maximum limit exceed");
     }
     cart = await Cart.findOneAndUpdate(
       {
@@ -178,9 +179,8 @@ const incrementQuantity = async (req, res) => {
       return item.product.toString() === ProductId;
     });
     return res.status(200).json({ updatedItem: dataAfterIncrement });
-
   } catch (error) {
-    console.error(error)
+    console.error(error);
     res.status(400).json({ error: error.message });
   }
 };
@@ -188,12 +188,14 @@ const incrementQuantity = async (req, res) => {
 const decrementQuantity = async (req, res) => {
   try {
     const { cartId, productId } = req.params;
-    
+
     // Find the cart
     let cart = await Cart.findOne({ _id: cartId });
 
     // Find the product in the cart
-    const productIndex = cart.items.findIndex(item => item.product.toString() === productId);
+    const productIndex = cart.items.findIndex(
+      (item) => item.product.toString() === productId
+    );
     if (productIndex === -1) {
       throw new Error("Product not found in cart");
     }
@@ -216,7 +218,6 @@ const decrementQuantity = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-
 
 module.exports = {
   getCart,

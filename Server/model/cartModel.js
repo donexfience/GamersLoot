@@ -34,6 +34,9 @@ const cartSchema = new Schema({
   type: {
     type: String,
   },
+  shipping: {
+    type: Number,
+  },
 });
 
 const Cart = mongoose.model("Cart", cartSchema);

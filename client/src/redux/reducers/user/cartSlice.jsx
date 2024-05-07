@@ -32,8 +32,10 @@ const cartSlice = createSlice({
           total + (item.product.price + item.product.markup) * item.quantity,
         0
       );
+      state.shipping = 40;
       state.tax = sum * 0.08;
-      state.totalPrice = sum;
+      state.totalPrice = sum + 40;
+
       console.log(state.totalPrice);
     },
     clearCartOnOrderPlaced: (state) => {
@@ -44,9 +46,7 @@ const cartSlice = createSlice({
       state.totalPrice = 0;
       state.tax = 0;
       state.shipping = 0;
-      state.couponCode = "",
-      state.couponType = "",
-      state.discount = 0;
+      (state.couponCode = ""), (state.couponType = ""), (state.discount = 0);
     },
   },
   extraReducers: (builder) => {

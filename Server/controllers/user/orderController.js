@@ -9,6 +9,7 @@ const Counter = require("../../model/counterModel");
 const Wallet = require("../../model/walletModel");
 const Coupon = require("../../model/couponModel");
 const uuid = require("uuid");
+const { generateInvoicePDF } = require("./Invoice/InvoicePdfGen");
 
 const getOrders = async (req, res) => {
   try {
@@ -51,7 +52,7 @@ const getOrdersWithCoupon = async (req, res) => {
     const { page = 1, limit = 7 } = req.query;
     const skip = (page - 1) * limit;
     const orders = await Order.find(
-      { user: _id, couponCode: { $exists: true, $ne: "" } }, 
+      { user: _id, couponCode: { $exists: true, $ne: "" } },
       {
         address: 0,
         paymentMode: 0,
@@ -112,6 +113,32 @@ const updateProductList = async (id, count) => {
     await Product.findByIdAndUpdate(id, {
       $set: { status: "published" },
     });
+  }
+};
+
+const generateInvoiceOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    let find = {};
+
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      find._id = id;
+    } else {
+      find.orderId = id;
+    }
+
+    const order = await Order.findOne(find).populate("products.productId");
+
+    const pdfBuffer = await generateInvoicePDF(order);
+
+    // Set headers for the response
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", "attachment; filename=invoice.pdf");
+
+    res.status(200).end(pdfBuffer);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -440,4 +467,5 @@ module.exports = {
   orderCount,
   returnOrder,
   getOrdersWithCoupon,
+  generateInvoiceOrder,
 };
