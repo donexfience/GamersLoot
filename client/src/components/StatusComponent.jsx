@@ -27,7 +27,9 @@ const StatusComponent = ({ status }) => {
   ) {
     styleVar += "bg-green-100 text-green-600";
   }
-
+  if (status === "payment failed") {
+    styleVar += "bg-red-100 text-red-600";
+  }
   if (
     status === "cancelled" ||
     status === "Blocked" ||

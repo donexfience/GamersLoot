@@ -241,9 +241,10 @@ const ProductDetails = () => {
                   {discountedPrice.toFixed(1)}₹
                 </span>
                 {"  "}
-                {product.offer && (
+                {product.offer>0 && (
                   <>
                     <span className="text-gray-500 line-through">
+                    
                       {(product.price + product.markup)}₹
                     </span>
                     <span className="bg-orange-500 px-3 py-1 ml-5 text-base rounded">

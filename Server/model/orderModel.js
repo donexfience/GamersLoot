@@ -18,6 +18,7 @@ const StatusHistorySchema = new Schema({
       "return rejected",
       "pickup completed",
       "returned",
+      "payment failed"
     ],
     default: "pending",
   },
@@ -128,6 +129,7 @@ const OrderSchema = new Schema(
         "return rejected",
         "pickup completed",
         "returned",
+        "payment failed"
       ],
       default: "pending",
     },

@@ -236,17 +236,112 @@ const createOrder = async (req, res) => {
         order: order._id,
       });
       await userWallet.save();
+      await Payment.create({
+        payment_id: `walletUser${_id}${uuid.v4()}`,
+        user: _id,
+        order: order._id,
+        status: "success",
+        paymentMode: "myWallet",
+      });
     }
-    await Payment.create({
-      payment_id: `walletUser${_id}${uuid.v4()}`,
-      user: _id,
-      order: order._id,
-      status: "success",
-      paymentMode: "myWallet",
-    });
+
     res.status(200).json({ order });
   } catch (error) {
     console.error(error, "--------------------------");
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const createFailedOrder = async (req, res) => {
+  try {
+    const token = req.cookies.user_token;
+    const { _id } = jwt.verify(token, process.env.SECRET);
+
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      throw Error("Invalid ID");
+    }
+
+    const { address, paymentMode, notes, couponCode } = req.body;
+
+    // Find address data
+    const addressData = await Address.findOne({ _id: address });
+
+    // Get user's cart with populated product details
+    const cart = await Cart.findOne({ user: _id }).populate("items.product", {
+      name: 1,
+      price: 1,
+      markup: 1,
+    });
+
+    // Calculate total price and quantity
+    let sum = 0;
+    let totalQuantity = 0;
+    cart.items.forEach((item) => {
+      sum += (item.product.price + item.product.markup) * item.quantity;
+      totalQuantity += item.quantity;
+    });
+
+    // Calculate total price with tax
+    const sumWithTax = parseInt(sum + sum * 0.08);
+
+    // Prepare products array for the order
+    const products = cart.items.map((item) => ({
+      productId: item.product._id,
+      totalPrice: item.product.price + item.product.markup,
+      price: item.product.price,
+      markup: item.product.markup,
+      quantity: item.quantity,
+    }));
+
+    // Prepare order data
+    const orderData = {
+      user: _id,
+      couponCode: couponCode,
+      address: addressData,
+      products: products,
+      status: "payment failed",
+      subTotal: sum,
+      tax: parseInt(sum * 0.08),
+      paymentMode,
+      totalPrice: sumWithTax,
+      totalQuantity,
+      statusHistory: [
+        {
+          status: "payment failed",
+        },
+      ],
+      ...(notes ? { notes } : {}),
+    };
+
+    // Create the order
+    const order = await Order.create(orderData);
+
+    // Delete the user's cart
+    await Cart.findByIdAndDelete(cart._id);
+
+    // Update coupon usage count if applicable
+    if (cart.coupon) {
+      await Coupon.findOneAndUpdate(
+        { code: cart.coupon },
+        { $inc: { used: 1 } }
+      );
+    }
+
+    // Create payment record with status "fail"
+    await Payment.create({
+      payment_id: `razorpayuser${_id}${uuid.v4()}`,
+      user: _id,
+      order: order._id,
+      status: "canceled",
+      paymentMode: "razorPay",
+    });
+
+    // Send success response
+    res
+      .status(200)
+      .json({ message: "Order created with payment status Failed", order });
+  } catch (error) {
+    console.error(error);
     res.status(400).json({ error: error.message });
   }
 };
@@ -458,7 +553,6 @@ const returnOrder = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-
 module.exports = {
   createOrder,
   getOrder,
@@ -468,4 +562,5 @@ module.exports = {
   returnOrder,
   getOrdersWithCoupon,
   generateInvoiceOrder,
+  createFailedOrder,
 };

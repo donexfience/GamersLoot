@@ -45,6 +45,7 @@ import ReturnOrder from "./pages/admin/pages/orders/ReturnOrder";
 import CreateOffer from "./pages/admin/pages/categories/CreateOffer";
 import SearchCoupons from "./pages/user/profileDashboard/Coupon/SearchCoupons";
 import Wallet from "./pages/user/profileDashboard/wallet/Wallet";
+import ReCheckout from "./pages/user/checkout/ReCheckout";
 
 function App() {
   const { user } = useSelector((state) => state.user);
@@ -139,6 +140,7 @@ function App() {
             <Route path="coupons" element={<FindCoupon />} />
             <Route path="coupons-search" element={<SearchCoupons />} />
             <Route path="wallet" element={<Wallet />} />
+            <Route path="Repayment" element={<ReCheckout/>}/>
           </Route>
         </Routes>
         {user ? user.role === "user" && <Footer /> : <Footer />}
