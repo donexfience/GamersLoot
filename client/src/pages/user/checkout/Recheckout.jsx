@@ -40,7 +40,10 @@ const ReCheckout = () => {
   //if any offers
   let offer = 0;
   const finalTotal =
-    userOrders.totalPrice + userOrders.shipping + userOrders.tax - offer;
+    parseInt(userOrders.totalPrice) +
+    parseInt(userOrders.shipping) +
+    parseInt(userOrders.tax) -
+    offer;
   //
   //handling payment
   const [selectedPayment, setSelectedPayment] = useState(null);
@@ -72,6 +75,7 @@ const ReCheckout = () => {
     if (userOrders.totalPrice > 1000 && selectedPayment === "cashOnDelivery") {
       toast.error("Order above 1000 should not be allowed for COD");
     } else {
+      console.log('11111111111111111111111111111111111111111111111111111111111111111');
       setOrderPlaceLoading(true);
       try {
         const order = await axios.post(
@@ -96,7 +100,7 @@ const ReCheckout = () => {
   };
   //razorpay order saving in b_end
   const saveOrderRazor = async (response) => {
-    console.log(response, "--------------------");
+    console.log(response, "Resssssssssssssssssssssss");
     setOrderPlaceLoading(true);
     try {
       //saving the order
@@ -109,19 +113,19 @@ const ReCheckout = () => {
         config
       );
 
-      const { order } = orderResponse.data;
-      console.log(order, response, "----------order response razor");
+      const { orders } = orderResponse.data;
+      console.log(orders, response, "----------order response razor");
       //saving payment
       await axios.post(
         `${URL}/user/razor-verify`,
-        { ...response, order: order._id },
+        { ...response, order: orders._id },
         config
       );
       // Updating user side
       setOrderData(true);
       toast.success("Order Placed");
       setOrderPlaceLoading(false);
-      navigateOrderConfirmation(order);
+      navigateOrderConfirmation(orders);
       dispatch(clearCartOnOrderPlaced());
     } catch (error) {
       console.log(error);
@@ -246,7 +250,7 @@ const ReCheckout = () => {
     parseInt(userOrders.shipping) +
     parseInt(userOrders.tax) -
     offer;
-  
+
   return (
     <div className="w-full">
       {orderPlaceLoading ? (

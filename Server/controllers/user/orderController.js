@@ -600,7 +600,7 @@ const Reorder = async (req, res) => {
     }
     const { paymentMode, orderId } = req.body;
     const orders = await Order.findOne({ orderId: orderId });
-    if (orders.status === "failed") {
+    if (orders.status === "payment failed") {
       // Update order status to 'pending'
       orders.status = "pending";
       await orders.save();
@@ -627,7 +627,7 @@ const Reorder = async (req, res) => {
         }
         userWallet.transactions.push({
           transaction_id: counter.count + 1,
-          amount: -order.totalPrice,
+          amount: -orders.totalPrice,
           type: "debit",
           description: `payment for the order ${orders._id}`,
           order: orders._id,
@@ -641,8 +641,8 @@ const Reorder = async (req, res) => {
         status: "success",
         paymentMode: "myWallet",
       });
-      res.status(200).json({ orders });
     }
+    res.status(200).json({ orders });
   } catch (error) {
     console.error(error, "--------------------------");
     res.status(400).json({ error: error.message });
