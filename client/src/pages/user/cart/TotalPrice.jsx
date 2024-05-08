@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { calculateTotalPrice } from "../../../redux/reducers/user/cartSlice";
 import { removeCoupon } from "../../../redux/actions/user/cartAction";
 import { AiFillCheckCircle } from "react-icons/ai";
-import  business  from "../../../assets/business.svg";
-const   TotalPrice = () => {
+import business from "../../../assets/business.svg";
+const TotalPrice = () => {
   const { totalPrice, shipping, discount, tax, couponType, couponCode } =
     useSelector((state) => state.cart);
   const dispatch = useDispatch();
@@ -21,14 +21,20 @@ const   TotalPrice = () => {
   } else {
     offer = discount;
   }
-  const finalprice = totalPrice + shipping + parseInt(tax) - offer;
+  let finalprice;
+  tax === 0
+    ? (finalprice = totalPrice + parseInt(tax) - offer)
+    : (finalprice = totalPrice + shipping + parseInt(tax) - offer);
   return (
     <div className="border-b border-gray-200 pb-2 mb-2">
       <div className="cart-total-list flex justify-between">
         <p className="cart-total-list-first font-bold text-violet-500">
           Sub Total
         </p>
-        <p className="cart-total-list-second">{totalPrice}₹</p>
+
+        <p className="cart-total-list-second">
+          {tax === 0 ? totalPrice - 40 : totalPrice}₹
+        </p>
       </div>
 
       <div className="cart-total-list flex justify-between">

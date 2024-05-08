@@ -183,6 +183,7 @@ const createOrder = async (req, res) => {
       paymentMode,
       totalPrice: sumWithTax,
       totalQuantity,
+      shipping:40,
       statusHistory: [
         {
           status: "pending",
@@ -252,6 +253,79 @@ const createOrder = async (req, res) => {
   }
 };
 
+const ReCreateOrder = async (req, res) => {
+  try {
+    const token = req.cookies.user_token;
+    const { _id } = jwt.verify(token, process.env.SECRET);
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      throw Error("Invalid ID");
+    }
+    const { paymentMode, orderId } = req.body;
+    const order = await Order.findOne({ orderId: orderId });
+    order.status = "pending";
+    await order.save();
+    console.log(order, "suceessssssssssssssssssssssssssss");
+    if (paymentMode === "myWallet") {
+      let userWallet = await Wallet.findOne({ user: _id });
+      if (!userWallet) {
+        throw Error("No such wallet found");
+      }
+      if (userWallet.balance < order.totalPrice) {
+        throw Error("Insufficient balance in wallet");
+      }
+      userWallet.balance -= order.totalPrice;
+      await userWallet.save();
+      let counter = await Counter.findOne({
+        model: "wallet",
+        field: "transaction_id",
+      });
+      if (counter) {
+        counter.count += 1;
+        await counter.save();
+      } else {
+        await Counter.create({ field: "transaction_id", model: "wallet" });
+      }
+      userWallet.transactions.push({
+        transaction_id: counter.count + 1,
+        amount: -order.totalPrice,
+        type: "debit",
+        description: `payment for the order ${order._id}`,
+        order: order._id,
+      });
+      await userWallet.save();
+      await Payment.create({
+        payment_id: `walletUser${_id}${uuid.v4()}`,
+        user: _id,
+        order: order._id,
+        status: "success",
+        paymentMode: "myWallet",
+      });
+    }
+
+
+    res.status(200).json({ order });
+  } catch (error) {
+    console.error(error, "--------------------------");
+    res.status(400).json({ error: error.message });
+  }
+};
+//RePayment order getting
+
+const getRepaymentOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await Order.findOne({ orderId: id });
+    console.log("|||||||||||||||", order);
+    if (!order) {
+      return res.status(400).json({ error: "Order not found" });
+    }
+    const totalAvailableOrders = 1;
+    res.status(200).json({ order, totalAvailableOrders });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 const createFailedOrder = async (req, res) => {
   try {
     const token = req.cookies.user_token;
@@ -299,6 +373,7 @@ const createFailedOrder = async (req, res) => {
       couponCode: couponCode,
       address: addressData,
       products: products,
+      shipping:40,
       status: "payment failed",
       subTotal: sum,
       tax: parseInt(sum * 0.08),
@@ -563,4 +638,6 @@ module.exports = {
   getOrdersWithCoupon,
   generateInvoiceOrder,
   createFailedOrder,
+  getRepaymentOrder,
+  ReCreateOrder,
 };

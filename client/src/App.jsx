@@ -140,7 +140,7 @@ function App() {
             <Route path="coupons" element={<FindCoupon />} />
             <Route path="coupons-search" element={<SearchCoupons />} />
             <Route path="wallet" element={<Wallet />} />
-            <Route path="Repayment" element={<ReCheckout/>}/>
+            <Route path="order-history/detail/:id/Repayment" element={<ReCheckout/>}/>
           </Route>
         </Routes>
         {user ? user.role === "user" && <Footer /> : <Footer />}

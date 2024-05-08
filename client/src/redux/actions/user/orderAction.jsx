@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { commonReduxRequests } from "../../../Common/api";
-import { appJson } from "../../../Common/configurations";
+import { appJson, config } from "../../../Common/configurations";
 
 export const getOrders = createAsyncThunk(
   "order/getOrders",
@@ -46,6 +46,19 @@ export const returnOrder = createAsyncThunk(
       "post",
       `user/return-order/${id}`,
       formData,
+      appJson,
+      rejectWithValue
+    );
+  }
+);
+
+export const getRepaymentorder = createAsyncThunk(
+  "order/getRepaymentOrder",
+  async (id, { rejectWithValue }) => {
+    return commonReduxRequests(
+      "get",
+      `/user/getRepaymentorders/${id}`,
+      null,
       appJson,
       rejectWithValue
     );

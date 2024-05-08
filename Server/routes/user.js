@@ -36,6 +36,8 @@ const {
   getOrdersWithCoupon,
   generateInvoiceOrder,
   createFailedOrder,
+  getRepaymentOrder,
+  ReCreateOrder,
 } = require("../controllers/user/orderController");
 const upload = require("../middleware/upload");
 const {
@@ -118,6 +120,7 @@ router.patch("/address/:id", updateAddress);
 
 //order
 router.post("/order", createOrder);
+router.post('/Reorder',ReCreateOrder)
 router.get("/orders", getOrders);
 router.post("/faildorder", createFailedOrder);
 router.get("/getCouponOrders", getOrdersWithCoupon);
@@ -125,6 +128,7 @@ router.get("/order/:id", getOrder);
 router.post("/cancel-order/:id", cancelOrder);
 router.get("/order-count", orderCount);
 router.post("/return-order/:id", returnOrder);
+router.get("/getRepaymentorders/:id", getRepaymentOrder);
 
 //review
 // Reviews

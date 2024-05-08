@@ -18,7 +18,7 @@ const StatusHistorySchema = new Schema({
       "return rejected",
       "pickup completed",
       "returned",
-      "payment failed"
+      "payment failed",
     ],
     default: "pending",
   },
@@ -33,11 +33,11 @@ const StatusHistorySchema = new Schema({
     type: String,
   },
   returndate: {
-    type:Date,
+    type: Date,
   },
-  pickupdate:{
-    type:Date
-  }
+  pickupdate: {
+    type: Date,
+  },
 });
 
 const ProductSchema = new Schema({
@@ -61,6 +61,9 @@ const ProductSchema = new Schema({
   markup: {
     type: Number,
     required: true,
+  },
+  imageURL: {
+    type: String,
   },
 });
 
@@ -129,7 +132,7 @@ const OrderSchema = new Schema(
         "return rejected",
         "pickup completed",
         "returned",
-        "payment failed"
+        "payment failed",
       ],
       default: "pending",
     },

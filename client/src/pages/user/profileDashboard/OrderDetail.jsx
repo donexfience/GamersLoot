@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { URL } from "../../../Common/api";
 import { config } from "../../../Common/configurations";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import Modal from "../../../components/Modal";
 import ProductReview from "./ProductReview";
 import CancelOrder from "./CancelOrder";
@@ -20,6 +20,12 @@ import YourReview from "./components/YourReview";
 import ReturnOrder from "./ReturnOrder";
 import { FaCcAmazonPay, FaDownload } from "react-icons/fa";
 import { saveAs } from "file-saver";
+import {
+  FaTruck,
+  FaTags,
+  FaMoneyBillWave,
+  FaRegMoneyBillAlt,
+} from "react-icons/fa";
 
 const OrderDetail = () => {
   const today = new Date();
@@ -194,9 +200,11 @@ const OrderDetail = () => {
                       Invoice <FaDownload />
                     </button>
                     {orderData.status === "payment failed" && (
-                      <button className="bg-blue-500 px-4 rounded-md flex items-center gap-2  py-3 mt-3 text-white">
-                        payment Again <FaCcAmazonPay/>
-                      </button>
+                      <Link to="Repayment">
+                        <button className="bg-blue-500 px-4 rounded-md flex items-center gap-2  py-3 mt-3 text-white">
+                          payment Again <FaCcAmazonPay />
+                        </button>
+                      </Link>
                     )}
                   </div>
                 </div>
@@ -245,32 +253,41 @@ const OrderDetail = () => {
                   </table>
                 </div>
                 <div className="flex justify-end">
-                  <div className="bg-gray-50 rounded-lg p-20 shadow-lg">
+                  <div className="bg-white rounded-lg p-3 mt-32 shadow-lg w-full max-w-lg">
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="flex flex-col">
-                        <p className="font-bold text-violet-500">Subtotal</p>
-                        <p>{orderData.subTotal}</p>
+                      <div className="flex flex-col items-center">
+                        <FaTags className="text-violet-500 text-lg" />
+                        <p className="font-bold text-gray-800">Subtotal</p>
+                        <p className="text-gray-600">{orderData.subTotal}₹</p>
                       </div>
-                      <div className="flex flex-col">
-                        <p className="font-bold text-violet-500">Shipping</p>
-                        <p>
+                      <div className="flex flex-col items-center">
+                        <FaTruck className="text-violet-500 text-lg" />
+                        <p className="font-bold text-gray-800">Shipping</p>
+                        <p className="text-gray-600">
                           {orderData.shipping === 0
                             ? "Free"
-                            : `${orderData.shipping}`}
+                            : `${orderData.shipping}₹`}
                         </p>
                       </div>
-                      <div className="flex flex-col">
-                        <p className="font-bold text-violet-500">Discount</p>
-                        <p>{orderData.discount || 0}</p>
+                      <div className="flex flex-col items-center">
+                        <FaTags className="text-violet-500 text-lg" />
+                        <p className="font-bold text-gray-800">Discount</p>
+                        <p className="text-gray-600">
+                          {orderData.discount || 0}₹
+                        </p>
                       </div>
-                      <div className="flex flex-col">
-                        <p className="font-bold text-violet-500">Tax</p>
-                        <p>{orderData.tax}₹</p>
+                      <div className="flex flex-col items-center">
+                        <FaMoneyBillWave className="text-violet-500 text-lg" />
+                        <p className="font-bold text-gray-800">Tax</p>
+                        <p className="text-gray-600">{orderData.tax}₹</p>
                       </div>
                     </div>
-                    <div className="flex justify-between mt-4">
-                      <p className="font-semibold text-gray-500">Total</p>
-                      <p className="font-semibold">{orderData.totalPrice}₹</p>
+                    <hr className="my-4 border-gray-300" />
+                    <div className="flex justify-between">
+                      <p className="font-semibold text-gray-800">Total</p>
+                      <p className="font-semibold text-violet-500">
+                        {orderData.totalPrice}₹
+                      </p>
                     </div>
                   </div>
                 </div>
