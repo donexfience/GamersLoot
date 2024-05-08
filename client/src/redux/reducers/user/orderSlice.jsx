@@ -3,6 +3,7 @@ import {
   cancelOrder,
   getCouonUsedOrders,
   getOrders,
+  getRepaymentorder,
   returnOrder,
 } from "../../actions/user/orderAction";
 import toast from "react-hot-toast";
@@ -82,6 +83,20 @@ const userOrdersSlice = createSlice({
           state.userOrders[index] = payload.order;
         }
         toast.success("Order return requested Successfully");
+      })
+      .addCase(getRepaymentorder.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getRepaymentorder.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.userOrders = payload.orders;
+        state.totalAvailableOrders = payload.totalAvailableOrders;
+      })
+      .addCase(getRepaymentorder.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.userOrders = null;
+        state.error = payload;
       });
   },
 });

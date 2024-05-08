@@ -76,14 +76,14 @@ const OrderDetail = () => {
     try {
       const response = await axios.get(`${URL}/user/order-invoice-pdf/${id}`, {
         withCredentials: true,
-        responseType: 'blob',
+        responseType: "blob",
       });
-  
-      saveAs(response.data, 'invoice.pdf');
+
+      saveAs(response.data, "invoice.pdf");
     } catch (error) {
-      console.error('Error downloading invoice:', error);
+      console.error("Error downloading invoice:", error);
     }
-  };  
+  };
 
   console.log(orderData, "999999999");
   return (
@@ -186,12 +186,26 @@ const OrderDetail = () => {
                   <p className="text-violet-500 font-bold">
                     {modifyPaymentText(orderData.paymentMode)}
                   </p>
-                  <button
-                    className="bg-violet-500 px-3 rounded-md  py-3 mt-3 text-white font-bold flex gap-3 items-center"
-                    onClick={downloadInvoice}
-                  >
-                    Invoice <FaDownload />
-                  </button>
+                  <div className="flex gap-3">
+                    {orderData.status === "payment failed" && (
+                      <button
+                        className="bg-violet-500 px-3 rounded-md py-3 mt-3 text-white font-bold flex gap-3 items-center"
+                        onClick={() =>
+                          naviagte(
+                            `/dashboard/order-history/detail/${id}/repayment`
+                          )
+                        }
+                      >
+                        Payment Again
+                      </button>
+                    )}
+                    <button
+                      className="bg-violet-500 px-3 rounded-md  py-3 mt-3 text-white font-bold flex gap-3 items-center"
+                      onClick={downloadInvoice}
+                    >
+                      Invoice <FaDownload />
+                    </button>
+                  </div>
                 </div>
                 <div className="3rd column">
                   <StatusComponent status={orderData.status} />

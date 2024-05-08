@@ -45,6 +45,8 @@ import ReturnOrder from "./pages/admin/pages/orders/ReturnOrder";
 import CreateOffer from "./pages/admin/pages/categories/CreateOffer";
 import SearchCoupons from "./pages/user/profileDashboard/Coupon/SearchCoupons";
 import Wallet from "./pages/user/profileDashboard/wallet/Wallet";
+import ReCheckout from "./pages/user/checkout/Recheckout";
+
 
 function App() {
   const { user } = useSelector((state) => state.user);
@@ -134,6 +136,7 @@ function App() {
             <Route path="profile" element={<ProfilePage />} />
             <Route path="order-history" element={<OrderHistory />} />
             <Route path="order-history/detail/:id" element={<OrderDetail />} />
+            <Route path="order-history/detail/:id/repayment" element={<ReCheckout/>}/>
             <Route path="address" element={<Address />} />
             <Route path="wishlist" element={<Wishlist />} />
             <Route path="coupons" element={<FindCoupon />} />

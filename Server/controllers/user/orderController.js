@@ -459,6 +459,18 @@ const returnOrder = async (req, res) => {
   }
 };
 
+const RepaymentOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const orders = await Order.findOne({ orderId: id });
+    const totalAvailableOrders = 1;
+    res.status(200).json({ orders, totalAvailableOrders });
+    console.log(orders,'--------------------');
+  } catch (error) {
+    console.error(error,"error of repayment order details")
+    res.status(400).json({ error: error.message });
+  }
+};
 module.exports = {
   createOrder,
   getOrder,
@@ -468,4 +480,5 @@ module.exports = {
   returnOrder,
   getOrdersWithCoupon,
   generateInvoiceOrder,
+  RepaymentOrder
 };

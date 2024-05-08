@@ -51,3 +51,15 @@ export const returnOrder = createAsyncThunk(
     );
   }
 );
+
+export const getRepaymentorder = createAsyncThunk(
+  "/order/getRepaymentorder",
+  async (id, { rejectWithValue }) => {
+    return commonReduxRequests(
+      "get",
+      `user/RepaymentOrder/${id}`,
+      null,
+      rejectWithValue
+    );
+  }
+);

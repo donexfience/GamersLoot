@@ -3,17 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { calculateTotalPrice } from "../../../redux/reducers/user/cartSlice";
 import { removeCoupon } from "../../../redux/actions/user/cartAction";
 import { AiFillCheckCircle } from "react-icons/ai";
-import  business  from "../../../assets/business.svg";
-const   TotalPrice = () => {
+import business from "../../../assets/business.svg";
+
+const TotalPrice = () => {
   const { totalPrice, shipping, discount, tax, couponType, couponCode } =
     useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(calculateTotalPrice());
-  });
-
-  console.log("🚀 ~ file: TotalPrice.jsx:7 ~ TotalPrice ~ cart:", totalPrice);
+  }, [dispatch]);
 
   let offer = 0;
   if (couponType === "percentage") {
@@ -21,7 +20,12 @@ const   TotalPrice = () => {
   } else {
     offer = discount;
   }
-  const finalprice = totalPrice + shipping + parseInt(tax) - offer;
+
+  const finalprice =
+    tax === 0
+      ? totalPrice + parseInt(tax) - offer
+      : totalPrice + shipping + parseInt(tax) - offer;
+
   return (
     <div className="border-b border-gray-200 pb-2 mb-2">
       <div className="cart-total-list flex justify-between">
@@ -44,6 +48,7 @@ const   TotalPrice = () => {
           {shipping === 0 ? "Free" : shipping}
         </p>
       </div>
+
       <div className="flex justify-between">
         <p className="text-violet-500 font-bold">Discount</p>
         <p className="cart-total-li-second">
@@ -55,6 +60,7 @@ const   TotalPrice = () => {
             : "0₹"}
         </p>
       </div>
+
       {couponCode !== "" && (
         <div className="flex items-center p-2 rounded bg-green-100 border border-green-300">
           <div className="flex items-center justify-center mr-4">
@@ -75,9 +81,10 @@ const   TotalPrice = () => {
           </button>
         </div>
       )}
+
       <div className="cart-total-list flex justify-between">
-        <p className=" font-bold text-red-400">Total</p>
-        <p className="text-red-500 font-semibold">{finalprice}₹</p>
+        <p className="font-bold text-red-400">Total</p>
+        <p className="font-semibold text-red-500">{finalprice}₹</p>
       </div>
     </div>
   );
