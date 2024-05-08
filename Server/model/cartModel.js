@@ -19,6 +19,9 @@ const cartSchema = new Schema({
       quantity: {
         type: Number,
       },
+      imageURL: {
+        type: String,
+      },
     },
   ],
   coupon: {

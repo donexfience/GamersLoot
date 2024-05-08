@@ -64,7 +64,7 @@ const Checkout = () => {
   //cash on delievery saving on backend
 
   const saveOrderOnCashOnDelivery = async () => {
-    if (totalPrice > 1000) {
+    if (totalPrice > 1000 && selectedPayment === "cashOnDelivery") {
       toast.error("Order above 1000 should not be allowed for COD");
     } else {
       setOrderPlaceLoading(true);
@@ -103,6 +103,7 @@ const Checkout = () => {
           notes: delieveryMessage,
           address: selectedAddress,
           paymentMode: selectedPayment,
+          couponCode: couponCode,
         },
         config
       );
@@ -174,15 +175,32 @@ const Checkout = () => {
     razor.open();
 
     // If failed toast it.
-    razor.on("payment.failed", function (response) {
-      toast.error(response.error.code);
-      toast.error(response.error.description);
-      toast.error(response.error.source);
-      toast.error(response.error.step);
-      toast.error(response.error.reason);
-      toast.error(response.error.metadata.order_id);
-      toast.error(response.error.metadata.payment_id);
+    razor.on("payment.failed", async function (response) {
+      console.log(response);
+      try {
+        const newOrder = await axios.post(
+          `${URL}/user/faildorder`,
+          {
+            address: selectedAddress,
+            paymentMode: selectedPayment,
+            notes: delieveryMessage,
+            couponCode: couponCode,
+          },
+          config
+        );
+        toast.error("Payment failed Order created with payment status Failed");
+        dispatch(clearCartOnOrderPlaced());
+      } catch (error) {
+        toast.error(error.response?.data?.error || "something went wrong");
+      }
       setOrderPlaceLoading(false);
+      // toast.error(response.error.code);
+      // toast.error(response.error.description);
+      // toast.error(response.error.source);
+      // toast.error(response.error.step);
+      // toast.error(response.error.reason);
+      // toast.error(response.error.metadata.order_id);
+      // toast.error(response.error.metadata.payment_id);
     });
   };
 

@@ -27,7 +27,7 @@ const ReCheckout = () => {
   const { userOrders, loading, error } = useSelector(
     (state) => state.userOrders
   );
-  console.log(userOrders.products, "================");
+  console.log(userOrders, "================");
   //wallet
 
   const [walletbalance, setWalletBalance] = useState(0);
@@ -219,10 +219,10 @@ const ReCheckout = () => {
     }
     if (selectedPayment === "myWallet") {
       let Total =
-        Number(orderData.totalPrice) +
-        Number(orderData.discount) -
-        Number(offer) +
-        Number(orderData.tax);
+        Number(userOrders.totalPrice) +
+        Number(userOrders.discount) -
+        Number(userOrders.offer) +
+        Number(userOrders.tax);
       if (walletbalance < Total) {
         toast.error("insufficient balance in Wallet");
         return;
@@ -240,11 +240,13 @@ const ReCheckout = () => {
       navigate(-1);
     }
   }, [orderData]);
-  const finalprice =
-    userOrders.totalPrice +
-    userOrders.shipping +
+  let finalprice = 0;
+  finalprice =
+    parseInt(userOrders.totalPrice) +
+    parseInt(userOrders.shipping) +
     parseInt(userOrders.tax) -
     offer;
+  
   return (
     <div className="w-full">
       {orderPlaceLoading ? (

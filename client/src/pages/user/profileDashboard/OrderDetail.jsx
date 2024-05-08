@@ -20,7 +20,9 @@ import YourReview from "./components/YourReview";
 import ReturnOrder from "./ReturnOrder";
 import { FaDownload } from "react-icons/fa";
 import { saveAs } from "file-saver";
+import { FaMoneyBillWave, FaTruck, FaTags } from 'react-icons/fa';
 
+import { AiOutlineDollarCircle } from "react-icons/ai";
 const OrderDetail = () => {
   const today = new Date();
   const naviagte = useNavigate();
@@ -196,7 +198,7 @@ const OrderDetail = () => {
                           )
                         }
                       >
-                        Payment Again
+                        Payment Again <AiOutlineDollarCircle />
                       </button>
                     )}
                     <button
@@ -252,42 +254,49 @@ const OrderDetail = () => {
                   </table>
                 </div>
                 <div className="flex justify-end">
-                  <div className="bg-gray-50 rounded-lg p-20 shadow-lg">
+                  <div className="bg-white-100 rounded-lg p-8 shadow-lg">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="flex flex-col">
-                        <p className="font-bold text-violet-500">Subtotal</p>
-                        <p>{orderData.subTotal}</p>
+                        <FaTags className="text-violet-500 text-3xl mb-2" />
+                        <p className="font-bold text-gray-700">Subtotal</p>
+                        <p className="text-gray-600">{orderData.subTotal}₹</p>
                       </div>
                       <div className="flex flex-col">
-                        <p className="font-bold text-violet-500">Shipping</p>
-                        <p>
+                        <FaTruck className="text-violet-500 text-3xl mb-2" />
+                        <p className="font-bold text-gray-700">Shipping</p>
+                        <p className="text-gray-600">
                           {orderData.shipping === 0
                             ? "Free"
-                            : `${orderData.shipping}`}
+                            : `${orderData.shipping}₹`}
                         </p>
                       </div>
                       <div className="flex flex-col">
-                        <p className="font-bold text-violet-500">Discount</p>
-                        <p>{orderData.discount || 0}</p>
+                        <FaTags className="text-violet-500 text-3xl mb-2" />
+                        <p className="font-bold text-gray-700">Discount</p>
+                        <p className="text-gray-600">
+                          {orderData.discount || 0}₹
+                        </p>
                       </div>
                       <div className="flex flex-col">
-                        <p className="font-bold text-violet-500">Tax</p>
-                        <p>{orderData.tax}₹</p>
+                        <FaMoneyBillWave className="text-violet-500 text-3xl mb-2" />
+                        <p className="font-bold text-gray-700">Tax</p>
+                        <p className="text-gray-600">{orderData.tax}₹</p>
                       </div>
                     </div>
-                    <div className="flex justify-between mt-4">
-                      <p className="font-semibold text-gray-500">Total</p>
-                      <p className="font-semibold">{orderData.totalPrice}₹</p>
+                    <hr className="my-4 border-gray-300" />
+                    <div className="flex justify-between">
+                      <p className="font-semibold text-gray-700">Total</p>
+                      <p className="font-semibold text-violet-500">
+                        {orderData.totalPrice}₹
+                      </p>
                     </div>
                   </div>
                 </div>
-
                 {orderData && (
                   <div className="pt-5">
                     <YourReview id={id} products={orderData.productId} />
                   </div>
                 )}
-
                 <div
                   className=" font-bold lg:flex items-center justify-center gap-10
                 "

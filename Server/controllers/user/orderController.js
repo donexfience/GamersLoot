@@ -157,6 +157,7 @@ const createOrder = async (req, res) => {
       name: 1,
       price: 1,
       markup: 1,
+      imageURL: 1,
     });
     let sum = 0;
     let totalQuantity = 0;
@@ -172,7 +173,14 @@ const createOrder = async (req, res) => {
       price: item.product.price,
       markup: item.product.markup,
       quantity: item.quantity,
+      imageURL: item.product.imageURL,
     }));
+    console.log(
+      "11111111111",
+      cart.items[0].product,
+      "111111111111111111111111111111"
+    );
+    console.log(products, "0000000000000000000000");
     let orderData = {
       user: _id,
       couponCode: couponCode,
@@ -182,7 +190,9 @@ const createOrder = async (req, res) => {
       tax: parseInt(sum * 0.08),
       paymentMode,
       totalPrice: sumWithTax,
+      discount: cart.discount,
       totalQuantity,
+      shipping: 40,
       statusHistory: [
         {
           status: "pending",
@@ -465,9 +475,176 @@ const RepaymentOrder = async (req, res) => {
     const orders = await Order.findOne({ orderId: id });
     const totalAvailableOrders = 1;
     res.status(200).json({ orders, totalAvailableOrders });
-    console.log(orders,'--------------------');
+    console.log(orders, "--------------------");
   } catch (error) {
-    console.error(error,"error of repayment order details")
+    console.error(error, "error of repayment order details");
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const createfailOrder = async (req, res) => {
+  try {
+    const token = req.cookies.user_token;
+    const { _id } = jwt.verify(token, process.env.SECRET);
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      throw Error("Invalid ID");
+    }
+    const { address, paymentMode, notes, couponCode } = req.body;
+    console.log(address, "--------------------------");
+    const addressData = await Address.findOne({ _id: address });
+    console.log(addressData, "---------------");
+    const cart = await Cart.findOne({ user: _id }).populate("items.product", {
+      name: 1,
+      price: 1,
+      markup: 1,
+    });
+    let sum = 0;
+    let totalQuantity = 0;
+    cart.items.map((item) => {
+      sum = sum + (item.product.price + item.product.markup) * item.quantity;
+      totalQuantity = totalQuantity + item.quantity;
+    });
+    let sumWithTax = parseInt(sum + sum * 0.08);
+
+    const products = cart.items.map((item) => ({
+      productId: item.product._id,
+      totalPrice: item.product.price + item.product.markup,
+      price: item.product.price,
+      markup: item.product.markup,
+      quantity: item.quantity,
+    }));
+    let orderData = {
+      user: _id,
+      couponCode: couponCode,
+      address: addressData,
+      products: products,
+      subTotal: sum,
+      tax: parseInt(sum * 0.08),
+      paymentMode,
+      status: "payment failed",
+      totalPrice: sumWithTax,
+      totalQuantity,
+      shipping: 40,
+      statusHistory: [
+        {
+          status: "payment failed",
+        },
+      ],
+      ...(notes ? notes : {}),
+    };
+    console.log(orderData, "000000000000000000000000");
+    const updateProductCount = products.map((item) => {
+      return updateProductList(item.productId, -item.quantity);
+    });
+    await Promise.all(updateProductCount);
+    const order = await Order.create(orderData);
+    console.log(order, "suceessssssssssssssssssssssssssss");
+    if (order) {
+      await Cart.findByIdAndDelete(cart._id);
+    }
+    //if the couopn is used
+    if (cart.coupon) {
+      await Coupon.findOneAndUpdate(
+        { code: cart.coupon },
+        { $inc: { used: 1 } }
+      );
+    }
+
+    if (paymentMode === "myWallet") {
+      let userWallet = await Wallet.findOne({ user: _id });
+      if (!userWallet) {
+        throw Error("No such wallet found");
+      }
+      if (userWallet.balance < order.totalPrice) {
+        throw Error("Insufficient balance in wallet");
+      }
+      await userWallet.save();
+      let counter = await Counter.findOne({
+        model: "wallet",
+        field: "transaction_id",
+      });
+      if (counter) {
+        counter.count += 1;
+        await counter.save();
+      } else {
+        await Counter.create({ field: "transaction_id", model: "wallet" });
+      }
+      userWallet.transactions.push({
+        transaction_id: counter.count + 1,
+        amount: -order.totalPrice,
+        type: "debit",
+        description: `payment for the order ${order._id}`,
+        order: order._id,
+      });
+      await userWallet.save();
+    }
+    await Payment.create({
+      payment_id: `walletUser${_id}${uuid.v4()}`,
+      user: _id,
+      order: order._id,
+      status: "success",
+      paymentMode: "myWallet",
+    });
+    res.status(200).json({ order });
+  } catch (error) {
+    console.error(error, "--------------------------");
+    res.status(400).json({ error: error.message });
+  }
+};
+const Reorder = async (req, res) => {
+  try {
+    const token = req.cookies.user_token;
+    const { _id } = jwt.verify(token, process.env.SECRET);
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      throw Error("Invalid ID");
+    }
+    const { paymentMode, orderId } = req.body;
+    const orders = await Order.findOne({ orderId: orderId });
+    if (orders.status === "failed") {
+      // Update order status to 'pending'
+      orders.status = "pending";
+      await orders.save();
+
+      if (paymentMode === "myWallet") {
+        let userWallet = await Wallet.findOne({ user: _id });
+        if (!userWallet) {
+          throw Error("No such wallet found");
+        }
+        if (userWallet.balance < orders.totalPrice) {
+          throw Error("Insufficient balance in wallet");
+        }
+        userWallet.balance -= orders.totalPrice;
+        await userWallet.save();
+        let counter = await Counter.findOne({
+          model: "wallet",
+          field: "transaction_id",
+        });
+        if (counter) {
+          counter.count += 1;
+          await counter.save();
+        } else {
+          await Counter.create({ field: "transaction_id", model: "wallet" });
+        }
+        userWallet.transactions.push({
+          transaction_id: counter.count + 1,
+          amount: -order.totalPrice,
+          type: "debit",
+          description: `payment for the order ${orders._id}`,
+          order: orders._id,
+        });
+        await userWallet.save();
+      }
+      await Payment.create({
+        payment_id: `walletUser${_id}${uuid.v4()}`,
+        user: _id,
+        order: orders._id,
+        status: "success",
+        paymentMode: "myWallet",
+      });
+      res.status(200).json({ orders });
+    }
+  } catch (error) {
+    console.error(error, "--------------------------");
     res.status(400).json({ error: error.message });
   }
 };
@@ -480,5 +657,7 @@ module.exports = {
   returnOrder,
   getOrdersWithCoupon,
   generateInvoiceOrder,
-  RepaymentOrder
+  RepaymentOrder,
+  createfailOrder,
+  Reorder,
 };
