@@ -47,6 +47,7 @@ const {
   BestSellingProducts,
   BestSellingCategory,
 } = require("../controllers/admin/BestSellingController");
+const { TotalSales } = require("../controllers/admin/dashController");
 
 //category controller functions mounting them to corresponding suiitable routes
 
@@ -102,4 +103,8 @@ router.get("/order-generate-excel", generateOrderExcel);
 
 router.get("/BestSellingProducts", BestSellingProducts);
 router.get("/BestSellingCategory", BestSellingCategory);
+
+//Dashboard charts routes
+
+router.get("/TotalSales", TotalSales);
 module.exports = router;

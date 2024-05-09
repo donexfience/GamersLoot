@@ -27,7 +27,7 @@ const OTPEnterSection = ({
   const [resendSeconds, setResendSeconds] = useState(30);
   const [resendLoading, setResendLoading] = useState(false);
 
-    // Saving OTP to otp variable on change
+  // Saving OTP to otp variable on change
   // Saving OTP to otp variable on change
   const handleChange = (e, index) => {
     const updatedOtp = [...otp];
@@ -60,7 +60,19 @@ const OTPEnterSection = ({
 
     setOtp(updatedOtp);
   };
-
+  const handlePaste = (e) => {
+    const pastedData = e.clipboardData.getData("text/plain");
+    for (let i = 0; i < otp.length; i++) {
+      if (pastedData[i] && !isNaN(pastedData[i])) {
+        document.getElementById(`otp-input-${i}`).value = pastedData[i];
+        setOtp((prevOtp) => {
+          const newOtp = [...prevOtp];
+          newOtp[i] = pastedData[i];
+          return newOtp;
+        });
+      }
+    }
+  };
   const handleOTPSumbit = async (e) => {
     e.preventDefault();
     let otpNumber = parseInt(otp.join(""));
@@ -82,8 +94,7 @@ const OTPEnterSection = ({
         setPasswordSec(true);
         setOTPSec(false);
         setLoading(false);
-      }
-      else{
+      } else {
         toast.error(res.reponse.data.error);
         setError(res.response.data.error);
         setLoading(false);
@@ -92,9 +103,9 @@ const OTPEnterSection = ({
       console.log(error);
       if (error.response && error.response.data && error.response.data.error) {
         setError(error.response.data.error);
-        toast.error(error.response.data.error); 
+        toast.error(error.response.data.error);
       } else {
-        setError("An error occurred. Please try again."); 
+        setError("An error occurred. Please try again.");
       }
       setLoading(false);
     }
@@ -159,7 +170,9 @@ const OTPEnterSection = ({
   };
   return (
     <>
-      <p className="mb-5 font-extrabold">An OTP is sent to your email ({email})</p>
+      <p className="mb-5 font-extrabold">
+        An OTP is sent to your email ({email})
+      </p>
       <label className="block text-gray-700 text-sm font-bold mb-2 text-center">
         Enter OTP
       </label>

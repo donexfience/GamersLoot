@@ -2490,6 +2490,11 @@ tar@^6.1.11:
     mkdirp "^1.0.3"
     yallist "^4.0.0"
 
+time-loom@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/time-loom/-/time-loom-2.0.1.tgz#910e27f75ef615dae25d8445056ee3cf2cb327fe"
+  integrity sha512-O6Tamt+P9z2TbPhK2HMb1V6S2QKdcxftSrob8q0PLvSCb6qibpR1s7UN5lfQH1jv4cZJGQ8vYGqsr6095TDXqw==
+
 tiny-inflate@^1.0.0, tiny-inflate@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/tiny-inflate/-/tiny-inflate-1.0.3.tgz#122715494913a1805166aaf7c93467933eea26c4"
