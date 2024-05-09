@@ -48,7 +48,7 @@ const BestSellingCategory = async (req, res) => {
     const bestSellingCategories = await Order.aggregate([
 
         //stage 1 from products
-      { $unwind: "$products" }, // Unwind to access each product in the order
+      { $unwind: "$products" }, 
       {
         $lookup: {
           from: "products",
@@ -57,7 +57,7 @@ const BestSellingCategory = async (req, res) => {
           as: "productDetails",
         },
       },
-      { $unwind: "$productDetails" }, // Unwind to access the product details
+      { $unwind: "$productDetails" }, 
       {
         $lookup: {
           from: "categories",
@@ -66,11 +66,11 @@ const BestSellingCategory = async (req, res) => {
           as: "category",
         },
       },
-      { $unwind: "$category" }, // Unwind to access the category details
+      { $unwind: "$category" },
       {
         $group: {
-          _id: "$category", // Group by category
-          totalQuantitySold: { $sum: "$products.quantity" }, // Sum up the quantity sold
+          _id: "$category", 
+          totalQuantitySold: { $sum: "$products.quantity" },
         },
       },
       { $sort: { totalQuantitySold: -1 } },

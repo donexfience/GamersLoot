@@ -12,7 +12,8 @@ import orderReducer from "./reducers/admin/ordersSlice";
 import couponReducer from "./reducers/admin/couponSlice";
 import wishlistReducer from "./reducers/user/wishlistSlice";
 import walletReducer from "./reducers/user/walletSlice";
-import BestsellingProductReducer from "./reducers/admin/adminDashSlice";
+import BestsellingProductReducer from "./reducers/admin/BestsellingProductDashSlice.jsx";
+import BestsellingCategoryReducer from "./reducers/admin/BestsellingCategoryDashslice.jsx";
 export const store = configureStore({
   reducer: {
     user: userReducer,
@@ -34,5 +35,6 @@ export const store = configureStore({
     orders: orderReducer,
     coupons: couponReducer,
     BestsellingProduct: BestsellingProductReducer,
+    BestsellingCategory: BestsellingCategoryReducer,
   },
 });

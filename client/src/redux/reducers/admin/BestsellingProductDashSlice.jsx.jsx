@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getBestSellingProducts } from "../../actions/admin/AdminDashAction";
 
-const adminDashSlice = createSlice({
-  name: "adminDash",
+const BestsellingProductDashSlice = createSlice({
+  name: "BestsellingProductDash",
   initialState: {
     loading: false,
     BestsellingProduct: [],
@@ -20,8 +20,10 @@ const adminDashSlice = createSlice({
       })
       .addCase(getBestSellingProducts.rejected, (state, { payload }) => {
         state.error = payload;
+        state.BestsellingProduct = null;
+        state.loading = false;
       });
   },
 });
 
-export default adminDashSlice.reducer
+export default BestsellingProductDashSlice.reducer;
