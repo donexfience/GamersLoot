@@ -33,10 +33,6 @@ const BestSellingProducts = async (req, res) => {
         },
       },
     ]);
-    console.log(
-      bestSellingProducts,
-      "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"
-    );
     res.status(200).json(bestSellingProducts);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -46,9 +42,8 @@ const BestSellingProducts = async (req, res) => {
 const BestSellingCategory = async (req, res) => {
   try {
     const bestSellingCategories = await Order.aggregate([
-
-        //stage 1 from products
-      { $unwind: "$products" }, 
+      //stage 1 from products
+      { $unwind: "$products" },
       {
         $lookup: {
           from: "products",
@@ -57,7 +52,10 @@ const BestSellingCategory = async (req, res) => {
           as: "productDetails",
         },
       },
-      { $unwind: "$productDetails" }, 
+
+      //sepearting product details
+      { $unwind: "$productDetails" },
+      //fetching data from categories collection and joining with productdetails
       {
         $lookup: {
           from: "categories",
@@ -68,8 +66,9 @@ const BestSellingCategory = async (req, res) => {
       },
       { $unwind: "$category" },
       {
+        //grouping to find the sum of quantity
         $group: {
-          _id: "$category", 
+          _id: "$category",
           totalQuantitySold: { $sum: "$products.quantity" },
         },
       },

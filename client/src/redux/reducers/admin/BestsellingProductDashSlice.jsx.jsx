@@ -11,7 +11,7 @@ const BestsellingProductDashSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getBestSellingProducts.fulfilled, (state, { payload }) => {
-        state.loading = true;
+        state.loading = false;
         state.BestsellingProduct = payload;
         state.error = null;
       })
