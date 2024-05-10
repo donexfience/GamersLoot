@@ -14,6 +14,9 @@ import { AiOutlineCalendar } from "react-icons/ai";
 import { debounce } from "time-loom";
 import OutSideTouchCloseComponent from "../../../components/OutSideTouchCloseComponent";
 import Char1 from "./charts/Char1";
+import Chart2 from "./charts/Chart2";
+import Chart3 from "./charts/Chart3";
+import Chart4 from "./charts/chart4";
 const AdminHome = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -99,8 +102,11 @@ const AdminHome = () => {
               )}
             </div>
           </div>
-          <div className="flex lg:flex-row flex-col gap-5 mb-5">
+          <div className="flex lg:flex-wrap gap-5 mb-5 e-1/4 p-3">
             <Char1 numberOfDates={numberOfDates} />
+            <Chart2 numberOfDates={numberOfDates} />
+            <Chart3 numberOfDates={numberOfDates} />
+            {/* <Chart4 numberOfDates={numberOfDates} /> */}
           </div>
         </div>
         <div className="w-full">

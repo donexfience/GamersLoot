@@ -36,8 +36,8 @@ const Char1 = ({ numberOfDates }) => {
   }, [numberOfDates]);
 
   return (
-    <div>
-    <h1 className="px-6 pt-2 pb-2 font-bold">Total sales</h1>
+    <div className="border-2 px-5 shadow-lg ml-3 bg-white">
+    <h1 className="px-6 pt-2 pb-2 font-bold text-lg">Total sales {totalOrdersSold}</h1>
       <AreaChart
         width={730}
         height={250}
@@ -60,11 +60,11 @@ const Char1 = ({ numberOfDates }) => {
         <Tooltip />
         <Area
           type="monotone"
-          dataKey="totalSales" //  totalSales for the y-axis data
+          dataKey="totalSales" 
           stroke="#8884d8"
           fillOpacity={1}
           fill="url(#colorUv)"
-        />
+        />a
         <Area
           type="monotone"
           dataKey="totalSales" //  totalSales for the y-axis data

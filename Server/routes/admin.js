@@ -47,7 +47,12 @@ const {
   BestSellingProducts,
   BestSellingCategory,
 } = require("../controllers/admin/BestSellingController");
-const { TotalSales } = require("../controllers/admin/dashController");
+const {
+  TotalSales,
+  TotalProfit,
+  TotalUserCount,
+  TotalRevenue,
+} = require("../controllers/admin/dashController");
 
 //category controller functions mounting them to corresponding suiitable routes
 
@@ -107,4 +112,7 @@ router.get("/BestSellingCategory", BestSellingCategory);
 //Dashboard charts routes
 
 router.get("/TotalSales", TotalSales);
+router.get("/TotalProfit", TotalProfit);
+router.get("/TotalUsers", TotalUserCount);
+router.get('/TotalRevenue',TotalRevenue )
 module.exports = router;
