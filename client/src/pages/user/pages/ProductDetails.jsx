@@ -138,11 +138,10 @@ const ProductDetails = () => {
   };
 
   //discount and price
+  let priceWithMarkup = product.price + product.markup;
+  priceWithMarkup *= product.offer;
+  let totalPrice = priceWithMarkup/100;
 
-  const discountedPrice =
-    product.price +
-    product.markup -
-    ((product.price + product.markup) * product.offer) / 100;
 
   return (
     <div className="px-5 lg:px-30 py-20 bg-white">
@@ -238,16 +237,16 @@ const ProductDetails = () => {
               </p>
               <p className="text-xl font-semibold my-2">
                 <span className="text-blue-600">
-                  {discountedPrice.toFixed(1)}₹
+                  {totalPrice.toFixed(0)}₹
                 </span>
                 {"  "}
                 {product.offer && (
                   <>
                     <span className="text-gray-500 line-through">
-                      {(product.price + product.markup)}₹
+                      {product.price + product.markup}₹
                     </span>
                     <span className="bg-orange-500 px-3 py-1 ml-5 text-base rounded">
-                      {product.offer.toFixed(1)}% Off
+                      {product.offer.toFixed(0)}% Off
                     </span>
                   </>
                 )}

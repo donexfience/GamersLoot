@@ -1,16 +1,22 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { URL } from "../../Common/api";
-import { FaHeart, FaStar } from "react-icons/fa"; // Example: Heart and Star icons from Font Awesome
+import { FaHeart, FaStar } from "react-icons/fa";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
   console.log(product, "--------------product----------card");
+  console.log(
+    product.price,
+    product.markup,
+    product.offer,
+    "calculationssssss"
+  );
 
   // Calculate the discounted price
-  const discountedPrice = (product.price + product.markup) - ((product.price + product.markup) * product.offer) / 100;
-
-
+  let priceWithMarkup = product.price + product.markup;
+  priceWithMarkup *= product.offer;
+  let totalPrice = priceWithMarkup/100;
 
   return (
     <div
@@ -37,11 +43,11 @@ const ProductCard = ({ product }) => {
           {product.offer ? (
             <>
               <span className="text-gray-500 line-through">
-                {product.price}₹
+                {(product.price + product.markup).toFixed(0)}₹
               </span>{" "}
             </>
           ) : null}
-          {discountedPrice + product.markup}₹{" "}
+          {totalPrice.toFixed(0)}₹{" "}
           {/* Displaying the discounted price + markup */}
         </p>
         <div className="flex items-center text-yellow-500">
