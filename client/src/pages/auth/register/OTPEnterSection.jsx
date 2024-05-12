@@ -108,12 +108,12 @@ const OTPEnterSection = ({
 
     if (res.success) {
       dispatchSignup();
-      console.log(res, "---------------");
       toast.success("OTP verification Success");
     } else {
-      toast.error(res.reponse.data.error);
-      setError(res.response.data.error);
       setLoading(false);
+      setError(res?.response?.data?.error);
+      toast.error(error)
+      
     }
   };
 
