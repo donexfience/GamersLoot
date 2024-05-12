@@ -47,6 +47,14 @@ const EditProduct = () => {
   //confirrmation
   console.log("edit product already existed data", fetchData);
   const toggleConfirm = () => {
+    if (newThumbnail === "" && fetchData.imageURL === "") {
+      toast.error("Please upload a thumbnail image");
+      return;
+    }
+    if (newMoreImage.length < 1 && fetchData.moreImageURL.length < 1) {
+      toast.error("Please upload at least one additional image");
+      return;
+    }
     if (fetchData?.offer && fetchData?.offer < 0) {
       toast.error("Offer can't be less than 0");
       return;
@@ -56,17 +64,12 @@ const EditProduct = () => {
       toast.error("price must be greater than 0");
     } else if (fetchData?.stockQuantity && fetchData.stockQuantity < 1) {
       toast.error("stock must be greater than 0");
-    } else if (fetchData?.markup && fetchData?.markup < 0) {
-      toast.error("Markup must be greater than 0");
-    } else if (fetchData.moreImageURL && fetchData.moreImageURL.length < 1) {
-      toast.error("Multiiple images also requried");
-    } else if (fetchData.imageURL === "") {
-      toast.error("Thumbanail required");
     } else {
       setShowConfirm(!showConfirm);
     }
   };
   const handleInputChange = (e) => {
+    console.log(e.target.value, e.target.name, "--------------------------");
     const { name, value } = e.target;
     setFetchData({ ...fetchData, [name]: value });
   };

@@ -32,11 +32,10 @@ const cartSlice = createSlice({
           total + (item.product.price + item.product.markup) * item.quantity,
         0
       );
+      console.log(sum,"cart slice")
       state.shipping = 40;
       state.tax = sum * 0.08;
       state.totalPrice = sum + 40;
-
-      console.log(state.totalPrice);
     },
     clearCartOnOrderPlaced: (state) => {
       state.loading = false;

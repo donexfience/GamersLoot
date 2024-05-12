@@ -67,8 +67,10 @@ const ProductDetails = () => {
         { withCredentials: true },
         config
       );
-      if (data.stockQuantity > count) {
+      if (count < 5 && data.stockQuantity > count) {
         setCount((count) => count + 1);
+      } else if (count >= 5) {
+        toast.error("Maximum limit for add to cart is reached");
       } else {
         toast.error("Product Unavailable");
       }
@@ -139,10 +141,8 @@ const ProductDetails = () => {
 
   //discount and price
   let priceWithMarkup = product.price + product.markup;
-  let offerPrice = (priceWithMarkup * product.offer)/100;
+  let offerPrice = (priceWithMarkup * product.offer) / 100;
   let totalPrice = priceWithMarkup - offerPrice;
-
-
 
   return (
     <div className="px-5 lg:px-30 py-20 bg-white">
@@ -237,9 +237,7 @@ const ProductDetails = () => {
                 </span>
               </p>
               <p className="text-xl font-semibold my-2">
-                <span className="text-blue-600">
-                  {totalPrice.toFixed(0)}₹
-                </span>
+                <span className="text-blue-600">{totalPrice.toFixed(0)}₹</span>
                 {"  "}
                 {product.offer && (
                   <>

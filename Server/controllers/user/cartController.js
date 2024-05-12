@@ -16,6 +16,7 @@ const getCart = async (req, res) => {
         imageURL: 1,
         price: 1,
         markup: 1,
+        offer: 1,
       })
       .sort({ createdAt: -1 });
     res.status(200).json({ cart });

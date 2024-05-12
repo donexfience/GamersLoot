@@ -259,7 +259,6 @@ const getAvailableQuantity = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw Error("Invalid ID!!!");
     }
-
     const stockQuantity = await Product.findOne(
       { _id: id },
       { stockQuantity: 1 }
