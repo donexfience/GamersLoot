@@ -35,7 +35,15 @@ const Checkout = () => {
 
   //if any offers
   let offer = 0;
-  const finalTotal = totalPrice + shipping + tax - offer;
+  if(couponCode){
+    if (couponType === "percentage") {
+      offer = ((totalPrice * discount) / 100).toFixed(0);
+    } else {
+      offer = Math.round(discount);
+    }
+  }
+  const finalTotal = totalPrice  - offer;
+
   //
   //handling payment
   const [selectedPayment, setSelectedPayment] = useState(null);

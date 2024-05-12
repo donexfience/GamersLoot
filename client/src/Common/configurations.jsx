@@ -24,8 +24,6 @@ export const configMultiPart = {
 //error handling logic for async action creators
 export const handleError = (error, rejectedWithValue) => {
   if (error.response && error.response.data.error) {
-    console.log(error, "error");
-    toast.error(error.response.data.error)
     return rejectedWithValue(error.response.data.error);
   } else {
     return rejectedWithValue(error.message);

@@ -16,15 +16,12 @@ const TotalPrice = () => {
 
   let offer = 0;
   if (couponType === "percentage") {
-    offer = ((totalPrice * discount) / 100).toFixed();
+    offer = ((totalPrice * discount) / 100).toFixed(0);
   } else {
-    offer = discount.toFixed(0);
+    offer = Math.round(discount);
   }
 
-  const finalprice =
-    tax === 0
-      ? totalPrice + parseInt(tax) - offer
-      : totalPrice + shipping + parseInt(tax) - offer;
+  const finalprice = totalPrice - offer;
 
   return (
     <div className="border-b border-gray-200 pb-2 mb-2">
@@ -32,7 +29,9 @@ const TotalPrice = () => {
         <p className="cart-total-list-first font-bold text-violet-500">
           Sub Total
         </p>
-        <p className="cart-total-list-second">{totalPrice}₹</p>
+        <p className="cart-total-list-second">
+          {totalPrice - shipping - parseInt(tax)}₹
+        </p>
       </div>
 
       <div className="cart-total-list flex justify-between">
