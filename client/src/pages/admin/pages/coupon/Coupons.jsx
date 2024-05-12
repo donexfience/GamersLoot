@@ -111,12 +111,12 @@ const Coupons = () => {
             <table className="w-full">
               <thead className="font-normal">
                 <tr className=" text-violet-500">
-                  <th className="admin-table-head ">No:</th>
+                  <th className="admin-table-head">No:</th>
                   <th className="admin-table-head">Code</th>
                   <th className="admin-table-head">Type</th>
                   <th className="admin-table-head">Value</th>
                   <th className="admin-table-head">Status</th>
-                  <th className="admin-table-head px-2">Created On</th>
+                  <th className="admin-table-head">Created On</th>
                   <th className="admin-table-head">Expiry</th>
                   <th className="admin-table-head">Action</th>
                 </tr>

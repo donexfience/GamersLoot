@@ -27,15 +27,18 @@ const cartSlice = createSlice({
   },
   reducers: {
     calculateTotalPrice: (state) => {
-      let sum = state.cart.reduce(
-        (total, item) =>
-          total + (item.product.price + item.product.markup) * item.quantity,
-        0
-      );
-      console.log(sum,"cart slice")
+      let sum = state.cart.reduce((total, item) => {
+        let priceWithMarkup = item.product.price + item.product.markup;
+        let offerPrice = priceWithMarkup * (item.product.offer / 100);
+        let totalPrice = priceWithMarkup - offerPrice;
+        return total + totalPrice * item.quantity;
+      }, 0);
+      sum = Math.round(sum);
+      console.log(sum, "cart slice");
+
       state.shipping = 40;
-      state.tax = sum * 0.08;
-      state.totalPrice = sum + 40;
+      state.tax = Math.round(sum * 0.08);
+      state.totalPrice = sum + state.shipping + state.tax;
     },
     clearCartOnOrderPlaced: (state) => {
       state.loading = false;

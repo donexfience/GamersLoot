@@ -16,9 +16,9 @@ const TotalPrice = () => {
 
   let offer = 0;
   if (couponType === "percentage") {
-    offer = (totalPrice * discount) / 100;
+    offer = ((totalPrice * discount) / 100).toFixed();
   } else {
-    offer = discount;
+    offer = discount.toFixed(0);
   }
 
   const finalprice =

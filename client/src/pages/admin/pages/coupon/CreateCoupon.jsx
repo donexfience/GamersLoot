@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import { AiOutlineClose, AiOutlineSave } from "react-icons/ai";
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import { createCoupon } from "../../../../redux/actions/admin/couponAction";
+import toast from "react-hot-toast";
 
 const CreateCoupon = () => {
   const [formData, setformData] = useState(new FormData());
@@ -22,12 +23,16 @@ const CreateCoupon = () => {
   //function that take values to formdata
 
   const showConfirm = (values) => {
-    toggleShow();
+    if (values.value > 100 && values.type === "percentage") {
+      toast.error("in percentage value not greter than 100");
+    } else {
+      toggleShow();
+    }
+
     setformData(values);
   };
   //coupon creating function
   const createCouponFunction = () => {
-    
     dispatch(createCoupon(formData));
     toggleShow();
     navigate(-1);
@@ -44,7 +49,7 @@ const CreateCoupon = () => {
     maximumUses: Yup.number().min(0).required("Maximum uses is required"),
     expirationDate: Yup.date().required("Expiry date is required"),
   });
-  
+
   const initialValues = {
     code: "",
     description: "",

@@ -31,7 +31,11 @@ const EditCoupon = () => {
 
   const showConfirm = (values) => {
     toggleShow();
-    setformData(values);
+    if (values.value > 100 && values.type === "percentage") {
+      toast.error("in percentage value not greter than 100");
+    } else {
+      setformData(values);
+    }
   };
   //coupon creating function
   const editeCouponFunction = () => {
