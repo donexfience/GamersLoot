@@ -42,18 +42,23 @@ const EditProduct = () => {
     price: "",
     markup: "",
     moreImageURL: [],
-    offer: "",
+    offer: 0,
   });
   //confirrmation
+  console.log("edit product already existed data", fetchData);
   const toggleConfirm = () => {
-    if (fetchData?.offer && fetchData?.offer > 2) {
+    if (fetchData?.offer && fetchData?.offer < 2) {
       toast.error("Offer can't be less than 1");
       return;
-    }
-    if (fetchData?.offer && fetchData?.offer > 100) {
+    } else if (fetchData?.offer && fetchData?.offer > 100) {
       toast.error("offer can't be above below 100");
+    } else if (fetchData?.price && fetchData?.price < 1) {
+      toast.error("price must be greater than 0");
+    } else if (fetchData?.stockQuantity && fetchData.stockQuantity < 1) {
+      toast.error("stock must be greater than 0");
+    } else {
+      setShowConfirm(!showConfirm);
     }
-    setShowConfirm(!showConfirm);
   };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -154,7 +159,7 @@ const EditProduct = () => {
   // }
   const handleSave = () => {
     const data = {};
-  
+
     for (const key in fetchData) {
       if (duplicateFetchData[key] !== fetchData[key]) {
         if (key === "attributes") {
@@ -166,24 +171,21 @@ const EditProduct = () => {
         }
       }
     }
-  
+
     // Add newMoreImage if it exists
     if (newMoreImage.length > 0) {
       data["moreImageURL"] = newMoreImage;
     }
-  
+
     // Add newThumbnail if it exists
     if (newThumbnail) {
       data["imageURL"] = newThumbnail;
-      
     }
-    console.log("🚀 ~ file: EditProduct.jsx:178 ~ handleSave ~ data:", data)
-  
+    console.log("🚀 ~ file: EditProduct.jsx:178 ~ handleSave ~ data:", data);
+
     dispatch(updateProduct({ id: id, data: data }));
     navigate(-1);
   };
-  
-  
 
   return (
     <div className="w-full bg-gray-100 pb-5">

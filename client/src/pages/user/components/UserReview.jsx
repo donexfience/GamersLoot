@@ -13,6 +13,7 @@ const UserReview = ({ product, id }) => {
   const [reviews, setReviews] = useState([]);
   const [ratingCount, setRatingCount] = useState([]);
   const [activeTab, setActiveTab] = useState("description");
+  const [error, setError] = useState("");
   const toggletab = (tab) => {
     setActiveTab(tab);
   };

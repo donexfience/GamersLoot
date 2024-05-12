@@ -126,7 +126,7 @@ UserSchema.statics.login = async function (email, password) {
   }
   let user = await this.findOne({ email });
   if (!user) {
-    throw Error("Your account is blocked by admin");
+    throw Error("No users found please signup");
   }
   if (!user.isActive) {
     throw Error("your account is blocked by admin");
