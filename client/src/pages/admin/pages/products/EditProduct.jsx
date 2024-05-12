@@ -40,7 +40,7 @@ const EditProduct = () => {
     status: "",
     attributes: [],
     price: "",
-    markup: "",
+    markup: 0,
     moreImageURL: [],
     offer: 0,
   });
@@ -56,6 +56,12 @@ const EditProduct = () => {
       toast.error("price must be greater than 0");
     } else if (fetchData?.stockQuantity && fetchData.stockQuantity < 1) {
       toast.error("stock must be greater than 0");
+    } else if (fetchData?.markup && fetchData?.markup < 0) {
+      toast.error("Markup must be greater than 0");
+    } else if (fetchData.moreImageURL && fetchData.moreImageURL.length < 1) {
+      toast.error("Multiiple images also requried");
+    } else if (fetchData.imageURL === "") {
+      toast.error("Thumbanail required");
     } else {
       setShowConfirm(!showConfirm);
     }
@@ -296,7 +302,7 @@ const EditProduct = () => {
               name="price"
               placeholder="Type product name here"
               className="admin-input p-2 rounded  hover:border-black w-full"
-              value={fetchData.price || ""}
+              value={fetchData?.price || ""}
               min={1}
               max={99}
               onChange={handleInputChange}
@@ -309,7 +315,7 @@ const EditProduct = () => {
               max={99}
               placeholder="Type product markup here"
               className="admin-input p-2 rounded  hover:border-black w-full"
-              value={fetchData.markup || ""}
+              value={fetchData?.markup || ""}
               onChange={handleInputChange}
             />
             <p className="admin-label font-semibold">Offer</p>
@@ -318,7 +324,7 @@ const EditProduct = () => {
               name="offer"
               placeholder="Type product offer here"
               className="admin-input p-2 rounded  hover:border-black w-full"
-              value={fetchData.offer || ""}
+              value={fetchData?.offer || ""}
               min={1}
               max={99}
               onChange={handleInputChange}
@@ -330,7 +336,7 @@ const EditProduct = () => {
                 name="category"
                 id="categories"
                 className="admin-input p-2 rounded  hover:border-black w-full"
-                value={fetchData.category || ""}
+                value={fetchData?.category || ""}
                 onChange={handleInputChange}
               >
                 {categories.map((cat, index) => (
@@ -344,7 +350,7 @@ const EditProduct = () => {
                 name="status"
                 id="status"
                 className="admin-input p-2 rounded  hover:border-black w-full"
-                value={fetchData.status || ""}
+                value={fetchData?.status || ""}
                 onChange={handleInputChange}
               >
                 {statusList.map((st, index) => (
