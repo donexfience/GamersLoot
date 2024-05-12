@@ -37,25 +37,27 @@ const getProduct = async (req, res) => {
     if (search) {
       filter.name = { $regex: new RegExp(search, "i") };
     }
-    if (startingDate) {
-      const date = new Date(startingDate);
-      filter.createdAt = { $gte: date };
+    if (startingDate && endingDate) {
+      filter.createdAt = {
+        $gte: new Date(startingDate),
+        $lte: new Date(endingDate),
+      };
+    } else if (startingDate) {
+      filter.createdAt = { $gte: new Date(startingDate) };
+    } else if (endingDate) {
+      filter.createdAt = { $lte: new Date(endingDate) };
     }
-    if (endingDate) {
-      const date = new Date(endingDate);
-      filter.createdAt = { ...filter.createdAt, $lte: date };
-    }
-    const products = await Product.find(filter, { skip })
+    const products = await Product.find(filter)
       .skip(skip)
       .limit(limit)
       .populate("category", { name: 1 });
-    const totalAvailableProducts = await Product.countDocuments(products);
-    console.log(products,"===================")
+    const totalAvailableProducts = await Product.countDocuments(filter);
     res.status(200).json({ products, totalAvailableProducts });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
+
 //creating new product
 const addProduct = async (req, res) => {
   try {

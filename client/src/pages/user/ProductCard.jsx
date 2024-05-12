@@ -15,8 +15,8 @@ const ProductCard = ({ product }) => {
 
   // Calculate the discounted price
   let priceWithMarkup = product.price + product.markup;
-  priceWithMarkup *= product.offer;
-  let totalPrice = priceWithMarkup/100;
+  let offerPrice = (priceWithMarkup * product.offer)/100;
+  let totalPrice = priceWithMarkup - offerPrice;
 
   return (
     <div

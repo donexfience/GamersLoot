@@ -47,8 +47,8 @@ const EditProduct = () => {
   //confirrmation
   console.log("edit product already existed data", fetchData);
   const toggleConfirm = () => {
-    if (fetchData?.offer && fetchData?.offer < 2) {
-      toast.error("Offer can't be less than 1");
+    if (fetchData?.offer && fetchData?.offer < 0) {
+      toast.error("Offer can't be less than 0");
       return;
     } else if (fetchData?.offer && fetchData?.offer > 100) {
       toast.error("offer can't be above below 100");

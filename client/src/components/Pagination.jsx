@@ -3,7 +3,7 @@ import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import toast from "react-hot-toast";
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from "react-icons/ai";
 
-const Pagination = ({ handleClick, page, number, totalNumber }) => {
+const   Pagination = ({ handleClick, page, number, totalNumber }) => {
   console.log("hello from pagination")
   let paginationNum = Math.ceil(totalNumber / number);
   const maxVisibleButtons = 5; // Number of pages to be shown in the pagination
