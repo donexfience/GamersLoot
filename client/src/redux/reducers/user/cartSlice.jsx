@@ -39,6 +39,7 @@ const cartSlice = createSlice({
       state.shipping = 40;
       state.tax = Math.round(sum * 0.08);
       state.totalPrice = sum + state.shipping + state.tax;
+      
     },
     clearCartOnOrderPlaced: (state) => {
       state.loading = false;

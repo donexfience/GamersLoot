@@ -172,6 +172,7 @@ const createOrder = async (req, res) => {
       totalQuantity += item.quantity;
     });
     let sumWithTax = Math.ceil(sum + sum * 0.08);
+    sumWithTax += 40;
     console.log(
       sum,
       sumWithTax,
@@ -186,15 +187,34 @@ const createOrder = async (req, res) => {
       quantity: item.quantity,
       imageURL: item.product.imageURL,
     }));
+    //coupon type getting
+    let coupon;
+    let couponType;
+    let couponValue;
+    if (couponCode) {
+      coupon = await Coupon.findOne({ code: couponCode });
+      couponType = coupon.type;
+    }
+    if (couponType === "percentage") {
+      console.log(sumWithTax, "before minus discount");
+      let offerPrice = (sumWithTax * cart.discount) / 100;
+      console.log(offerPrice, "offer pricen=-=-=-=-==-=-=");
+      sumWithTax -= offerPrice;
+      console.log(sumWithTax, "after minus discount");
+    } else if (couponType === "fixed") {
+      sumWithTax -= cart.discount;
+    }
+    console.log(sumWithTax, "----------------------]]]]]]]]]]]]]");
     let orderData = {
       user: _id,
       couponCode: couponCode,
+      couponType: couponType,
       address: addressData,
       products: products,
       subTotal: Math.round(sum),
       tax: Math.ceil(sum * 0.08),
       paymentMode,
-      totalPrice: sumWithTax + 40,
+      totalPrice: Math.round(sumWithTax),
       discount: cart.discount,
       totalQuantity,
       shipping: 40,
@@ -514,7 +534,7 @@ const createfailOrder = async (req, res) => {
       sum += discountedPrice * item.quantity;
       totalQuantity += item.quantity;
     });
-    console.log("11111111111111111111111111111111111111111111111111111",sum);
+    console.log("11111111111111111111111111111111111111111111111111111", sum);
     let sumWithTax = Math.ceil(sum + sum * 0.08);
     console.log(sumWithTax);
     const products = cart.items.map((item) => ({
