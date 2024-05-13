@@ -14,7 +14,6 @@ import { removeCoupon } from "../../../redux/actions/user/cartAction";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { config } from "../../../Common/configurations";
-
 const ReCheckout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -39,11 +38,15 @@ const ReCheckout = () => {
 
   //if any offers
   let offer = 0;
-  const finalTotal =
-    parseInt(userOrders.totalPrice) +
-    parseInt(userOrders.shipping) +
-    parseInt(userOrders.tax) -
-    offer;
+  if (userOrders.couponCode) {
+    if (userOrders.couponType === "percentage") {
+      offer = ((userOrders.totalPrice * userOrders.discount) / 100).toFixed(0);
+    } else {
+      offer = Math.round(userOrders.discount);
+    }
+  }
+  console.log(userOrders.totalPrice)
+  const finalTotal = userOrders.totalPrice - offer;
   //
   //handling payment
   const [selectedPayment, setSelectedPayment] = useState(null);
@@ -75,7 +78,9 @@ const ReCheckout = () => {
     if (userOrders.totalPrice > 1000 && selectedPayment === "cashOnDelivery") {
       toast.error("Order above 1000 should not be allowed for COD");
     } else {
-      console.log('11111111111111111111111111111111111111111111111111111111111111111');
+      console.log(
+        "11111111111111111111111111111111111111111111111111111111111111111"
+      );
       setOrderPlaceLoading(true);
       try {
         const order = await axios.post(
@@ -129,7 +134,6 @@ const ReCheckout = () => {
       dispatch(clearCartOnOrderPlaced());
     } catch (error) {
       console.log(error);
-      toast.error(error.response?.data?.error || "something went wrong");
       setOrderPlaceLoading(false);
     }
   };
@@ -244,13 +248,6 @@ const ReCheckout = () => {
       navigate(-1);
     }
   }, [orderData]);
-  let finalprice = 0;
-  finalprice =
-    parseInt(userOrders.totalPrice) +
-    parseInt(userOrders.shipping) +
-    parseInt(userOrders.tax) -
-    offer;
-
   return (
     <div className="w-full">
       {orderPlaceLoading ? (
@@ -278,7 +275,7 @@ const ReCheckout = () => {
                   Sub Total
                 </p>
                 <p className="cart-total-list-second">
-                  {userOrders.totalPrice}₹
+                  {userOrders.subTotal}₹
                 </p>
               </div>
 
@@ -336,7 +333,7 @@ const ReCheckout = () => {
               )}
               <div className="cart-total-list flex justify-between">
                 <p className=" font-bold text-red-400">Total</p>
-                <p className="text-red-500 font-semibold">{finalprice}₹</p>
+                <p className="text-red-500 font-semibold">{finalTotal}₹</p>
               </div>
             </div>
             <button

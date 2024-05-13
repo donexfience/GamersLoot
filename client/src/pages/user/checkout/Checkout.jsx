@@ -35,15 +35,14 @@ const Checkout = () => {
 
   //if any offers
   let offer = 0;
-  if(couponCode){
+  if (couponCode) {
     if (couponType === "percentage") {
       offer = ((totalPrice * discount) / 100).toFixed(0);
     } else {
       offer = Math.round(discount);
     }
-    
   }
-  const finalTotal = totalPrice  - offer;
+  const finalTotal = totalPrice - offer;
 
   //
   //handling payment
@@ -198,6 +197,7 @@ const Checkout = () => {
           config
         );
         toast.error("Payment failed Order created with payment status Failed");
+        navigate(-1);
         dispatch(clearCartOnOrderPlaced());
       } catch (error) {
         toast.error(error.response?.data?.error || "something went wrong");

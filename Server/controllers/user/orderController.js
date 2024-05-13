@@ -34,7 +34,7 @@ const getOrders = async (req, res) => {
       .skip(skip)
       .limit(limit)
       .populate("products.productId", { name: 1 })
-      .sort({ creatdAt: -1 });
+      .sort({ createdAt: -1 });
     const totalAvailableOrders = await Order.countDocuments({ user: _id });
     res.status(200).json({ orders, totalAvailableOrders });
   } catch (error) {
@@ -502,15 +502,21 @@ const createfailOrder = async (req, res) => {
       name: 1,
       price: 1,
       markup: 1,
+      offer: 1,
     });
     let sum = 0;
     let totalQuantity = 0;
-    cart.items.map((item) => {
-      sum = sum + (item.product.price + item.product.markup) * item.quantity;
-      totalQuantity = totalQuantity + item.quantity;
+    cart.items.forEach((item) => {
+      const discountAmount =
+        ((item.product.price + item.product.markup) * item.product.offer) / 100;
+      const discountedPrice =
+        item.product.price + item.product.markup - discountAmount;
+      sum += discountedPrice * item.quantity;
+      totalQuantity += item.quantity;
     });
-    let sumWithTax = parseInt(sum + sum * 0.08);
-
+    console.log("11111111111111111111111111111111111111111111111111111",sum);
+    let sumWithTax = Math.ceil(sum + sum * 0.08);
+    console.log(sumWithTax);
     const products = cart.items.map((item) => ({
       productId: item.product._id,
       totalPrice: item.product.price + item.product.markup,
@@ -523,11 +529,12 @@ const createfailOrder = async (req, res) => {
       couponCode: couponCode,
       address: addressData,
       products: products,
-      subTotal: sum,
-      tax: parseInt(sum * 0.08),
+      subTotal: Math.round(sum),
+      tax: Math.ceil(sum * 0.08),
       paymentMode,
       status: "payment failed",
-      totalPrice: sumWithTax,
+      totalPrice: sumWithTax + 40,
+      discount: cart.discount,
       totalQuantity,
       shipping: 40,
       statusHistory: [
