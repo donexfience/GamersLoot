@@ -41,6 +41,7 @@ const Checkout = () => {
     } else {
       offer = Math.round(discount);
     }
+    
   }
   const finalTotal = totalPrice  - offer;
 

@@ -158,15 +158,26 @@ const createOrder = async (req, res) => {
       price: 1,
       markup: 1,
       imageURL: 1,
+      offer: 1,
     });
     let sum = 0;
     let totalQuantity = 0;
-    cart.items.map((item) => {
-      sum = sum + (item.product.price + item.product.markup) * item.quantity;
-      totalQuantity = totalQuantity + item.quantity;
-    });
-    let sumWithTax = parseInt(sum + sum * 0.08);
 
+    cart.items.forEach((item) => {
+      const discountAmount =
+        ((item.product.price + item.product.markup) * item.product.offer) / 100;
+      const discountedPrice =
+        item.product.price + item.product.markup - discountAmount;
+      sum += discountedPrice * item.quantity;
+      totalQuantity += item.quantity;
+    });
+    let sumWithTax = Math.ceil(sum + sum * 0.08);
+    console.log(
+      sum,
+      sumWithTax,
+      sum * 0.08,
+      "-----------0---------0-------------"
+    );
     const products = cart.items.map((item) => ({
       productId: item.product._id,
       totalPrice: item.product.price + item.product.markup,
@@ -175,21 +186,15 @@ const createOrder = async (req, res) => {
       quantity: item.quantity,
       imageURL: item.product.imageURL,
     }));
-    console.log(
-      "11111111111",
-      cart.items[0].product,
-      "111111111111111111111111111111"
-    );
-    console.log(products, "0000000000000000000000");
     let orderData = {
       user: _id,
       couponCode: couponCode,
       address: addressData,
       products: products,
-      subTotal: sum,
-      tax: parseInt(sum * 0.08),
+      subTotal: Math.round(sum),
+      tax: Math.ceil(sum * 0.08),
       paymentMode,
-      totalPrice: sumWithTax,
+      totalPrice: sumWithTax + 40,
       discount: cart.discount,
       totalQuantity,
       shipping: 40,
@@ -200,7 +205,6 @@ const createOrder = async (req, res) => {
       ],
       ...(notes ? notes : {}),
     };
-    console.log(orderData, "000000000000000000000000");
     const updateProductCount = products.map((item) => {
       return updateProductList(item.productId, -item.quantity);
     });
@@ -379,6 +383,7 @@ const getOrder = async (req, res) => {
       imageURL: 1,
       name: 1,
       description: 1,
+      offer: 1,
     });
     if (!order) {
       throw Error("No such order");

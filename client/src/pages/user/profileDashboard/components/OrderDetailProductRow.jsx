@@ -11,24 +11,25 @@ const OrderDetailsProductRow = ({
   status,
   toggleReviewModal,
   statusHistory,
-  toggleReturnModal
+  toggleReturnModal,
 }) => {
   const isLast = index === length - 1;
   const classes = isLast ? "p-4" : "p-4 border-b border-gray-200 ";
-
+  const OfferPrice = (item.totalPrice * item.productId.offer) / 100;
+  let subTotal = item.totalPrice - OfferPrice;
   const [isReturnable, setIsReturnable] = useState(false);
-
+  console.log(item, "00000000000");
   useEffect(() => {
     const givenDate = new Date(statusHistory);
     const today = new Date();
-    
+
     if (givenDate > today) {
       setIsReturnable(true);
     } else {
       setIsReturnable(false);
     }
   }, [statusHistory]);
-  
+
   return (
     <tr className={classes}>
       <td className="admin-table-row">
@@ -54,10 +55,10 @@ const OrderDetailsProductRow = ({
           </div>
         </div>
       </td>
-      <td className="admin-table-row">{item.price + item.markup}</td>
+      <td className="admin-table-row">{Math.round(subTotal)}</td>
       <td className="admin-table-row">{item.quantity}</td>
       <td className="admin-table-row">
-        {item.price + item.markup * item.quantity}
+        {Math.round(subTotal * item.quantity)}
       </td>
       <div className="flex gap-8">
         {status !== "pending" &&
@@ -85,7 +86,7 @@ const OrderDetailsProductRow = ({
               }}
               disabled={status === "returned" || status === "return request"}
             >
-              Return <IoMdUndo/>
+              Return <IoMdUndo />
             </button>
           </td>
         )}

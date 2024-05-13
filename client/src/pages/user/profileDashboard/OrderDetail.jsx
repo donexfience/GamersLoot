@@ -20,7 +20,7 @@ import YourReview from "./components/YourReview";
 import ReturnOrder from "./ReturnOrder";
 import { FaDownload } from "react-icons/fa";
 import { saveAs } from "file-saver";
-import { FaMoneyBillWave, FaTruck, FaTags } from 'react-icons/fa';
+import { FaMoneyBillWave, FaTruck, FaTags } from "react-icons/fa";
 
 import { AiOutlineDollarCircle } from "react-icons/ai";
 const OrderDetail = () => {
@@ -201,12 +201,14 @@ const OrderDetail = () => {
                         Payment Again <AiOutlineDollarCircle />
                       </button>
                     )}
-                    <button
-                      className="bg-violet-500 px-3 rounded-md  py-3 mt-3 text-white font-bold flex gap-3 items-center"
-                      onClick={downloadInvoice}
-                    >
-                      Invoice <FaDownload />
-                    </button>
+                    {orderData.status !== "payment failed" && (
+                      <button
+                        className="bg-violet-500 px-3 rounded-md  py-3 mt-3 text-white font-bold flex gap-3 items-center"
+                        onClick={downloadInvoice}
+                      >
+                        Invoice <FaDownload />
+                      </button>
+                    )}
                   </div>
                 </div>
                 <div className="3rd column">
