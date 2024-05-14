@@ -1,30 +1,31 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { URL } from "../../../Common/api";
-import { RiSecurePaymentLine } from "react-icons/ri";
-import { BiBadgeCheck, BiCheckShield, BiPhoneCall } from "react-icons/bi";
+import {
+  BiBadgeCheck,
+  BiCheckShield,
+  BiPhoneCall,
+} from "react-icons/bi";
 import { FaShippingFast, FaStar } from "react-icons/fa";
 import { renderStars } from "../../../Common/Functions";
-import ProgressBar from "react-bootstrap/ProgressBar";
-import YourReview from "../profileDashboard/components/YourReview";
 import ReviewRow from "./ReviewRow";
+import { RiSecurePaymentLine } from "react-icons/ri";
 
 const UserReview = ({ product, id }) => {
   const [reviews, setReviews] = useState([]);
   const [ratingCount, setRatingCount] = useState([]);
   const [activeTab, setActiveTab] = useState("description");
   const [error, setError] = useState("");
+
   const toggletab = (tab) => {
     setActiveTab(tab);
   };
 
   const loadReviews = async () => {
-    console.log(id, "--------------");
     try {
       const { data } = await axios.get(`${URL}/user/reviews/${id}`, {
         withCredentials: true,
       });
-      console.log(data.reviews);
       setReviews(data.reviews);
       const ratingCounts = Array(5).fill(0);
 
@@ -121,51 +122,58 @@ const UserReview = ({ product, id }) => {
         )}
         {activeTab === "reviews" && (
           <div className="">
-            <div className="bg-gray-50 flex flex-col items-center justify-center w-1/6">
-              <div className="flex flex-col items-center">
-                <div className="flex items-center gap-2">
-                  <p className="text-5xl">{product.rating}</p>
-                  <FaStar />
+            {reviews.length > 0 && (
+              <div className="bg-gray-50 flex flex-col items-center justify-center w-1/6">
+                <div className="flex flex-col items-center">
+                  <div className="flex items-center gap-2">
+                    <p className="text-5xl">{product.rating}</p>
+                    <FaStar />
+                  </div>
+                  <div className="flex">{renderStars(product.rating)}</div>
+                  <p className="text-sm">
+                    Customer Reviews ({product.numberOfReviews === 0
+                      ? "No reviews found"
+                      : product.numberOfReviews})
+                  </p>
                 </div>
-                <div className="flex">{renderStars(product.rating)}</div>
-                <p className="text-sm">
-                  Customer Reviews ({product.numberOfReviews})
-                </p>
               </div>
-            </div>
+            )}
             <div className="flex flex-col gap-3 justify-center">
-              {ratingCount &&
-                ratingCount.map((item, index) => {
-                  const width = parseInt(
-                    (item / product.numberOfReviews) * 100
-                  );
-                  return (
-                    <div className="flex items-center gap-5" key={index}>
-                      <div className="flex">
-                        {/* Horizontal line representing the rating level */}
-                        <div className="w-12 h-1 bg-green-600 rounded-full"></div>
-                      </div>
-                      <div className="flex-grow">
-                        {/* Progress bar */}
-                        <div className="progress h-1 bg-gray-200 rounded-full">
-                          <div
-                            className="progress-bar bg-red-500 rounded-full"
-                            style={{ width: `${width}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                      <div className="flex gap-2 text-xs font-semibold">
-                        <p>{width}%</p>
-                        <p className="text-gray-500">({item})</p>
+              {ratingCount.map((item, index) => {
+                const width =
+                  product.numberOfReviews === 0
+                    ? 0
+                    : parseInt((item / product.numberOfReviews) * 100);
+                return (
+                  <div className="flex items-center gap-5" key={index}>
+                    <div className="flex">
+                      {/* Horizontal line representing the rating level */}
+                      <div className="w-12 h-1 bg-green-600 rounded-full"></div>
+                    </div>
+                    <div className="flex-grow">
+                      {/* Progress bar */}
+                      <div className="progress h-1 bg-gray-200 rounded-full">
+                        <div
+                          className="progress-bar bg-red-500 rounded-full"
+                          style={{ width: `${width}%` }}
+                        ></div>
                       </div>
                     </div>
-                  );
-                })}
-            </div>
-            {reviews &&
-              reviews.map((review, index) => {
-                return <ReviewRow review={review} />;
+                    <div className="flex gap-2 text-xs font-semibold">
+                      <p>{width}%</p>
+                      <p className="text-gray-500">({item})</p>
+                    </div>
+                  </div>
+                );
               })}
+            </div>
+            {reviews.length > 0 ? (
+              reviews.map((review, index) => (
+                <ReviewRow key={index} review={review} />
+              ))
+            ) : (
+              <p className="text-center">No reviews found</p>
+            )}
           </div>
         )}
       </div>
