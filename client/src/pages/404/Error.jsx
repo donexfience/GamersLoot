@@ -4,8 +4,8 @@ import ErrorPic from "../../assets/Error.jpg";
 
 const Error = () => {
   return (
-    <div className="w-full flex  items-center justify-center p-5">
-      <div className="">
+    <div className="w-full   items-center justify-center p-5">
+      <div className="flex justify-center items-center">
         <img
           src={ErrorPic}
           style={{ maxWidth: "600px", maxHeight: "600px" }}
