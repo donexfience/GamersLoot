@@ -2,7 +2,7 @@ import { handleError } from "./configurations";
 import axios from "axios";
 
 // export const URL = "http://localhost:9072/api";
-export const URL = "https://gamersloots.shop/api";
+export const URL = "https://gamersloots.shop";
 
 const apiInstance = axios.create({ baseURL: URL });
 //response initerceptor creating
