@@ -5,6 +5,7 @@ const cors = require("cors");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const cronJob = require("./util/cronJob");
+const path =require('path')
 
 const app = express();
 
@@ -42,6 +43,12 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/super-admin", requireAdminAuth, superAdminRoutes);
 app.use("/api/public", publicRoutes);
 
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+});
+
 //public Api for accessing images
 
 app.use("/api/img", express.static(__dirname + "/public/products/"));
@@ -49,8 +56,7 @@ app.use("/api/off", express.static(__dirname + "/public/official/"));
 
 // cron job util call to work when the server start working
 // cronJob();
-checkoffer()
-
+checkoffer();
 
 mongoose.connect(process.env.MONGO_URL).then(() => {
   app.listen(process.env.PORT, () => {
