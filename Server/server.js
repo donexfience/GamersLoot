@@ -5,6 +5,7 @@ const cors = require("cors");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const cronJob = require("./util/cronJob");
+const path =require('path')
 
 const app = express();
 
