@@ -1,7 +1,8 @@
 import { handleError } from "./configurations";
 import axios from "axios";
 
-export const URL = "http://localhost:9072/api";
+// export const URL = "http://localhost:9072/api";
+export const URL = "http://gamersloots.shop";
 
 const apiInstance = axios.create({ baseURL: URL });
 //response initerceptor creating
@@ -15,38 +16,42 @@ export const commonReduxRequests = async (
   config,
   rejectWithValue
 ) => {
-    let requestConfig={
-        method,
-        url:route,
-        data:body,
-        headers:config,
-        withCredentials:true
-    }
-    try{
-        console.log("customer request----->>>>.")
-        const response=await apiInstance(requestConfig);
-        return response;
-    }
-    catch(error){
-        console.log(error);
-        //we are passing this error to the handleError functions
-        return handleError(error,rejectWithValue)
-    }
+  let requestConfig = {
+    method,
+    url: route,
+    data: body,
+    headers: config,
+    withCredentials: true,
+  };
+  try {
+    console.log("customer request----->>>>.");
+    const response = await apiInstance(requestConfig);
+    return response;
+  } catch (error) {
+    console.log(error);
+    //we are passing this error to the handleError functions
+    return handleError(error, rejectWithValue);
+  }
 };
-export const commonRequests=async(method,route,body,config,rejectWithValue)=>{
-    let requestConfig={
-        method,
-        url:route,
-        data:body,
-        headers:config,
-        withCredentials:true
-    }
-    try{
-        const response=await apiInstance(requestConfig);
-        return response;
-    }
-    catch(error){
-        console.log(error)
-        return error
-    }
-}
+export const commonRequests = async (
+  method,
+  route,
+  body,
+  config,
+  rejectWithValue
+) => {
+  let requestConfig = {
+    method,
+    url: route,
+    data: body,
+    headers: config,
+    withCredentials: true,
+  };
+  try {
+    const response = await apiInstance(requestConfig);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
