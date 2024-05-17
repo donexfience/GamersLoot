@@ -46,11 +46,17 @@ app.use("/api/public", publicRoutes);
 
 app.use("/api/img", express.static(__dirname + "/public/products/"));
 app.use("/api/off", express.static(__dirname + "/public/official/"));
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
+
+// Handle all other routes by serving the React app
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+});
 
 // cron job util call to work when the server start working
 // cronJob();
-checkoffer()
-
+checkoffer();
 
 mongoose.connect(process.env.MONGO_URL).then(() => {
   app.listen(process.env.PORT, () => {
