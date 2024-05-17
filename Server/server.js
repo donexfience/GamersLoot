@@ -45,9 +45,6 @@ app.use("/api/public", publicRoutes);
 
 app.use(express.static(path.join(__dirname, "../client/dist")));
 
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
-});
 
 //public Api for accessing images
 
@@ -58,6 +55,9 @@ app.use("/api/off", express.static(__dirname + "/public/official/"));
 // cronJob();
 checkoffer();
 
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+});
 mongoose.connect(process.env.MONGO_URL).then(() => {
   app.listen(process.env.PORT, () => {
     console.log(`Listening on Port: ${process.env.PORT}-DB Connected`);
