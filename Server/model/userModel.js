@@ -44,7 +44,6 @@ const UserSchema = new Schema(
     },
     referralCode: {
       type: String,
-      required: true,
     },
   },
   { timestamps: true }
