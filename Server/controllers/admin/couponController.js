@@ -113,6 +113,7 @@ const editCoupon = async (req, res) => {
   try {
     let formData = req.body;
     const { id } = req.params;
+    console.log(id);
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw Error("not valid coupon id");
     }
@@ -121,6 +122,7 @@ const editCoupon = async (req, res) => {
       code: nameRegex,
       _id: { $ne: id },
     });
+    console.log(existingCoupon, "----------------------");
     if (existingCoupon) {
       throw new Error("A coupon with the same name already exists");
     }
@@ -141,6 +143,7 @@ const editCoupon = async (req, res) => {
 
     res.status(200).json({ coupon });
   } catch (error) {
+    console.error(error, "couopn erorr");
     res.status(400).json({ error: error.message });
   }
 };

@@ -197,7 +197,8 @@ const Checkout = () => {
           config
         );
         toast.error("Payment failed Order created with payment status Failed");
-        navigate(-1);
+        razor.close();
+        navigate("/cart");
         dispatch(clearCartOnOrderPlaced());
       } catch (error) {
         toast.error(error.response?.data?.error || "something went wrong");
@@ -216,32 +217,34 @@ const Checkout = () => {
   //order placing function
 
   const placeOrder = async () => {
+    // Validate cart
     if (cart.length === 0) {
-      toast.error("Added something to cart");
+      toast.error("Add something to the cart");
+      return;
     }
     if (!selectedAddress) {
-      toast.error("delivery address not found");
+      toast.error("Delivery address not found");
+      return;
     }
     if (!selectedPayment) {
-      toast.error("Please select any payment method");
+      toast.error("Please select a payment method");
+      return;
     }
-    //backend calling
-
     if (
-      selectedPayment === "cashOnDelivery" ||
-      selectedPayment === "myWallet"
+      (selectedPayment === "cashOnDelivery" && selectedAddress) ||
+      (selectedPayment === "myWallet " && selectedAddress)
     ) {
       saveOrderOnCashOnDelivery();
     }
-    if (selectedPayment === "myWallet") {
+    if (selectedPayment === "myWallet" && selectedAddress) {
       let Total =
         Number(totalPrice) + Number(discount) - Number(offer) + Number(tax);
       if (walletbalance < Total) {
-        toast.error("insufficient balance in Wallet");
+        toast.error("Insufficient balance in Wallet");
         return;
       }
     }
-    if (selectedPayment === "razorPay") {
+    if (selectedPayment === "razorPay" && selectedAddress) {
       initiateRazorPayPayment();
       return;
     }

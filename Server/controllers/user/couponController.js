@@ -166,6 +166,8 @@ const getSearchcoupon = async (req, res) => {
       filter.minimumPurchaseAmount = minPurchaseAmount;
     }
   }
+  const currentDate = new Date();
+  filter.expirationDate = { $gte: currentDate };
   try {
     const coupons = await Coupon.find(filter);
     res.status(200).json({ coupons });
@@ -175,10 +177,10 @@ const getSearchcoupon = async (req, res) => {
   }
 };
 
-
+j;
 module.exports = {
   getCoupons,
   applyCoupon,
   removeCoupon,
-  getSearchcoupon
+  getSearchcoupon,
 };
