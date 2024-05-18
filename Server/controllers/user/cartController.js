@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const Cart = require("../../model/cartModel");
 const Product = require("../../model/ProductModel");
+const Coupon = require("../../model/couponModel");
 
 const getCart = async (req, res) => {
   try {
@@ -220,6 +221,72 @@ const decrementQuantity = async (req, res) => {
   }
 };
 
+//checking product availability
+
+const productAvailable = async (req, res) => {
+  const { cartId } = req.body;
+  console.log(cartId, "99999");
+  try {
+    const cart = await Cart.findById(cartId).populate("items.product");
+    if (!cart) {
+      throw Error("cart not found");
+    }
+    let unAvailableProducts = [];
+    for (const item of cart.items) {
+      const product = item.product;
+      if (
+        !product ||
+        product.status === "out of stock" ||
+        product.status === "unpublished" ||
+        product.status === "draft" ||
+        product.stockQuantity < 1
+      ) {
+        unAvailableProducts.push(product._id);
+      }
+    }
+    if (unAvailableProducts.length > 0) {
+      return res.status(200).json({ available: false, unAvailableProducts });
+    }
+    res.status(200).json({ available: true });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+};
+const couponAvailable = async (req, res) => {
+  console.log('ddddddddddddddd')
+  const { cartId, couponCode } = req.body;
+  try {
+    console.log(cartId,couponCode,'body data form ');
+    const cart = await Cart.findById(cartId).populate("coupon");
+    if (!cart) {
+      console.log('cart not found');
+      return res.status(400).json({ error: "Cart not found" });
+    }
+
+    const coupon = await Coupon.findOne({ code: couponCode });
+    if (!coupon) {
+      console.log('coupon not found');
+      return res.status(400).json({ error: "Coupon not found" });
+    }
+
+    const currentDate = new Date();
+    if (!coupon.isActive || coupon.expirationDate < currentDate) {
+      console.log('coupon is invalid');
+      return res.status(400).json({ error: "Coupon is invalid or expired" });
+    }
+
+    if (coupon.maximumUses && coupon.used >= coupon.maximumUses) {
+      console.log('coupon usage limited');
+      return res.status(400).json({ error: "Coupon usage limit exceeded" });
+    }
+
+    res.status(200).json({ valid: true });
+  } catch (error) {
+    console.error(error, "validating coupon in checkout");
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 module.exports = {
   getCart,
   deleteCart,
@@ -227,4 +294,6 @@ module.exports = {
   incrementQuantity,
   decrementQuantity,
   deleteOneProduct,
+  productAvailable,
+  couponAvailable,
 };

@@ -30,11 +30,15 @@ const Addaddress = ({ closeToggle }) => {
   const validationSchema = Yup.object().shape({
     firstName: Yup.string()
       .required("Required")
+      .required("Required")
+      .min(1, "atleast one letter required")
       .trim()
-      .max(20, "Only 20 letters allowed")
-      .min(1, "atleast one letter required"),
+      .max(20, "Only 20 letters allowed"),
     lastName: Yup.string()
       .required("Required")
+      .min(1, "atleast one letter required")
+      .required("Required")
+      .trim()
       .max(20, "Only 20 letters allowed")
       .min(1, "atleast one letter required"),
     companyName: Yup.string()
@@ -42,30 +46,44 @@ const Addaddress = ({ closeToggle }) => {
       .max(20, "Only 20 letters allowed")
       .min(1, "atleast one letter required"),
     address: Yup.string()
-      .required("Required")
       .trim()
-      .max(20, "Only 20 letters allowed")
+      .required("Required")
+      .max(100, "Only 100 letters allowed")
       .min(1, "atleast one letter required"),
     country: Yup.string()
       .required("Required")
       .max(20, "Only 20 letters allowed")
       .min(1, "atleast one letter required"),
     regionState: Yup.string()
+      .trim()
       .required("Required")
       .max(20, "Only 20 letters allowed")
       .min(1, "atleast one letter required"),
     city: Yup.string()
+      .trim()
       .required("Required")
       .max(20, "Only 20 letters allowed")
       .min(1, "atleast one letter required"),
-    pinCode: Yup.number().required("Required"),
-    email: Yup.string().email("Invalid Email"),
+    pinCode: Yup.number()
+      .required("Required")
+      .typeError("Pin code should be digits")
+      .test(
+        "len",
+        "Pin code should be exactly 6 digits",
+        (val) => val && val.toString().length === 6
+      ),
+    email: Yup.string()
+      .email("Invalid Email")
+      .max(50, "Maximum 50 letters allowed")
+      .trim(),
     phoneNumber: Yup.number()
-      .typeError("Phone number should be digits")
-      .moreThan(999999999, "Not valid phone number")
       .required("Phone number is required")
-      .max(20, "Only 20 letters allowed")
-      .min(1, "atleast one letter required"),
+      .typeError("Phone number should be digits")
+      .test(
+        "len",
+        "Phone number should be exactly 10 digits",
+        (val) => val && val.toString().length === 10
+      ),
   });
 
   const handleSubmit = (value) => {

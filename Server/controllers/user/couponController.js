@@ -177,7 +177,6 @@ const getSearchcoupon = async (req, res) => {
   }
 };
 
-j;
 module.exports = {
   getCoupons,
   applyCoupon,

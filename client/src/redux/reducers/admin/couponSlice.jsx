@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createCoupon, editCoupon, getCoupons } from "../../actions/admin/couponAction";
-
+import {
+  createCoupon,
+  editCoupon,
+  getCoupons,
+} from "../../actions/admin/couponAction";
+import toast from "react-hot-toast";
 
 const couponsSlice = createSlice({
   name: "coupons",
@@ -50,7 +54,7 @@ const couponsSlice = createSlice({
         const index = state.coupons.findIndex(
           (item) => item._id === payload._id
         );
-
+        toast.success("edit successfull");
         if (index !== -1) {
           state.coupons[index] = payload;
         }
@@ -59,6 +63,7 @@ const couponsSlice = createSlice({
         state.loading = false;
         state.coupons = null;
         state.error = payload;
+        toast.error("something went wrong");
       });
   },
 });

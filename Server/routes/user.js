@@ -17,6 +17,8 @@ const {
   deleteOneProduct,
   incrementQuantity,
   decrementQuantity,
+  productAvailable,
+  couponAvailable,
 } = require("../controllers/user/cartController");
 const {
   getAddresses,
@@ -110,7 +112,10 @@ router.patch(
   "/cart-decrement-quantity/:cartId/item/:productId",
   decrementQuantity
 );
-
+//deleting cart if the product is blocked by admin or making stockquantitiy to 0
+router.post("/productAvailabile", productAvailable);
+//removing the coupon when the admin is removed
+router.post('/couponAvailable',couponAvailable)
 //address
 router.get("/address", getAddresses);
 router.get("/address/:id", getAddress);
@@ -121,14 +126,14 @@ router.patch("/address/:id", updateAddress);
 //order
 router.post("/order", createOrder);
 router.get("/orders", getOrders);
-router.get('/RepaymentOrder/:id',RepaymentOrder)
+router.get("/RepaymentOrder/:id", RepaymentOrder);
 router.get("/getCouponOrders", getOrdersWithCoupon);
 router.get("/order/:id", getOrder);
 router.post("/cancel-order/:id", cancelOrder);
 router.get("/order-count", orderCount);
 router.post("/return-order/:id", returnOrder);
-router.post('/faildorder',createfailOrder)
-router.post('/Reorder',Reorder)
+router.post("/faildorder", createfailOrder);
+router.post("/Reorder", Reorder);
 
 //review
 // Reviews

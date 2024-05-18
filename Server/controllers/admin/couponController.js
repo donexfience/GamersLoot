@@ -111,42 +111,53 @@ const deleteCoupon = async (req, res) => {
 
 const editCoupon = async (req, res) => {
   try {
-    let formData = req.body;
+    const formData = req.body;
     const { id } = req.params;
-    console.log(id);
+
+    console.log("Form Data:", formData);
+    console.log("Coupon ID:", id);
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw Error("not valid coupon id");
+      throw new Error("Invalid coupon ID");
     }
-    const nameRegex = new RegExp(formData.code, "i");
+
+    const nameRegex = new RegExp(`^${formData.code}$`, "i");
     const existingCoupon = await Coupon.findOne({
       code: nameRegex,
       _id: { $ne: id },
     });
-    console.log(existingCoupon, "----------------------");
+
+    console.log("Existing Coupon Check:", existingCoupon);
+
     if (existingCoupon) {
-      throw new Error("A coupon with the same name already exists");
+      throw new Error("A coupon with the same code already exists");
     }
+
     if (formData.type === "percentage" && formData.value > 100) {
       throw new Error(
         "Value must be less than or equal to 100 for percentage type"
       );
     }
 
-    const coupon = await Coupon.findOneAndUpdate(
-      { _id: id },
-      { $set: { ...formData } },
-      { new: true }
+    const coupon = await Coupon.findByIdAndUpdate(
+      id,
+      { $set: formData },
+      { new: true, runValidators: true }
     );
+
     if (!coupon) {
-      throw Error("No such Coupon");
+      throw new Error("No such Coupon");
     }
+
+    console.log("Updated Coupon:", coupon);
 
     res.status(200).json({ coupon });
   } catch (error) {
-    console.error(error, "couopn erorr");
+    console.error("Coupon Error:", error);
     res.status(400).json({ error: error.message });
   }
 };
+
 module.exports = {
   getCoupon,
   getCoupons,

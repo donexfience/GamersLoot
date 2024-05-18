@@ -20,17 +20,22 @@ const ProductSchema = new Schema(
     price: {
       type: Number,
     },
-    category:{
-        type:Schema.Types.ObjectId,
-        ref:Category
-
+    category: {
+      type: Schema.Types.ObjectId,
+      ref: Category,
     },
     markup: {
       type: Number,
     },
     status: {
       type: String,
-      enum: ["out of stock", "published", "low quantity", "draft","unpublished"],
+      enum: [
+        "out of stock",
+        "published",
+        "low quantity",
+        "draft",
+        "unpublished",
+      ],
     },
     attributes: [
       {
@@ -59,11 +64,12 @@ const ProductSchema = new Schema(
     numberOfReviews: {
       type: Number,
     },
-    offer:{
-        type:Number
+    offer: {
+      type: Number,
     },
   },
   { timestamps: true }
 );
-const Product=mongoose.model("Products",ProductSchema)
-module.exports=Product;
+
+const Product = mongoose.model("Products", ProductSchema);
+module.exports = Product;

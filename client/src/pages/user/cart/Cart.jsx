@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import {
+  CheckProductAvailable,
   applyCoupon,
   deleteEntireCart,
   deleteOneProduct,
@@ -27,12 +28,12 @@ const Cart = () => {
 
   //coupon config
 
-  const [inputCouponCode,setInputCouponCode]=useState("")
-  const dispatchApplyCoupons =() =>{
-    if(inputCouponCode.trim()!==""){
-      dispatch(applyCoupon(inputCouponCode.trim()))
+  const [inputCouponCode, setInputCouponCode] = useState("");
+  const dispatchApplyCoupons = () => {
+    if (inputCouponCode.trim() !== "") {
+      dispatch(applyCoupon(inputCouponCode.trim()));
     }
-  }
+  };
   useEffect(() => {
     dispatch(getCart());
   }, [dispatch]);
@@ -164,33 +165,48 @@ const Cart = () => {
               <button
                 className="bg-violet-600 w-full p-3  text-white font-bold rounded-md"
                 onClick={() => {
-                  if (cart.length > 0) {
-                    navigate("/checkout");
-                  } else {
-                    toast.error("Nothing inside the cart");
-                  }
+                  console.log(
+                    cartId,
+                    "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+                  );
+                  dispatch(CheckProductAvailable(cartId)).then((res) => {
+                    if (res.payload.available && cart.length > 0) {
+                      navigate("/checkout");
+                      console.log(res, "==========");
+                    } else {
+                      console.log(res);
+                      toast.error("product not available for going to checkout");
+                    }
+                  });
                 }}
               >
                 Procced to Checkout
               </button>
             </div>
             <div className="mt-8 bg-white">
-              <h3 className="p-5 border-b border-gray-100 font-bold">Coupon code</h3>
+              <h3 className="p-5 border-b border-gray-100 font-bold">
+                Coupon code
+              </h3>
               <div className="p-4">
-                <input type="text"
-                className="w-full bg-gray-100 py-2 px-2 border border-gray-300"
-                placeholder="Enter your coupon code"
-                value={inputCouponCode}
-                onChange={(e)=>setInputCouponCode(e.target.value)}
+                <input
+                  type="text"
+                  className="w-full bg-gray-100 py-2 px-2 border border-gray-300"
+                  placeholder="Enter your coupon code"
+                  value={inputCouponCode}
+                  onChange={(e) => setInputCouponCode(e.target.value)}
                 />
                 <div className="pt-3 flex justify-between">
-                  <button className="bg-violet-500 border border-black text-white rounded-md p-3"
-                  onClick={dispatchApplyCoupons}
+                  <button
+                    className="bg-violet-500 border border-black text-white rounded-md p-3"
+                    onClick={dispatchApplyCoupons}
                   >
                     Apply Coupon
                   </button>
-                  <button className="flex items-center gap-2 border-2 px-2" onClick={()=>navigate('/dashboard/coupons-search')}>
-                   <FaSearch/> find coupon
+                  <button
+                    className="flex items-center gap-2 border-2 px-2"
+                    onClick={() => navigate("/dashboard/coupons-search")}
+                  >
+                    <FaSearch /> find coupon
                   </button>
                 </div>
               </div>

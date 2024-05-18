@@ -74,9 +74,9 @@ const Signup = () => {
 
   console.log(initialValues.referralCode)
   const validationSchema = Yup.object().shape({
-    firstName: Yup.string().trim().required("First name is required").max(20,"username canot be more than 20 letters"),
-    lastName: Yup.string().trim().required("Last name is required"),
-    email: Yup.string().trim().email().required("Email is required"),
+    firstName: Yup.string().trim().required("First name is required").max(12,'firstname cant be greater than 12 letters'),
+    lastName: Yup.string().trim().required("Last name is required").max(12,'Lastname cant be greater than 12 letters'),
+    email: Yup.string().email().trim().required("Email is required").max(12,' number cant be greater than 12 letters'),
     password: Yup.string()
       .required("Password is required")
       .matches(
@@ -91,8 +91,7 @@ const Signup = () => {
       ),
     phoneNumber: Yup.number()
       .typeError("Phone number should be digits")
-      .moreThan(99999999),
-      
+      .moreThan(99999999).max(12,'phone number cant be greater than 10 digits'),
   });
   const [data, setData] = useState({});
   const dispatch = useDispatch();

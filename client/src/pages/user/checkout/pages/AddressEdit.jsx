@@ -110,7 +110,10 @@ const AddressEdit = ({ closeToggle, address }) => {
           </div>
           <InputType name="email" placeholder="" title="Email" />
           <InputType name="phoneNumber" placeholder="" title="Phone Number" />
-          <button type="submit" className="bg-violet-500 p-3 rounded text-white">
+          <button
+            type="submit"
+            className="bg-violet-500 p-3 rounded text-white"
+          >
             Update
           </button>
         </Form>

@@ -14,22 +14,48 @@ import { config } from "../../../Common/configurations";
 import toast from "react-hot-toast";
 import { GiCleaver } from "react-icons/gi";
 import { clearCartOnOrderPlaced } from "../../../redux/reducers/user/cartSlice";
+import {
+  CheckCouponAvailable,
+  CheckProductAvailable,
+  removeCoupon,
+} from "../../../redux/actions/user/cartAction";
 
 const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [couponChecked, setCouponChecked] = useState(false);
 
   //wallet
 
   const [walletbalance, setWalletBalance] = useState(0);
   // taking the cart details for checkout
 
-  const { cart, loading, error } = useSelector((state) => state.cart);
-  const { totalPrice, shipping, tax, couponType, discount, couponCode } =
-    useSelector((state) => state.cart);
+  const { cart, loading, error, cartId } = useSelector((state) => state.cart);
+  const {
+    totalPrice,
+    shipping,
+    tax,
+    couponType,
+    discount,
+    couponCode,
+    couponValid,
+  } = useSelector((state) => state.cart);
 
   console.log(couponCode, "0000000000000");
+  //useEffect for the coupon the validation
+  useEffect(() => {
+    if (cartId && couponCode && !couponChecked) {
+      dispatch(CheckCouponAvailable({ cartId, couponCode })).then((res) => {
+        if (!res.payload.valid) {
+          dispatch(removeCoupon());
+          toast.error("Coupon is not valid.");
+        }
+        setCouponChecked(true);
+      });
+    }
+  }, [cartId, couponCode, couponChecked, dispatch]);
 
+  console.log(couponValid, "coupon valid");
   //selected address
   const [selectedAddress, setSelectedAddress] = useState("");
 
@@ -197,7 +223,6 @@ const Checkout = () => {
           config
         );
         toast.error("Payment failed Order created with payment status Failed");
-        razor.close();
         navigate("/cart");
         dispatch(clearCartOnOrderPlaced());
       } catch (error) {
@@ -218,36 +243,43 @@ const Checkout = () => {
 
   const placeOrder = async () => {
     // Validate cart
-    if (cart.length === 0) {
-      toast.error("Add something to the cart");
-      return;
-    }
-    if (!selectedAddress) {
-      toast.error("Delivery address not found");
-      return;
-    }
-    if (!selectedPayment) {
-      toast.error("Please select a payment method");
-      return;
-    }
-    if (
-      (selectedPayment === "cashOnDelivery" && selectedAddress) ||
-      (selectedPayment === "myWallet " && selectedAddress)
-    ) {
-      saveOrderOnCashOnDelivery();
-    }
-    if (selectedPayment === "myWallet" && selectedAddress) {
-      let Total =
-        Number(totalPrice) + Number(discount) - Number(offer) + Number(tax);
-      if (walletbalance < Total) {
-        toast.error("Insufficient balance in Wallet");
-        return;
+    dispatch(CheckProductAvailable(cartId)).then((res) => {
+      if (res.payload.available) {
+        console.log("hello inside the place Order");
+        if (cart.length === 0) {
+          toast.error("Add something to the cart");
+          return;
+        }
+        if (!selectedAddress) {
+          toast.error("Delivery address not found");
+          return;
+        }
+        if (!selectedPayment) {
+          toast.error("Please select a payment method");
+          return;
+        }
+        if (
+          (selectedPayment === "cashOnDelivery" && selectedAddress) ||
+          (selectedPayment === "myWallet " && selectedAddress)
+        ) {
+          saveOrderOnCashOnDelivery();
+        }
+        if (selectedPayment === "myWallet" && selectedAddress) {
+          let Total =
+            Number(totalPrice) + Number(discount) - Number(offer) + Number(tax);
+          if (walletbalance < Total) {
+            toast.error("Insufficient balance in Wallet");
+            return;
+          }
+        }
+        if (selectedPayment === "razorPay" && selectedAddress) {
+          initiateRazorPayPayment();
+          return;
+        }
+      } else {
+        toast.error("product not available");
       }
-    }
-    if (selectedPayment === "razorPay" && selectedAddress) {
-      initiateRazorPayPayment();
-      return;
-    }
+    });
   };
 
   useEffect(() => {

@@ -84,7 +84,7 @@ const editUser = async (req, res) => {
       { $set: formData },
       { new: true }
     );
-
+    console.log(updateUser, "9999999999999999999999999999");
     if (!updateUser) {
       throw Error("No such User");
     }
@@ -123,14 +123,14 @@ const signUpUser = async (req, res) => {
       let refercode = userCredentials.referralCode;
       const walletUser = await User.findOne({ referralCode: refercode });
       const wallet = await Wallet.findOne({ user: walletUser._id });
-      console.log(walletUser,'11111');
+      console.log(walletUser, "11111");
       if (wallet) {
-        console.log(wallet,'222222222222');
+        console.log(wallet, "222222222222");
         wallet.balance += 1000;
         await wallet.save();
-        console.log('wallet saved....');
+        console.log("wallet saved....");
       } else {
-        console.log('user dont have the wallet');
+        console.log("user dont have the wallet");
         const wallet = await Wallet.create({
           user: walletUser._id,
           balance: 1000,
@@ -140,11 +140,10 @@ const signUpUser = async (req, res) => {
               amount: "1000",
               type: "credit",
               description: `Refferal price for the user  order id ${userCredentials.firstName}`,
-              
             },
           ],
         });
-        console.log(wallet,'wallet user created and saved');
+        console.log(wallet, "wallet user created and saved");
       }
     }
     const user = await User.signup(userCredentials, "user", true);

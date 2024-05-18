@@ -20,6 +20,7 @@ export const createCoupon = createAsyncThunk(
 export const editCoupon = createAsyncThunk(
   "coupons/editCoupon",
   async ({ id, formData }, { rejectwithValue }) => {
+    console.log(formData,'ppppppppppp')
     return commonReduxRequests(
       "patch",
       `/admin/coupon/${id}`,

@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import {
+  CheckCouponAvailable,
+  CheckProductAvailable,
   applyCoupon,
   decrementCount,
   deleteEntireCart,
@@ -24,6 +26,8 @@ const cartSlice = createSlice({
     discount: 0,
     couponType: "",
     couponCode: "",
+    unAvailableProducts: [],
+    couponValid: true,
   },
   reducers: {
     calculateTotalPrice: (state) => {
@@ -39,7 +43,6 @@ const cartSlice = createSlice({
       state.shipping = 40;
       state.tax = Math.round(sum * 0.08);
       state.totalPrice = sum + state.shipping + state.tax;
-      
     },
     clearCartOnOrderPlaced: (state) => {
       state.loading = false;
@@ -50,6 +53,15 @@ const cartSlice = createSlice({
       state.tax = 0;
       state.shipping = 0;
       (state.couponCode = ""), (state.couponType = ""), (state.discount = 0);
+    },
+    setCart: (state, action) => {
+      state.cart = action.payload;
+    },
+    clearUnavailbleProducts: (state) => {
+      state.unAvailableProducts = [];
+    },
+    setCouponValid: (state, action) => {
+      state.couponValid = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -181,9 +193,37 @@ const cartSlice = createSlice({
       .addCase(removeCoupon.rejected, (state, { payload }) => {
         state.loading = false;
         state.error = payload;
+      })
+      .addCase(CheckProductAvailable.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(CheckProductAvailable.fulfilled, (state, action) => {
+        state.loading = false;
+        state.unAvailableProducts = action.payload.unAvailableProducts || [];
+      })
+      .addCase(CheckProductAvailable.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(CheckCouponAvailable.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(CheckCouponAvailable.fulfilled, (state, action) => {
+        state.loading = false;
+        state.couponValid = action.payload.valid;
+      })
+      .addCase(CheckCouponAvailable.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.couponValid = false;
       });
   },
 });
 export default cartSlice.reducer;
-export const { calculateTotalPrice, clearCartOnOrderPlaced } =
-  cartSlice.actions;
+export const {
+  calculateTotalPrice,
+  clearCartOnOrderPlaced,
+  setCart,
+  clearUnavailbleProducts,
+  setCouponValid,
+} = cartSlice.actions;

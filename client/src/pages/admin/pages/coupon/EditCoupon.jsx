@@ -14,6 +14,7 @@ import ConfirmModal from "../../../../components/ConfirmModal";
 import BreadCrumbs from "../../components/BreadCrumbs";
 import { AiOutlineClose, AiOutlineSave } from "react-icons/ai";
 import { Formik, Form, ErrorMessage, Field } from "formik";
+import toast from "react-hot-toast";
 
 const EditCoupon = () => {
   const { id } = useParams();
@@ -39,6 +40,7 @@ const EditCoupon = () => {
   };
   //coupon creating function
   const editeCouponFunction = () => {
+    console.log(formData, "reeeeeeeeeeeeee");
     dispatch(editCoupon({ id, formData }));
     toggleShow();
     navigate(-1);

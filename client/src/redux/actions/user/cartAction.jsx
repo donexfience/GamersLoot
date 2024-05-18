@@ -103,3 +103,31 @@ export const applyCoupon = createAsyncThunk(
     );
   }
 );
+
+export const CheckProductAvailable = createAsyncThunk(
+  "/cart/productAvailabile",
+  async (cartId, { rejectWithValue }) => {
+    console.log(cartId, "9999999");
+    return commonReduxRequests(
+      "post",
+      `/user/productAvailabile`,
+      { cartId },
+      appJson,
+      rejectWithValue
+    );
+  }
+);
+
+export const CheckCouponAvailable = createAsyncThunk(
+  "/cart/couponAvailable",
+  async ({cartId,couponCode}, { rejectWithValue }) => {
+    console.log(cartId,"coupon availabbbbbbbbbble")
+    return commonReduxRequests(
+      "post",
+      "/user/couponAvailable",
+      { cartId,couponCode },
+      appJson,
+      rejectWithValue
+    );
+  }
+);
