@@ -91,6 +91,7 @@ const CustomFileInput = ({ onChange }) => {
         onChange={handleFileChange}
         multiple
         className="hidden"
+        accept="image/jpeg,image/png"
       />
       {droppedFiles.length > 0 && (
         <div className="mt-4">
@@ -105,6 +106,7 @@ const CustomFileInput = ({ onChange }) => {
                     src={URL.createObjectURL(file)}
                     alt={file.name}
                     className="h-full w-full object-contain rounded"
+
                   />
                 ) : (
                   <div className="w-20 h-20 bg-gray-100"></div>

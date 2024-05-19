@@ -40,25 +40,28 @@ const Wallet = () => {
 
   return (
     <div className="w-full">
-      <div className="bg-white rounded-lg h-screen mx-5 shadow-lg lg:mx-0">
+      <div className="bg-white rounded-lg h-screen mx-5 shadow-lg lg:mx-2">
         <BreadCrumbs list={["Home", "Wallet"]} />
-        <div className="uppercase text-lg font-bold text-violet-500 px-5 py-3">
-          Wallet Management
-          <div>
+        <div className="bg-gradient-to-r from-violet-500 to-indigo-500 text-white p-5 rounded-t-lg flex justify-between items-center shadow-md">
+          <h2 className="text-2xl font-extrabold">Wallet Management</h2>
+          <div className="flex items-center">
             {wallet ? (
               <>
                 <img
                   src={walletbalance}
                   alt="Wallet"
-                  className="w-6 h-6 inline-block mr-2"
+                  className="w-8 h-8 inline-block mr-3"
                 />
-                {wallet.balance} Rs
+                <span className="text-xl font-semibold">
+                  {wallet.balance} Rs
+                </span>
               </>
             ) : (
-              "N/A"
+              <span className="text-xl font-semibold">N/A</span>
             )}
           </div>
         </div>
+
         <div className="overflow-auto p-5">
           {loading ? (
             <JustLoading size={10} />

@@ -28,7 +28,7 @@ const EditCategory = () => {
 
   const showConfirm = (value) => {
     toggleModal();
-    console.log(value,"ooooooooooooooooooooo")
+    console.log(value, "ooooooooooooooooooooo");
     const updatedFormData = new FormData();
     updatedFormData.append("name", value.title);
     updatedFormData.append("description", value.description);
@@ -38,7 +38,7 @@ const EditCategory = () => {
   };
 
   const saveCategory = () => {
-    dispatch(updateCategory({id,formData}));
+    dispatch(updateCategory({ id, formData }));
     toggleModal();
     navigate(-1);
   };
@@ -50,9 +50,19 @@ const EditCategory = () => {
   });
 
   const validationSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    description: Yup.string().required("Description is required"),
-    imageURL: Yup.mixed().required("File is required"),
+    title: Yup.string()
+      .required("Title is required")
+      .max(22, "only 22 characters are allowed"),
+    description: Yup.string()
+      .required("Description is required")
+      .max(22, "only 22 characters are allowed"),
+    imageURL: Yup.mixed()
+      .required("File is required")
+      .test(
+        "fileType",
+        "Unsupported File Format. Only JPEG or PNG is allowed.",
+        (value) => value && ["image/jpeg", "image/png"].includes(value.type)
+      ),
   });
   useEffect(() => {
     const loadInitialData = async () => {
@@ -63,8 +73,8 @@ const EditCategory = () => {
         setInitialValues({
           title: category.name,
           description: category.description,
-          imageURL: category.imgURL, 
-          isActive: category.isActive, 
+          imageURL: category.imgURL,
+          isActive: category.isActive,
         });
       } catch (error) {
         console.log("Error fetching category:", error);

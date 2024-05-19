@@ -80,7 +80,7 @@ const CreateOffer = () => {
       .required("Starting date is required"),
     endingDate: Yup.date()
       .min(
-        Yup.ref("startingDate"),
+        Yup.ref("startingDate"),  
         "Ending date must be later than starting date"
       )
       .required("Ending date is required"),

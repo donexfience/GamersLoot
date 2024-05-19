@@ -39,9 +39,9 @@ const starRating = () => {
 const ProductReview = ({ closeToggle, id, reviewingProduct }) => {
   const dispatch = useDispatch();
   const validationSchema = Yup.object().shape({
-    rating: Yup.number().required("Rating is required"),
-    title: Yup.string(),
-    body: Yup.string(),
+    rating: Yup.number().required("Rating is required").max(22,'Only 20 characters allowed'),
+    title: Yup.string().max(22,'Only 20 characters allowed').required("title is required"),
+    body: Yup.string().max(22,'Only 20 characters allowed').required('body is requried'),
   });
   const initialValues = {
     rating: "",

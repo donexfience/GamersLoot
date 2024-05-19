@@ -31,24 +31,30 @@ const Navbar = () => {
 
   useEffect(() => {
     // Change navbar color based on the current route
-    if (location.pathname === "/" && user) {
-      setNavbarColor("text-black"); // Change to the desired color
-    }
+    // if (location.pathname === "/" && user) {
+    //   setNavbarColor("text-black"); // Change to the desired color
+    // }
+    // if (location.pathname === "/") {
+    //   setNavbarColor("text-black"); // Change to the desired color
+    // }
+    // if (location.pathname === "/login" && !user) {
+    //   setNavbarColor("text-black"); // Change to the desired color
+    // }
+    // if (location.pathname === "/signup") {
+    //   setNavbarColor("text-black"); // Change to the desired color
+    // }
+    // if (location.pathname === "*") {
+    //   setNavbarColor("text-black");
+    // } else if (location.pathname.includes("/product/")) {
+    //   setNavbarColor("text-black"); // Change to the desired color for paths containing "/product/"
+    // } else {
+    //   setNavbarColor("text-white"); // Change to the default color
+    // }
     if (location.pathname === "/") {
-      setNavbarColor("text-black"); // Change to the desired color
+      setNavbarColor("text-white");
     }
-    if (location.pathname === "/login" && !user) {
-      setNavbarColor("text-black"); // Change to the desired color
-    }
-    if (location.pathname === "/signup") {
-      setNavbarColor("text-black"); // Change to the desired color
-    }
-    if (location.pathname === "*") {
+    if (location.pathname === "/login") {
       setNavbarColor("text-black");
-    } else if (location.pathname.includes("/product/")) {
-      setNavbarColor("text-black"); // Change to the desired color for paths containing "/product/"
-    } else {
-      setNavbarColor("text-white"); // Change to the default color
     }
   }, [location.pathname]);
 

@@ -43,9 +43,15 @@ const CreateCategory = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    description: Yup.string().required("Description is required"),
-    imageURL: Yup.mixed().required("File is required"),
+    title: Yup.string().required("Title is required").max(22,"only 22 characters are allowed"),
+    description: Yup.string().required("Description is required").max(22,"only 22 characters are allowed"),
+    imageURL: Yup.mixed()
+      .required("File is required")
+      .test(
+        "fileType",
+        "Unsupported File Format. Only JPEG or PNG is allowed.",
+        (value) => value && ["image/jpeg", "image/png"].includes(value.type)
+      ),
   });
 
   return (
@@ -100,7 +106,10 @@ const CreateCategory = () => {
               <Form className="lg:flex w-full gap-5">
                 <div className="lg:w-2/3">
                   <div className="flex flex-col gap-3">
-                    <label htmlFor="title" className="admin-label font-bold mt-3">
+                    <label
+                      htmlFor="title"
+                      className="admin-label font-bold mt-3"
+                    >
                       Category Title
                     </label>
                     <Field
@@ -116,7 +125,10 @@ const CreateCategory = () => {
                     />
                   </div>
                   <div className="flex flex-col gap-3">
-                    <label htmlFor="description" className="admin-label mt-4 font-bold">
+                    <label
+                      htmlFor="description"
+                      className="admin-label mt-4 font-bold"
+                    >
                       Category Description
                     </label>
                     <Field

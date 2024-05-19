@@ -44,7 +44,7 @@ const CustomSingleFileInput = ({ onChange }) => {
   };
 
   return (
-    <div 
+    <div
       className={`bg-white lg:h-80 border-dashed border-2 border-violet-600  p-8 rounded-lg text-center ${
         isDragging
           ? "bg-blue-100 border-violet-600"
@@ -94,7 +94,7 @@ const CustomSingleFileInput = ({ onChange }) => {
             type="file"
             ref={fileInputRef}
             onChange={handleFileChange}
-            accept="image/*"
+            accept="image/jpeg,image/png"
             className="hidden"
           />
         </div>

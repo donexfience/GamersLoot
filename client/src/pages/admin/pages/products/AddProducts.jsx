@@ -185,6 +185,7 @@ const AddProducts = () => {
                   className="admin-input p-2 rounded  hover:border-black w-full"
                   name="name"
                   value={name}
+                  maxLength={22}
                   onChange={(e) => setName(e.target.value)}
                 />
                 <p className="admin-label font-semibold">Description</p>
@@ -193,6 +194,7 @@ const AddProducts = () => {
                   id="description"
                   onChange={(e) => setDescription(e.target.value)}
                   className="admin-input h-56 px-3 rounded  hover:border-black placeholder:mt-4 w-full"
+                  maxLength={32}
                 />
                 <p className="admin-label font-semibold">Quantity</p>
                 <input
@@ -203,6 +205,7 @@ const AddProducts = () => {
                   onChange={(e) => setStockQuantity(e.target.value)}
                   placeholder="Type the Quantity"
                   className="admin-input p-2 rounded   hover:border-black w-full"
+                  maxLength={22}
                 />
               </div>
               <div className="lg:w-2/3">
@@ -222,6 +225,7 @@ const AddProducts = () => {
               onChange={(e) => setPrice(e.target.value)}
               placeholder="Type product price"
               className="admin-input p-2 rounded   hover:border-black w-full"
+              maxLength={12}
             ></input>
 
             <p className="admin-label font-semibold">Markup</p>
@@ -232,6 +236,7 @@ const AddProducts = () => {
               placeholder="Type product Markup"
               onChange={(e) => setMarkup(e.target.value)}
               className="admin-input p-2 rounded  hover:border-black w-full"
+              maxLength={12}
             ></input>
 
             <p className="admin-label font-semibold">Offer</p>
@@ -300,6 +305,7 @@ const AddProducts = () => {
             className="admin-input p-2 rounded hover:border-black w-full"
             value={attributeName}
             onChange={(e) => setAttributeName(e.target.value)}
+            maxLength={22}
           />
           <input
             type="text"
@@ -307,6 +313,7 @@ const AddProducts = () => {
             className="admin-input p-2 rounded   hover:border-black w-full"
             value={attributeValue}
             onChange={(e) => setAttributeValue(e.target.value)}
+            maxLength={22}
           />
           <div className="admin-input-no-m w-full lg:w-auto shrink-0">
             <input

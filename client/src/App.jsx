@@ -122,8 +122,8 @@ function App() {
           <Route path="/forgot-password" element={<ForgetPassword />} />
 
           {/* home components routes */}
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/about" element={<About />} />
+          {/* <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} /> */} 
 
           {/* user profile mangement */}
 
@@ -180,6 +180,7 @@ function AdminRoutes() {
         <Route path="coupons/create" element={<CreateCoupon />} />
         <Route path="coupons/edit/:id" element={<EditCoupon />} />
       </Route>
+      <Route path="*" Component={Error} />
     </Routes>
   );
 }

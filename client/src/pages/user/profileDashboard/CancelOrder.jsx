@@ -10,7 +10,9 @@ const CancelOrder = ({ id, closeToggle, loadData }) => {
     reason: "",
   };
   const validationSchema = Yup.object().shape({
-    reason: Yup.string().required("canelation reason is required"),
+    reason: Yup.string()
+      .required("canelation reason is required")
+      .max(22, "only 22 characters are allowed"),
   });
 
   const handleSubmit = (value) => {
