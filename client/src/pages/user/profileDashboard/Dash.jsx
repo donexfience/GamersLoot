@@ -223,7 +223,7 @@ const Dash = () => {
                   <div className="flex items-center">
                     <input
                       type="text"
-                      value={`http://localhost:5173/signup?referralCode=${user.referralCode}`}
+                      value={`https://gamersloots.shop/signup?referralCode=${user.referralCode}`}
                       className="form-input w-full rounded-md mr-2"
                       readOnly
                     />
